@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "inventory": {
+    "schema_version": 1,
+    "input_id": "sha256:d3f278dee382bf57c67647d3e0460f9b85393f57b4299fa4dfc36a14218004e3",
+    "coverage": "partial",
+    "entries": [
+      {
+        "path": ".",
+        "kind": "directory",
+        "disposition": "analyzed",
+        "reason": "directory_enumerated",
+        "mode": "none",
+        "bytes": null,
+        "sha256": null,
+        "diagnostics": []
+      },
+      {
+        "path": "src/",
+        "kind": "directory",
+        "disposition": "analyzed",
+        "reason": "directory_enumerated",
+        "mode": "none",
+        "bytes": null,
+        "sha256": null,
+        "diagnostics": []
+      },
+      {
+        "path": "src/greet.ts",
+        "kind": "file",
+        "disposition": "analyzed",
+        "reason": "supported_source",
+        "mode": "structural",
+        "bytes": 76,
+        "sha256": "sha256:ddadb22209a4466c1f4c6075e56c0317cfe9a29fed48c6dacdb3241447368efc",
+        "diagnostics": []
+      },
+      {
+        "path": "src/index.ts",
+        "kind": "file",
+        "disposition": "analyzed",
+        "reason": "supported_source",
+        "mode": "structural",
+        "bytes": 36,
+        "sha256": "sha256:363ffae00ed3cd7f40376be2469c12f2bd0102c3e329c9d92871fb12b1878c0c",
+        "diagnostics": []
+      },
+      {
+        "path": "src/legacy.py",
+        "kind": "file",
+        "disposition": "inventory-only",
+        "reason": "unsupported_language",
+        "mode": "inventory-only",
+        "bytes": 19,
+        "sha256": "sha256:cd5feed619c1175324cf7cb5ca3d39eabde8c618324209d511468faea6837c76",
+        "diagnostics": [
+          {
+            "code": "unsupported_language",
+            "message": "Python is not semantically analyzed in v0.1."
+          }
+        ]
+      }
+    ],
+    "counts": {
+      "files": {
+        "analyzed": 2,
+        "inventory-only": 1,
+        "ignored": 0,
+        "skipped": 0,
+        "unreadable": 0,
+        "parse-error": 0
+      },
+      "directories": {
+        "analyzed": 2,
+        "inventory-only": 0,
+        "ignored": 0,
+        "skipped": 0,
+        "unreadable": 0,
+        "parse-error": 0
+      }
+    },
+    "diagnostics": [],
+    "policy_exclusions": ["context/", ".shcontext/"]
+  },
+  "analyses": [
+    {
+      "schema_version": 1,
+      "path": "src/greet.ts",
+      "sha256": "sha256:ddadb22209a4466c1f4c6075e56c0317cfe9a29fed48c6dacdb3241447368efc",
+      "line_count": 3,
+      "language": "typescript",
+      "mode": "structural",
+      "disposition": "analyzed",
+      "symbols": [
+        {
+          "id": "S1",
+          "name": "greet",
+          "kind": "function",
+          "exported": true,
+          "range": {
+            "start_line": 1,
+            "end_line": 3
+          }
+        }
+      ],
+      "references": [],
+      "diagnostics": []
+    },
+    {
+      "schema_version": 1,
+      "path": "src/index.ts",
+      "sha256": "sha256:363ffae00ed3cd7f40376be2469c12f2bd0102c3e329c9d92871fb12b1878c0c",
+      "line_count": 1,
+      "language": "typescript",
+      "mode": "structural",
+      "disposition": "analyzed",
+      "symbols": [],
+      "references": [
+        {
+          "kind": "re-export",
+          "specifier": "./greet.ts",
+          "start_byte": 0,
+          "end_byte": 35,
+          "evidence": {
+            "path": "src/index.ts",
+            "sha256": "sha256:363ffae00ed3cd7f40376be2469c12f2bd0102c3e329c9d92871fb12b1878c0c",
+            "start_line": 1,
+            "end_line": 1,
+            "symbol": null,
+            "basis": "source"
+          }
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "schema_version": 1,
+      "path": "src/legacy.py",
+      "sha256": "sha256:cd5feed619c1175324cf7cb5ca3d39eabde8c618324209d511468faea6837c76",
+      "line_count": 1,
+      "language": "python",
+      "mode": "inventory-only",
+      "disposition": "inventory-only",
+      "symbols": [],
+      "references": [],
+      "diagnostics": [
+        {
+          "code": "unsupported_language",
+          "message": "Python is not semantically analyzed in v0.1."
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "schema_version": 1,
+      "from": "src/index.ts",
+      "reference": {
+        "kind": "re-export",
+        "specifier": "./greet.ts",
+        "start_byte": 0,
+        "end_byte": 35,
+        "evidence": {
+          "path": "src/index.ts",
+          "sha256": "sha256:363ffae00ed3cd7f40376be2469c12f2bd0102c3e329c9d92871fb12b1878c0c",
+          "start_line": 1,
+          "end_line": 1,
+          "symbol": null,
+          "basis": "source"
+        }
+      },
+      "resolution": "resolved",
+      "to": "src/greet.ts",
+      "reason": null
+    }
+  ],
+  "folders": [
+    {
+      "schema_version": 1,
+      "source_path": ".",
+      "coverage": "partial",
+      "input_id": "sha256:d3f278dee382bf57c67647d3e0460f9b85393f57b4299fa4dfc36a14218004e3",
+      "generation_id": "sha256:995bfe3ed99e6677b2571465489dc89409f67aa4139b2c1b2ed279aad0aa0a0d",
+      "purpose": [],
+      "files": [],
+      "interfaces_and_entry_points": [],
+      "dependencies_and_consumers": [],
+      "feature_flows": [],
+      "tests": [],
+      "children": [
+        {
+          "path": "src",
+          "coverage": "partial"
+        }
+      ],
+      "limitations": [
+        "Python content is inventoried, not semantically analyzed."
+      ],
+      "evidence": [],
+      "counts": {
+        "files": {
+          "analyzed": 2,
+          "inventory-only": 1,
+          "ignored": 0,
+          "skipped": 0,
+          "unreadable": 0,
+          "parse-error": 0
+        },
+        "directories": {
+          "analyzed": 2,
+          "inventory-only": 0,
+          "ignored": 0,
+          "skipped": 0,
+          "unreadable": 0,
+          "parse-error": 0
+        }
+      }
+    },
+    {
+      "schema_version": 1,
+      "source_path": "src",
+      "coverage": "partial",
+      "input_id": "sha256:d3f278dee382bf57c67647d3e0460f9b85393f57b4299fa4dfc36a14218004e3",
+      "generation_id": "sha256:995bfe3ed99e6677b2571465489dc89409f67aa4139b2c1b2ed279aad0aa0a0d",
+      "purpose": [
+        {
+          "kind": "observed",
+          "text": "Provides a greeting function and its re-export.",
+          "evidence_ids": ["E1"],
+          "rationale": null
+        }
+      ],
+      "files": [
+        {
+          "path": "src/greet.ts",
+          "disposition": "analyzed",
+          "mode": "structural",
+          "claims": [
+            {
+              "kind": "observed",
+              "text": "Exports greet.",
+              "evidence_ids": ["E1"],
+              "rationale": null
+            }
+          ],
+          "limitations": []
+        },
+        {
+          "path": "src/index.ts",
+          "disposition": "analyzed",
+          "mode": "structural",
+          "claims": [
+            {
+              "kind": "observed",
+              "text": "Re-exports greet from the neighboring source file.",
+              "evidence_ids": ["E2"],
+              "rationale": null
+            }
+          ],
+          "limitations": []
+        },
+        {
+          "path": "src/legacy.py",
+          "disposition": "inventory-only",
+          "mode": "inventory-only",
+          "claims": [],
+          "limitations": ["Unsupported language."]
+        }
+      ],
+      "interfaces_and_entry_points": [],
+      "dependencies_and_consumers": [],
+      "feature_flows": [],
+      "tests": [],
+      "children": [],
+      "limitations": [
+        "Python content is inventoried, not semantically analyzed."
+      ],
+      "evidence": [
+        {
+          "id": "E1",
+          "path": "src/greet.ts",
+          "sha256": "sha256:ddadb22209a4466c1f4c6075e56c0317cfe9a29fed48c6dacdb3241447368efc",
+          "start_line": 1,
+          "end_line": 3,
+          "symbol": "greet",
+          "basis": "source"
+        },
+        {
+          "id": "E2",
+          "path": "src/index.ts",
+          "sha256": "sha256:363ffae00ed3cd7f40376be2469c12f2bd0102c3e329c9d92871fb12b1878c0c",
+          "start_line": 1,
+          "end_line": 1,
+          "symbol": null,
+          "basis": "source"
+        }
+      ],
+      "counts": {
+        "files": {
+          "analyzed": 2,
+          "inventory-only": 1,
+          "ignored": 0,
+          "skipped": 0,
+          "unreadable": 0,
+          "parse-error": 0
+        },
+        "directories": {
+          "analyzed": 1,
+          "inventory-only": 0,
+          "ignored": 0,
+          "skipped": 0,
+          "unreadable": 0,
+          "parse-error": 0
+        }
+      }
+    }
+  ],
+  "manifest": {
+    "schema_version": 1,
+    "generator": {
+      "version": "0.0.0",
+      "generation_id": "sha256:995bfe3ed99e6677b2571465489dc89409f67aa4139b2c1b2ed279aad0aa0a0d"
+    },
+    "generation": {
+      "provider": {
+        "id": "fixture-provider",
+        "model": "fixture-model"
+      },
+      "generator": "0.0.0",
+      "parser": "fixture-parser-1",
+      "resolver": "fixture-resolver-1",
+      "prompt": "fixture-prompt-1",
+      "template": "fixture-template-1",
+      "renderer": "fixture-renderer-1",
+      "detector": "fixture-detector-1",
+      "default_policy": "fixture-policy-1"
+    },
+    "selection": {
+      "configuration": {
+        "version": 1,
+        "maxFileBytes": 1048576,
+        "maxInputBytes": 20971520,
+        "maxEntries": 10000,
+        "folderWordLimit": 600,
+        "rootWordLimit": 1200,
+        "provider": {
+          "id": "fixture-provider",
+          "model": "fixture-model"
+        }
+      },
+      "control_files": [
+        {
+          "path": ".gitignore",
+          "sha256": null
+        },
+        {
+          "path": ".shcontextignore",
+          "sha256": null
+        },
+        {
+          "path": "shcontext.config.json",
+          "sha256": null
+        }
+      ]
+    },
+    "input_id": "sha256:d3f278dee382bf57c67647d3e0460f9b85393f57b4299fa4dfc36a14218004e3",
+    "coverage": "partial",
+    "provenance": {
+      "git_head": null
+    },
+    "files": [
+      {
+        "path": "src/greet.ts",
+        "sha256": "sha256:ddadb22209a4466c1f4c6075e56c0317cfe9a29fed48c6dacdb3241447368efc",
+        "disposition": "analyzed",
+        "reason": "supported_source",
+        "mode": "structural"
+      },
+      {
+        "path": "src/index.ts",
+        "sha256": "sha256:363ffae00ed3cd7f40376be2469c12f2bd0102c3e329c9d92871fb12b1878c0c",
+        "disposition": "analyzed",
+        "reason": "supported_source",
+        "mode": "structural"
+      },
+      {
+        "path": "src/legacy.py",
+        "sha256": "sha256:cd5feed619c1175324cf7cb5ca3d39eabde8c618324209d511468faea6837c76",
+        "disposition": "inventory-only",
+        "reason": "unsupported_language",
+        "mode": "inventory-only"
+      }
+    ],
+    "directories": [
+      {
+        "path": ".",
+        "coverage": "partial"
+      },
+      {
+        "path": "src",
+        "coverage": "partial"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "context/.shcontext/report.json",
+        "sha256": "sha256:e9266c6168956371d93103f71b99f4c941e8699e6077bb1d3ef8482211f2ea38"
+      },
+      {
+        "path": "context/CONTEXT.md",
+        "sha256": "sha256:feba1545dec79545c8603f5e54ff433d5c633461c4773aa5519d3aaea8330c06"
+      },
+      {
+        "path": "context/src/CONTEXT.md",
+        "sha256": "sha256:80213d2c44515b9d0590c06a1384272bff5b8cfb8f4f5fb8963b62e12f457af2"
+      }
+    ],
+    "analysis_failures": [
+      {
+        "path": "src/legacy.py",
+        "code": "unsupported_language",
+        "message": "Python is not semantically analyzed in v0.1."
+      }
+    ],
+    "diagnostics": []
+  }
+}

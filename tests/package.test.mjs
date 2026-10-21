@@ -53,6 +53,7 @@ test(
         paths.includes('src/core/project-info.ts'),
         'Declaration maps need their source files.',
       );
+      assert.ok(paths.includes('dist/core/contracts/index.d.ts'));
       assert.ok(
         !paths.some((path) => /^(tests|node_modules|\.github)\//.test(path)),
       );
@@ -93,6 +94,14 @@ test(
       );
       assert.equal(library.stdout, '');
       assert.equal(library.stderr, '');
+      runNode(
+        [
+          '--input-type=module',
+          '--eval',
+          "import { validateContract } from 'shcontext/contracts'; if (validateContract('fileAnalysis', {}).success) process.exitCode = 1;",
+        ],
+        consumer,
+      );
 
       writeFileSync(
         join(consumer, 'consumer.mts'),
@@ -101,6 +110,17 @@ test(
           "import { getProjectInfo as core } from 'shcontext/core';",
           'export const info: ProjectInfo = getProjectInfo();',
           'export const name: string = core().name;',
+          "import { validateContract, type DependencyEdge } from 'shcontext/contracts';",
+          "export const checked = validateContract('repositoryInventory', {});",
+          'if (checked.success) { const count: number = checked.data.entries.length; void count; }',
+          'export function target(edge: DependencyEdge): string | null {',
+          "  if (edge.resolution === 'resolved') return edge.to;",
+          '  const empty: null = edge.to; return empty;',
+          '}',
+          '// @ts-expect-error Unknown contract names are rejected statically.',
+          "validateContract('inventedContract', {});",
+          '// @ts-expect-error Payload is unavailable before success narrowing.',
+          "validateContract('fileAnalysis', {}).data;",
         ].join('\n'),
       );
       runNode(

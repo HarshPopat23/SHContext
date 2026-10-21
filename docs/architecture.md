@@ -4,6 +4,10 @@ Status: implementation plan for the [v0.1 specification](specification.md), not
 an existing module inventory. The [format contract](context-format.md) is the
 authority for persisted files, identities, and diagnostics.
 
+The shared in-memory/runtime record contracts are now implemented in
+`src/core/contracts/`; use the [data contract guide](data-contracts.md) for exact
+types and payloads. Processing stages below remain the implementation plan.
+
 ## Design decisions and research
 
 These decisions are SHContext proposals. Existing projects inform them; their
@@ -53,8 +57,8 @@ inspect source, but cannot replace mechanical checks or human evaluation.
 | `InventoryEntry`     | Path/kind, one disposition/reason, mode, byte size, digest, sanitized diagnostics                   |
 | `FileAnalysis`       | Inventory reference, syntax symbols, evidence ranges, observed references, limitations              |
 | `DependencyEdge`     | From/to paths when resolved, original specifier, relationship kind, evidence; no guessed target     |
-| `FolderDraft`        | Required sections, claims with evidence IDs, direct file/child inventory, complete/partial coverage |
-| `BuildManifest`      | Portable source/policy/generation identities and owned output digests                               |
+| `FolderSummary`      | Required sections, claims with evidence IDs, direct file/child inventory, complete/partial coverage |
+| `GenerationManifest` | Portable source/policy/generation identities and owned output digests                               |
 | `VerificationResult` | Fresh/stale/unknown/invalid state, coverage, machine-readable findings                              |
 
 Adapters MUST return typed results validated by the core. Provider responses

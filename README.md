@@ -45,8 +45,10 @@ const project: ProjectInfo = getProjectInfo();
 console.log(project.version);
 ```
 
-Importing the library does not run the CLI. The current API exposes package
-identity only; repository schemas and pipeline operations come in later steps.
+Importing the library does not run the CLI. Shared runtime schemas and inferred
+TypeScript types are also available from `shcontext/contracts`; see the
+[data contract guide](docs/data-contracts.md). Repository pipeline operations
+remain future work.
 
 ## Project documents
 
@@ -57,6 +59,7 @@ identity only; repository schemas and pipeline operations come in later steps.
 - [Architecture](docs/architecture.md): processing stages, module boundaries,
   consistency, and implementation order.
 - [Development decisions](docs/development.md): tooling choices and sources.
+- [Shared data contracts](docs/data-contracts.md): module handoffs, validation and examples.
 - [Contributing](CONTRIBUTING.md): installation, checks and package boundaries.
 
 Released under the [MIT license](LICENSE).

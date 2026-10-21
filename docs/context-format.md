@@ -161,18 +161,24 @@ report. Time/cost operational logs, if enabled, belong only in root `.shcontext/
 
 `manifest.json` MUST contain:
 
-| Field            | Contract                                                                                                                 |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `schema_version` | Integer `1`                                                                                                              |
-| `generator`      | SHContext version and `generation_id`                                                                                    |
-| `generation`     | Effective provider/model ID; parser/resolver, prompt/template, renderer, detector and default-policy version identifiers |
-| `selection`      | Effective configuration without credentials and ordered root-relative ignore-control file paths/digests                  |
-| `input_id`       | Snapshot digest defined below                                                                                            |
-| `coverage`       | Root complete/partial result                                                                                             |
-| `provenance`     | Optional Git HEAD or `null`; informational, excluded from freshness                                                      |
-| `files`          | Selected text identities: path, digest or null, disposition and mode                                                     |
-| `directories`    | Included source directories and their coverage                                                                           |
-| `outputs`        | Every owned generated path except the manifest itself, with raw-byte digest                                              |
+The executable version-1 record layouts and example payloads are defined in the
+[shared data contract guide](data-contracts.md). Folder summary records also carry
+per-kind/disposition subtree counts; the renderer owns that mechanical metadata.
+
+| Field               | Contract                                                                                                                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `schema_version`    | Integer `1`                                                                                                              |
+| `generator`         | SHContext version and `generation_id`                                                                                    |
+| `generation`        | Effective provider/model ID; parser/resolver, prompt/template, renderer, detector and default-policy version identifiers |
+| `selection`         | Effective configuration without credentials and ordered root-relative ignore-control file paths/digests                  |
+| `input_id`          | Snapshot digest defined below                                                                                            |
+| `coverage`          | Root complete/partial result                                                                                             |
+| `provenance`        | Object with nullable `git_head`; informational, excluded from freshness                                                  |
+| `files`             | Selected text identities: path, digest or null, disposition, reason and mode                                             |
+| `directories`       | Included source directories and their coverage                                                                           |
+| `outputs`           | Every owned generated path except the manifest itself, with raw-byte digest                                              |
+| `analysis_failures` | One primary limitation per affected path: unsupported language, access/parser failure, oversized or sensitive content    |
+| `diagnostics`       | Sanitized run-level code/message records                                                                                 |
 
 The output list includes `context/.shcontext/report.json`. The manifest does not
 hash itself, avoiding a circular digest. Reject unknown schema versions and

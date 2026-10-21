@@ -1,1 +1,1 @@
-export { greet } from './greet.js';
+export { greet } from './greet.ts';

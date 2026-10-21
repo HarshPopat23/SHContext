@@ -15,7 +15,9 @@ product, which the current foundation does not implement.
 | `prepare` build and package smoke test | Git/local development compiles, while a packed consumer gets ready-to-run JS and types without development dependencies. [npm scripts](https://docs.npmjs.com/cli/v11/using-npm/scripts/)                                                        |
 | Linux/Windows and Node 22/24 CI matrix | Check path, executable-shim and runtime boundaries on supported hosts. [GitHub Node CI guide](https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs)                                                                           |
 
-The runtime currently has no third-party dependencies. Development tooling is
+The shared data contracts use the pinned Zod runtime dependency for strict
+validation and inferred TypeScript types; see the [contract guide](data-contracts.md).
+Development tooling is
 installed locally; no global compiler, provider credentials, scanner, model SDK,
 vector store, linter plugin stack or web framework is required. Strict type
 checking and formatting are separate checks. This is a project setup, not a

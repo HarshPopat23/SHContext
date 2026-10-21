@@ -1,7 +1,8 @@
 # Contributing to SHContext
 
 SHContext is under development. The foundation exposes help/version and a small
-typed package-identity API. Repository analysis is specified but not implemented.
+typed package-identity API plus shared runtime data contracts. Repository analysis
+is specified but not implemented.
 Read the [specification](docs/specification.md), [format](docs/context-format.md)
 and [architecture](docs/architecture.md) before adding behavior.
 
@@ -52,8 +53,10 @@ partial-coverage cases. No model/API key is required for foundation checks.
 Keep process argument handling in `src/cli/`; importing `shcontext` or
 `shcontext/core` must not start the CLI or inspect a user's repository. Use `.js`
 extensions in relative TypeScript imports so emitted ESM resolves in Node.
-Do not export placeholder scanners/providers. The next milestone owns shared
-repository schemas and configuration, not this scaffold.
+Do not export placeholder scanners/providers. Import shared schemas/types from
+`shcontext/contracts`; read the [contract guide](docs/data-contracts.md) before
+changing handoff records. Configuration-file loading and pipeline operations
+remain future work.
 
 `npm pack` builds a tarball through `prepare`. Its allowlist includes compiled
 output, corresponding TypeScript sources for source/declaration maps, docs and

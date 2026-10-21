@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "state": "invalid",
+  "coverage": "partial",
+  "findings": [
+    {
+      "schema_version": 1,
+      "code": "invalid_evidence",
+      "severity": "error",
+      "path": "src/index.ts",
+      "pointer": "/folders/1/evidence/0",
+      "message": "Evidence must match the inspected source identity."
+    }
+  ]
+}
