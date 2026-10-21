@@ -16,7 +16,7 @@ function runNode(args, cwd) {
     env: {
       ...process.env,
       npm_config_update_notifier: 'false',
-      npm_config_loglevel: 'silent',
+      npm_config_loglevel: 'error',
     },
   });
   assert.ifError(result.error);
@@ -25,7 +25,7 @@ function runNode(args, cwd) {
 }
 
 test(
-  'packed package installs offline with a working bin, library and declarations',
+  'packed package installs with a fresh cache and working bin, library and declarations',
   { timeout: 180_000 },
   () => {
     const sandbox = mkdtempSync(join(tmpdir(), 'shcontext package '));
@@ -69,7 +69,9 @@ test(
         [
           npm,
           'install',
-          '--offline',
+          '--prefer-offline',
+          '--cache',
+          join(sandbox, 'npm-cache'),
           '--ignore-scripts',
           '--omit=dev',
           '--no-audit',

@@ -26,21 +26,22 @@ Use `npm install` when deliberately changing dependencies and commit the updated
 
 ## Commands and checks
 
-| Command                 | Purpose                                                                                 |
-| ----------------------- | --------------------------------------------------------------------------------------- |
-| `npm run build`         | Clean `dist/` and emit Node ESM, declarations and source maps                           |
-| `npm run typecheck`     | Strict source checking without emission                                                 |
-| `npm run format`        | Apply the pinned Prettier version                                                       |
-| `npm run format:check`  | Check formatting without writes                                                         |
-| `npm test`              | Build, run CLI/library tests, pack/install the package offline and check consumer types |
-| `npm run check`         | Formatting, type checking and the test suite                                            |
-| `npm run cli -- --help` | Run the compiled CLI without a global installation                                      |
+| Command                 | Purpose                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| `npm run build`         | Clean `dist/` and emit Node ESM, declarations and source maps                              |
+| `npm run typecheck`     | Strict source checking without emission                                                    |
+| `npm run format`        | Apply the pinned Prettier version                                                          |
+| `npm run format:check`  | Check formatting without writes                                                            |
+| `npm test`              | Build, run CLI/library tests, pack/install with a fresh npm cache and check consumer types |
+| `npm run check`         | Formatting, type checking and the test suite                                               |
+| `npm run cli -- --help` | Run the compiled CLI without a global installation                                         |
 
 Tests use Node's built-in runner and live at `tests/*.test.mjs`; fixture files are
 not executable tests. Keep fixtures small and self-contained, and never include
 credentials or downloaded private repositories. `tests/package.test.mjs` requires
-`npm test` so it can reuse npm's executable path; it exercises a temporary local
-installation, not the public registry. Test files run sequentially because
+`npm test` so it can reuse npm's executable path. It installs SHContext from a
+local tarball into a temporary consumer with a fresh npm cache; registry access
+is required to fetch runtime dependencies. Test files run sequentially because
 packing runs `prepare`, which rebuilds `dist/`.
 
 Formatting excludes byte-sensitive fixtures and generated artifacts. The existing
