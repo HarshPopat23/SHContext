@@ -9,14 +9,14 @@ authority for persisted files, identities, and diagnostics.
 These decisions are SHContext proposals. Existing projects inform them; their
 features are not evidence that SHContext has implemented equivalent behavior.
 
-| Research input | Observation | SHContext decision |
-| --- | --- | --- |
-| [Aider repository map](https://aider.chat/docs/repomap.html) | Maps important symbols and ranks file relationships within a token budget | Preserve symbols and dependency evidence; use maps for navigation, not as proof of behavior |
-| [Repomix configuration](https://repomix.com/guide/configuration) | Separates selection/exclusions from packed output and supports bounded inputs | Make inventory and exclusion reasons explicit before generation |
-| [Repomix security](https://repomix.com/guide/security) and [FAQ](https://repomix.com/guide/faq) | Uses credential checks and recommends reviewing output | Apply filename exclusions and local detection before provider submission; disclose limits |
-| [Git ignore rules](https://git-scm.com/docs/gitignore) | Tracked files are not removed by ignore patterns | Separate Git tracking from SHContext's stricter exclusions; exclude personal global rules for portability |
-| [Tree-sitter introduction](https://tree-sitter.github.io/tree-sitter/) | Syntax trees can remain partially available around errors | Treat syntax recovery as incomplete evidence; report parser errors explicitly |
-| [TypeScript module reference](https://www.typescriptlang.org/docs/handbook/modules/reference.html) | Resolution behavior varies with host and configuration | Limit v0.1 edges to explicitly resolved relative references and report ambiguity |
+| Research input                                                                                     | Observation                                                                   | SHContext decision                                                                                        |
+| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| [Aider repository map](https://aider.chat/docs/repomap.html)                                       | Maps important symbols and ranks file relationships within a token budget     | Preserve symbols and dependency evidence; use maps for navigation, not as proof of behavior               |
+| [Repomix configuration](https://repomix.com/guide/configuration)                                   | Separates selection/exclusions from packed output and supports bounded inputs | Make inventory and exclusion reasons explicit before generation                                           |
+| [Repomix security](https://repomix.com/guide/security) and [FAQ](https://repomix.com/guide/faq)    | Uses credential checks and recommends reviewing output                        | Apply filename exclusions and local detection before provider submission; disclose limits                 |
+| [Git ignore rules](https://git-scm.com/docs/gitignore)                                             | Tracked files are not removed by ignore patterns                              | Separate Git tracking from SHContext's stricter exclusions; exclude personal global rules for portability |
+| [Tree-sitter introduction](https://tree-sitter.github.io/tree-sitter/)                             | Syntax trees can remain partially available around errors                     | Treat syntax recovery as incomplete evidence; report parser errors explicitly                             |
+| [TypeScript module reference](https://www.typescriptlang.org/docs/handbook/modules/reference.html) | Resolution behavior varies with host and configuration                        | Limit v0.1 edges to explicitly resolved relative references and report ambiguity                          |
 
 More languages, embeddings and multi-agent execution are later extensions. They
 must preserve selection, output ownership, provenance and partial-coverage rules.
@@ -28,18 +28,18 @@ for the first useful build.
 Use a TypeScript core with a thin CLI; select exact dependencies when building
 the relevant modules, pin versions, and test their behavior against this contract.
 
-| Proposed location | Responsibility | Must not do |
-| --- | --- | --- |
-| `src/cli/` | Parse commands, select root, render diagnostics, map exit codes | Hide partial failures or publish directly |
-| `src/core/` | Config/schema validation, shared types, budgets, pipeline state | Evaluate repository configuration code |
-| `src/scanner/` | Enumerate paths, track Git status, apply layered policy, hash safe input | Follow symlinks or silently prune for budget |
-| `src/parsers/` | JS/TS syntax adapters and bounded text/config inspection | Claim complete type/call/runtime knowledge |
-| `src/graph/` | Store evidence-backed relative edges, unresolved/external references | Invent targets for aliases/dynamic references |
-| `src/generation/` | Evidence selection, chunking, bottom-up summaries, rendering | Let a model select arbitrary filesystem paths |
-| `src/providers/` | One initial adapter; request limits, bounded retries, response decoding | Read repository files or select fallback destinations |
-| `src/validation/` | Format, path, evidence, coverage, identity and output checks | Promise semantic truth from hash/link validity |
-| `src/storage/` | Staging, ownership checks, recoverable publication | Delete unowned output or modify source |
-| `tests/fixtures/` | Small controlled repositories covering edge cases | Require real credentials for core tests |
+| Proposed location | Responsibility                                                           | Must not do                                           |
+| ----------------- | ------------------------------------------------------------------------ | ----------------------------------------------------- |
+| `src/cli/`        | Parse commands, select root, render diagnostics, map exit codes          | Hide partial failures or publish directly             |
+| `src/core/`       | Config/schema validation, shared types, budgets, pipeline state          | Evaluate repository configuration code                |
+| `src/scanner/`    | Enumerate paths, track Git status, apply layered policy, hash safe input | Follow symlinks or silently prune for budget          |
+| `src/parsers/`    | JS/TS syntax adapters and bounded text/config inspection                 | Claim complete type/call/runtime knowledge            |
+| `src/graph/`      | Store evidence-backed relative edges, unresolved/external references     | Invent targets for aliases/dynamic references         |
+| `src/generation/` | Evidence selection, chunking, bottom-up summaries, rendering             | Let a model select arbitrary filesystem paths         |
+| `src/providers/`  | One initial adapter; request limits, bounded retries, response decoding  | Read repository files or select fallback destinations |
+| `src/validation/` | Format, path, evidence, coverage, identity and output checks             | Promise semantic truth from hash/link validity        |
+| `src/storage/`    | Staging, ownership checks, recoverable publication                       | Delete unowned output or modify source                |
+| `tests/fixtures/` | Small controlled repositories covering edge cases                        | Require real credentials for core tests               |
 
 Selection and hashing are deterministic code, not model tasks. Model calls are
 restricted to bounded supplied evidence. A separate semantic reviewer can later
@@ -47,15 +47,15 @@ inspect source, but cannot replace mechanical checks or human evaluation.
 
 ## Shared in-memory contracts
 
-| Record | Minimum responsibility |
-| --- | --- |
-| `EffectiveConfig` | Validated settings, provider/model ID, component identities; no credentials in serialized form |
-| `InventoryEntry` | Path/kind, one disposition/reason, mode, byte size, digest, sanitized diagnostics |
-| `FileAnalysis` | Inventory reference, syntax symbols, evidence ranges, observed references, limitations |
-| `DependencyEdge` | From/to paths when resolved, original specifier, relationship kind, evidence; no guessed target |
-| `FolderDraft` | Required sections, claims with evidence IDs, direct file/child inventory, complete/partial coverage |
-| `BuildManifest` | Portable source/policy/generation identities and owned output digests |
-| `VerificationResult` | Fresh/stale/unknown/invalid state, coverage, machine-readable findings |
+| Record               | Minimum responsibility                                                                              |
+| -------------------- | --------------------------------------------------------------------------------------------------- |
+| `EffectiveConfig`    | Validated settings, provider/model ID, component identities; no credentials in serialized form      |
+| `InventoryEntry`     | Path/kind, one disposition/reason, mode, byte size, digest, sanitized diagnostics                   |
+| `FileAnalysis`       | Inventory reference, syntax symbols, evidence ranges, observed references, limitations              |
+| `DependencyEdge`     | From/to paths when resolved, original specifier, relationship kind, evidence; no guessed target     |
+| `FolderDraft`        | Required sections, claims with evidence IDs, direct file/child inventory, complete/partial coverage |
+| `BuildManifest`      | Portable source/policy/generation identities and owned output digests                               |
+| `VerificationResult` | Fresh/stale/unknown/invalid state, coverage, machine-readable findings                              |
 
 Adapters MUST return typed results validated by the core. Provider responses
 cannot introduce a source reference outside the supplied evidence set. Invalid
@@ -194,14 +194,14 @@ an MCP server is an optional integration, not the indexing engine.
 
 ## Implementation and verification order
 
-| Order | Deliverable | Evidence needed before advancing |
-| --- | --- | --- |
-| 1 | Config, shared schemas, path rules, scanner | Fixtures for tracked/untracked files, ignore precedence, unusual paths, pruned boundaries and limits |
-| 2 | Parser adapters and graph | Symbols and resolved/unresolved edges checked against small JS/TS examples; error/declaration cases |
-| 3 | Renderer and deterministic inventory-only build | Every included folder represented; metadata/links/ownership verified without a model |
-| 4 | Provider adapter and sequential semantic generation | Mocked timeout/budget/schema failures; real sample summaries manually checked against evidence |
-| 5 | Publication and offline verify | Race, output-tampering, interrupted-swap recovery and clean-clone verification exercises |
-| 6 | First release and build/verify skills | Specification acceptance matrix satisfied and limitations documented |
+| Order | Deliverable                                             | Evidence needed before advancing                                                                                    |
+| ----- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 1     | Config, shared schemas, path rules, scanner             | Fixtures for tracked/untracked files, ignore precedence, unusual paths, pruned boundaries and limits                |
+| 2     | Parser adapters and graph                               | Symbols and resolved/unresolved edges checked against small JS/TS examples; error/declaration cases                 |
+| 3     | Renderer and deterministic inventory-only build         | Every included folder represented; metadata/links/ownership verified without a model                                |
+| 4     | Provider adapter and sequential semantic generation     | Mocked timeout/budget/schema failures; real sample summaries manually checked against evidence                      |
+| 5     | Publication and offline verify                          | Race, output-tampering, interrupted-swap recovery and clean-clone verification exercises                            |
+| 6     | First release and build/verify skills                   | Specification acceptance matrix satisfied and limitations documented                                                |
 | Later | Incremental update, query, benchmarks, parallel workers | Compare correctness, useful file retrieval, latency, token use and cost against sequential/simple-summary baselines |
 
 Tests must cover the product's observable contracts, not just snapshots of its

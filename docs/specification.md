@@ -22,14 +22,14 @@ proof that the application behaves as described at runtime.
 
 ### First-release boundary
 
-| Included in v0.1 | Deferred beyond v0.1 |
-| --- | --- |
-| Local directory input; Git awareness when available | Fetching repositories, hosted service, GitHub authentication |
-| JavaScript/TypeScript structural analysis and evidence-based summaries | Full semantic support for other languages |
-| Markdown/configuration context at the limited levels below | Runtime tracing, type checking, complete call graphs |
-| Full builds, scan reports, mechanical verification | Incremental generation, question answering, CI automation |
-| One sequential generation workflow and one configured provider adapter | Parallel agent scheduling, many provider adapters |
-| Versioned output, source references, content-based freshness | Guaranteed factual correctness or identical model prose |
+| Included in v0.1                                                       | Deferred beyond v0.1                                         |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Local directory input; Git awareness when available                    | Fetching repositories, hosted service, GitHub authentication |
+| JavaScript/TypeScript structural analysis and evidence-based summaries | Full semantic support for other languages                    |
+| Markdown/configuration context at the limited levels below             | Runtime tracing, type checking, complete call graphs         |
+| Full builds, scan reports, mechanical verification                     | Incremental generation, question answering, CI automation    |
+| One sequential generation workflow and one configured provider adapter | Parallel agent scheduling, many provider adapters            |
+| Versioned output, source references, content-based freshness           | Guaranteed factual correctness or identical model prose      |
 
 The build/update/query/verify/benchmark skills remain the longer-term product
 plan. In v0.1, only build and verify have an underlying generation workflow;
@@ -63,15 +63,15 @@ Configuration is optional root `shcontext.config.json`, parsed as strict JSON
 with unknown keys rejected. Duplicate JSON keys MUST be rejected. The v0.1 keys
 and defaults are:
 
-| Key | Default / constraint |
-| --- | --- |
-| `version` | Required `1` when the file exists |
-| `maxFileBytes` | `1048576` (1 MiB); positive integer |
-| `maxInputBytes` | `20971520` (20 MiB); positive integer, at least `maxFileBytes` |
-| `maxEntries` | `10000`; positive integer; includes discovered files and directories |
-| `folderWordLimit` | `600`; positive integer for generated narrative per non-root folder |
-| `rootWordLimit` | `1200`; positive integer for the root narrative |
-| `provider` | `null` when absent; build requires `{ "id": "...", "model": "..." }`; scan/verify preserve this setting without contacting the provider |
+| Key               | Default / constraint                                                                                                                    |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `version`         | Required `1` when the file exists                                                                                                       |
+| `maxFileBytes`    | `1048576` (1 MiB); positive integer                                                                                                     |
+| `maxInputBytes`   | `20971520` (20 MiB); positive integer, at least `maxFileBytes`                                                                          |
+| `maxEntries`      | `10000`; positive integer; includes discovered files and directories                                                                    |
+| `folderWordLimit` | `600`; positive integer for generated narrative per non-root folder                                                                     |
+| `rootWordLimit`   | `1200`; positive integer for the root narrative                                                                                         |
+| `provider`        | `null` when absent; build requires `{ "id": "...", "model": "..." }`; scan/verify preserve this setting without contacting the provider |
 
 Provider IDs are implementation-defined and MUST be listed in the eventual CLI
 documentation. Credentials come from explicit process configuration, never
@@ -147,14 +147,14 @@ individual files are instead recorded as skipped and make coverage partial.
 
 ## 4. Language and content support
 
-| Input | v0.1 mode | Guaranteed scope / limits |
-| --- | --- | --- |
-| `.js`, `.jsx`, `.mjs`, `.cjs` | `structural` | Syntax declarations, exports, literal imports/re-exports and literal `require()` references; relevant bodies may be read for explanation |
-| `.ts`, `.tsx`, `.mts`, `.cts`, including declarations | `structural` | Above plus types/interfaces; declarations describe interfaces, not absent implementation |
-| `.md`, `.mdx`, `.txt`, extensionless `README`/`LICENSE` | `text` | Explain inspected prose and headings; do not execute MDX or treat claims as verified implementation |
-| `.json`, `.jsonc`, `.yaml`, `.yml`, `.toml`, `.gitignore`, `.shcontextignore` | `configuration` | Summarize observed settings/declared scripts or selection rules; no evaluation, schema validation, or dependency installation |
-| Other readable UTF-8 files, such as Python/Rust/Go/HTML/CSS | `inventory-only` | Path, size, language hint and hash; no behavioral or dependency claims from their contents |
-| Binary/non-UTF-8 files, archives, images and generated source maps (`*.map`) | `none` | Path/type/reason only; no decoding, OCR, archive extraction, or semantic summary |
+| Input                                                                         | v0.1 mode        | Guaranteed scope / limits                                                                                                                |
+| ----------------------------------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `.js`, `.jsx`, `.mjs`, `.cjs`                                                 | `structural`     | Syntax declarations, exports, literal imports/re-exports and literal `require()` references; relevant bodies may be read for explanation |
+| `.ts`, `.tsx`, `.mts`, `.cts`, including declarations                         | `structural`     | Above plus types/interfaces; declarations describe interfaces, not absent implementation                                                 |
+| `.md`, `.mdx`, `.txt`, extensionless `README`/`LICENSE`                       | `text`           | Explain inspected prose and headings; do not execute MDX or treat claims as verified implementation                                      |
+| `.json`, `.jsonc`, `.yaml`, `.yml`, `.toml`, `.gitignore`, `.shcontextignore` | `configuration`  | Summarize observed settings/declared scripts or selection rules; no evaluation, schema validation, or dependency installation            |
+| Other readable UTF-8 files, such as Python/Rust/Go/HTML/CSS                   | `inventory-only` | Path, size, language hint and hash; no behavioral or dependency claims from their contents                                               |
+| Binary/non-UTF-8 files, archives, images and generated source maps (`*.map`)  | `none`           | Path/type/reason only; no decoding, OCR, archive extraction, or semantic summary                                                         |
 
 Configuration mode is a bounded text inspection mode, not a promise to implement
 every parser for those formats. Invalid configuration syntax is marked uncertain
@@ -207,12 +207,12 @@ identity and hashing rules are in [the format contract](context-format.md#freshn
 Store Git HEAD only as optional provenance; committing generated output or
 rebasing with identical relevant bytes MUST NOT alone make context stale.
 
-| Result | Meaning |
-| --- | --- |
-| `fresh` | Current inputs and policy match recorded identities and all owned outputs validate |
-| `stale` | A known relevant file/path/disposition/policy/identity changed |
-| `unknown` | Inputs cannot be fully compared, for example an unreadable included file |
-| `invalid` | Manifest/output missing, malformed, modified, or internally inconsistent |
+| Result    | Meaning                                                                            |
+| --------- | ---------------------------------------------------------------------------------- |
+| `fresh`   | Current inputs and policy match recorded identities and all owned outputs validate |
+| `stale`   | A known relevant file/path/disposition/policy/identity changed                     |
+| `unknown` | Inputs cannot be fully compared, for example an unreadable included file           |
+| `invalid` | Manifest/output missing, malformed, modified, or internally inconsistent           |
 
 Coverage and freshness are independent: unsupported text can yield
 `fresh + partial`; unreadable content prevents a `fresh` result. A byte hash
@@ -245,11 +245,11 @@ SHContext MUST NOT replace repository instructions such as `AGENTS.md`.
 
 ## 8. Outcomes and acceptance criteria
 
-| Exit code | Contract |
-| --- | --- |
-| `0` | Scan/build completed with complete coverage; verify found fresh, complete, valid context |
-| `2` | Scan/build completed with explicitly partial coverage; verify found fresh, partial, valid context |
-| `1` | Operational/configuration/provider failure; verify found stale, unknown, or invalid context |
+| Exit code | Contract                                                                                          |
+| --------- | ------------------------------------------------------------------------------------------------- |
+| `0`       | Scan/build completed with complete coverage; verify found fresh, complete, valid context          |
+| `2`       | Scan/build completed with explicitly partial coverage; verify found fresh, partial, valid context |
+| `1`       | Operational/configuration/provider failure; verify found stale, unknown, or invalid context       |
 
 A partial build with unreadable content may publish explicit placeholders and
 exit `2`; a subsequent verify exits `1` because that content cannot be compared.
@@ -258,21 +258,21 @@ no source snippets, credentials, or provider request bodies are logged by defaul
 
 The implementation is releasable only when these observable cases pass:
 
-| Scenario | Required behavior |
-| --- | --- |
-| Small JS/TS tree | Root and every included folder have linked summaries with valid source references |
-| Dirty/untracked file | Summary and hash describe current bytes, not HEAD or index |
-| Tracked path matches `.gitignore` | Included unless a stronger SHContext exclusion applies |
-| Nested ignore + negation | Matches the documented layer and parent-pruning rules |
-| Ignored dependency tree or symlink | Single boundary record; no descent or provider content |
-| Python file, parser error, denied file/directory | Explicit limitation and partial coverage; no invented behavior |
-| Embedded credential | Whole-file exclusion without matched value in output/logs |
-| Add/edit/delete/move, config or parser identity change | Verify reports stale; HEAD-only change does not |
-| Output edited, manifest corrupt, filename collision | Verify/build refuse a misleading valid result |
-| Source changes during generation, budget/provider failure | Previous published context remains usable; no partial replacement |
-| No eligible text / empty directory | Honest inventory-only/empty summary; no fabricated features |
-| Same unchanged inputs | Mechanical identities and ordering stable; prose need not be byte-identical |
-| First build creates output/state directories | Immediate offline verify is fresh; generated paths do not invalidate their own source identity |
+| Scenario                                                  | Required behavior                                                                              |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Small JS/TS tree                                          | Root and every included folder have linked summaries with valid source references              |
+| Dirty/untracked file                                      | Summary and hash describe current bytes, not HEAD or index                                     |
+| Tracked path matches `.gitignore`                         | Included unless a stronger SHContext exclusion applies                                         |
+| Nested ignore + negation                                  | Matches the documented layer and parent-pruning rules                                          |
+| Ignored dependency tree or symlink                        | Single boundary record; no descent or provider content                                         |
+| Python file, parser error, denied file/directory          | Explicit limitation and partial coverage; no invented behavior                                 |
+| Embedded credential                                       | Whole-file exclusion without matched value in output/logs                                      |
+| Add/edit/delete/move, config or parser identity change    | Verify reports stale; HEAD-only change does not                                                |
+| Output edited, manifest corrupt, filename collision       | Verify/build refuse a misleading valid result                                                  |
+| Source changes during generation, budget/provider failure | Previous published context remains usable; no partial replacement                              |
+| No eligible text / empty directory                        | Honest inventory-only/empty summary; no fabricated features                                    |
+| Same unchanged inputs                                     | Mechanical identities and ordering stable; prose need not be byte-identical                    |
+| First build creates output/state directories              | Immediate offline verify is fresh; generated paths do not invalidate their own source identity |
 
 Research references explain design inputs, not features inherited from another
 tool. Tests and benchmarks must demonstrate SHContext's own behavior.

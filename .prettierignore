@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+.shcontext/
+package-lock.json
+tests/fixtures/
+LICENSE

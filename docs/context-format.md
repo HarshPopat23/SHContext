@@ -6,12 +6,12 @@ processing responsibilities are in [the architecture](architecture.md).
 
 ## Layout and path mapping
 
-| Source directory | Generated summary |
-| --- | --- |
-| `.` | `context/CONTEXT.md` |
-| `src` | `context/src/CONTEXT.md` |
-| `src/auth` | `context/src/auth/CONTEXT.md` |
-| `tests/auth` | `context/tests/auth/CONTEXT.md` |
+| Source directory | Generated summary               |
+| ---------------- | ------------------------------- |
+| `.`              | `context/CONTEXT.md`            |
+| `src`            | `context/src/CONTEXT.md`        |
+| `src/auth`       | `context/src/auth/CONTEXT.md`   |
+| `tests/auth`     | `context/tests/auth/CONTEXT.md` |
 
 Emit one summary per included directory, even when it contains no analyzable
 files. Root output also contains `context/.shcontext/manifest.json` and
@@ -41,10 +41,10 @@ The renderer supplies metadata; the model does not invent hashes or paths.
 ```yaml
 ---
 schema_version: 1
-source_path: "src/auth"
-coverage: "complete"
-input_id: "sha256:<64 lowercase hexadecimal characters>"
-generation_id: "sha256:<64 lowercase hexadecimal characters>"
+source_path: 'src/auth'
+coverage: 'complete'
+input_id: 'sha256:<64 lowercase hexadecimal characters>'
+generation_id: 'sha256:<64 lowercase hexadecimal characters>'
 ---
 ```
 
@@ -54,18 +54,18 @@ No `fresh: true` field is stored: freshness must be checked against current inpu
 `input_id` identifies the full selected repository snapshot; `generation_id`
 identifies the transformation. v0.1 can invalidate the entire output on changes.
 
-| Required heading | Required content |
-| --- | --- |
-| `# Context: <source_path>` | Exact folder identity, including `.` for root |
-| `## Purpose` | Bounded explanation; observed facts and labeled inferences |
-| `## Files and responsibilities` | Every direct non-ignored file, its mode/disposition, and supported responsibility or explicit limitation |
-| `## Interfaces and entry points` | Observed exports/routes/commands with evidence; unknowns stated |
-| `## Dependencies and consumers` | Resolved file references, external specifiers, unresolved references; never imply a complete call graph |
-| `## Feature flows` | Supported cross-file sequences or an explicit statement that none were established |
-| `## Tests` | Relevant inspected test files; do not claim they were executed or passed |
-| `## Child folders` | Links to every included direct child summary |
-| `## Coverage and limitations` | Disposition counts, skipped boundaries, unsupported/unreadable inputs, and uncertainty |
-| `## Evidence` | Evidence IDs, source links, byte hashes, line ranges, optional symbols, and basis |
+| Required heading                 | Required content                                                                                         |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `# Context: <source_path>`       | Exact folder identity, including `.` for root                                                            |
+| `## Purpose`                     | Bounded explanation; observed facts and labeled inferences                                               |
+| `## Files and responsibilities`  | Every direct non-ignored file, its mode/disposition, and supported responsibility or explicit limitation |
+| `## Interfaces and entry points` | Observed exports/routes/commands with evidence; unknowns stated                                          |
+| `## Dependencies and consumers`  | Resolved file references, external specifiers, unresolved references; never imply a complete call graph  |
+| `## Feature flows`               | Supported cross-file sequences or an explicit statement that none were established                       |
+| `## Tests`                       | Relevant inspected test files; do not claim they were executed or passed                                 |
+| `## Child folders`               | Links to every included direct child summary                                                             |
+| `## Coverage and limitations`    | Disposition counts, skipped boundaries, unsupported/unreadable inputs, and uncertainty                   |
+| `## Evidence`                    | Evidence IDs, source links, byte hashes, line ranges, optional symbols, and basis                        |
 
 Empty sections MUST say `None observed` or `Not established`, with the relevant
 limit. Tests cannot be inferred from filenames alone: a filename can identify a
@@ -87,9 +87,9 @@ Checks submitted passwords and returns a session token on success. [E1]
 
 ## Files and responsibilities
 
-| File | Mode | Responsibility |
-| --- | --- | --- |
-| login.ts | structural | Exposes login(); calls checkPassword(). [E1] |
+| File      | Mode           | Responsibility                               |
+| --------- | -------------- | -------------------------------------------- |
+| login.ts  | structural     | Exposes login(); calls checkPassword(). [E1] |
 | legacy.py | inventory-only | Unsupported language; behavior not analyzed. |
 
 ## Tests
@@ -116,26 +116,26 @@ independent proof of implementation. Evidence IDs in prose MUST resolve.
 
 The same inventory record shape is used by `scan` and persisted build reports:
 
-| Field | Meaning |
-| --- | --- |
-| `path` | Root-relative file path or directory boundary |
-| `kind` | `file` or `directory` |
-| `disposition` | Exactly one value from the next table |
-| `reason` | Stable machine code, e.g. `unsupported_language` |
-| `mode` | `structural`, `text`, `configuration`, `inventory-only`, or `none` |
-| `bytes` | File size when known, otherwise `null` |
-| `sha256` | Raw-byte digest for readable non-sensitive selected text, otherwise `null` |
-| `diagnostics` | Sanitized code/message pairs, never source/credential excerpts |
+| Field         | Meaning                                                                    |
+| ------------- | -------------------------------------------------------------------------- |
+| `path`        | Root-relative file path or directory boundary                              |
+| `kind`        | `file` or `directory`                                                      |
+| `disposition` | Exactly one value from the next table                                      |
+| `reason`      | Stable machine code, e.g. `unsupported_language`                           |
+| `mode`        | `structural`, `text`, `configuration`, `inventory-only`, or `none`         |
+| `bytes`       | File size when known, otherwise `null`                                     |
+| `sha256`      | Raw-byte digest for readable non-sensitive selected text, otherwise `null` |
+| `diagnostics` | Sanitized code/message pairs, never source/credential excerpts             |
 
-| Disposition | Example reasons | Coverage effect |
-| --- | --- | --- |
-| `analyzed` | `supported_source`, `supported_text`, `supported_configuration` | None |
-| `inventory-only` | `unsupported_language` | Partial |
-| `ignored` | `gitignore`, `shcontextignore`, `noise_directory`, `sensitive_path`, `tool_output`, `vcs_metadata` | None; explicit policy scope |
-| `skipped` | `binary`, `non_utf8`, `lockfile`, `source_map`, `symlink`, `special_file`, `nested_repository` | None; declared exclusions |
-| `skipped` | `too_large`, `sensitive_content` | Partial |
-| `unreadable` | `permission_denied`, `read_failed`, `directory_unreadable` | Partial and unverifiable input |
-| `parse-error` | `syntax_error`, `parser_failed` | Partial; no behavioral summary for that file |
+| Disposition      | Example reasons                                                                                    | Coverage effect                              |
+| ---------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `analyzed`       | `supported_source`, `supported_text`, `supported_configuration`                                    | None                                         |
+| `inventory-only` | `unsupported_language`                                                                             | Partial                                      |
+| `ignored`        | `gitignore`, `shcontextignore`, `noise_directory`, `sensitive_path`, `tool_output`, `vcs_metadata` | None; explicit policy scope                  |
+| `skipped`        | `binary`, `non_utf8`, `lockfile`, `source_map`, `symlink`, `special_file`, `nested_repository`     | None; declared exclusions                    |
+| `skipped`        | `too_large`, `sensitive_content`                                                                   | Partial                                      |
+| `unreadable`     | `permission_denied`, `read_failed`, `directory_unreadable`                                         | Partial and unverifiable input               |
+| `parse-error`    | `syntax_error`, `parser_failed`                                                                    | Partial; no behavioral summary for that file |
 
 An enumerated real directory without a boundary diagnostic is `analyzed` with
 `reason: directory_enumerated`, `mode: none`, and null size/hash. This means its
@@ -161,18 +161,18 @@ report. Time/cost operational logs, if enabled, belong only in root `.shcontext/
 
 `manifest.json` MUST contain:
 
-| Field | Contract |
-| --- | --- |
-| `schema_version` | Integer `1` |
-| `generator` | SHContext version and `generation_id` |
-| `generation` | Effective provider/model ID; parser/resolver, prompt/template, renderer, detector and default-policy version identifiers |
-| `selection` | Effective configuration without credentials and ordered root-relative ignore-control file paths/digests |
-| `input_id` | Snapshot digest defined below |
-| `coverage` | Root complete/partial result |
-| `provenance` | Optional Git HEAD or `null`; informational, excluded from freshness |
-| `files` | Selected text identities: path, digest or null, disposition and mode |
-| `directories` | Included source directories and their coverage |
-| `outputs` | Every owned generated path except the manifest itself, with raw-byte digest |
+| Field            | Contract                                                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `schema_version` | Integer `1`                                                                                                              |
+| `generator`      | SHContext version and `generation_id`                                                                                    |
+| `generation`     | Effective provider/model ID; parser/resolver, prompt/template, renderer, detector and default-policy version identifiers |
+| `selection`      | Effective configuration without credentials and ordered root-relative ignore-control file paths/digests                  |
+| `input_id`       | Snapshot digest defined below                                                                                            |
+| `coverage`       | Root complete/partial result                                                                                             |
+| `provenance`     | Optional Git HEAD or `null`; informational, excluded from freshness                                                      |
+| `files`          | Selected text identities: path, digest or null, disposition and mode                                                     |
+| `directories`    | Included source directories and their coverage                                                                           |
+| `outputs`        | Every owned generated path except the manifest itself, with raw-byte digest                                              |
 
 The output list includes `context/.shcontext/report.json`. The manifest does not
 hash itself, avoiding a circular digest. Reject unknown schema versions and
@@ -197,7 +197,7 @@ UTF-8 byte order. Use arrays/tuples with specified field order, not unspecified
 object serialization; do not normalize Unicode or lowercase paths.
 
 1. **Policy identity:** hash `["policy-v1", effective-configuration-tuples,
-   ignore-control-tuples, default-policy-version, detector-version]`. Configuration
+ignore-control-tuples, default-policy-version, detector-version]`. Configuration
    tuples are sorted `[key,value]` pairs with nested objects recursively represented
    as sorted pairs. Ignore-control tuples are sorted `[path,raw-byte-digest]` pairs.
    An absent optional control file is represented by its path and null digest;
