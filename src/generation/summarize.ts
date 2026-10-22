@@ -29,7 +29,7 @@ import {
 } from './draft.js';
 import { BuildError } from './errors.js';
 
-export const GENERATOR_VERSION = 'context-pipeline-v1';
+export const GENERATOR_VERSION = 'context-pipeline-v2';
 export const RENDERER_VERSION = 'markdown-v1';
 export const TEMPLATE_VERSION = 'context-sections-v1';
 export function generationIdentity(
@@ -107,13 +107,14 @@ export async function summarize(
         throw new Error();
       const text = decode(read.bytes, true);
       if (sensitiveContent(text)) throw new Error();
-      sources.set(analysis.path, text);
+      if (analysis.line_count > 0) sources.set(analysis.path, text);
     } catch {
       throw new BuildError(
         'source_changed',
         'A selected source changed before evidence collection.',
       );
     }
+    if (analysis.line_count === 0) continue;
     allEvidence.set(analysis.path, {
       id: `E${allEvidence.size + 1}`,
       path: analysis.path,
@@ -179,7 +180,9 @@ export async function summarize(
         claims: [],
         limitations:
           file.disposition === 'analyzed'
-            ? []
+            ? file.bytes === 0
+              ? ['Empty file; no behavioral evidence.']
+              : []
             : [`${file.disposition}: ${file.reason}; behavior not analyzed.`],
       })),
       interfaces_and_entry_points: [],

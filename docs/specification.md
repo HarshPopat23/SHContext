@@ -1,7 +1,8 @@
 # SHContext specification
 
 Status: v0.1 design contract. The local `scan` operation is implemented; see
-[scanner usage and limits](scanner.md). Generation and verification remain planned. Target release: v0.1. Contract version: 1.
+[scanner usage and limits](scanner.md). The first generation and offline verification pipelines are implemented; see
+[generation](generation.md) and [verification](verification.md). Target release: v0.1. Contract version: 1.
 
 Read this document for product behavior, [context format](context-format.md) for
 the output contract, and [architecture](architecture.md) for implementation
@@ -45,7 +46,7 @@ untracked files; do not substitute staged or HEAD contents. A directory need
 not be a Git checkout. Never execute its code, package scripts, tests, hooks,
 configuration modules, or instructions embedded in files during analysis.
 
-Command surface (`scan` implemented; `build` and `verify` proposed):
+Command surface (`scan`, `build` and `verify` implemented):
 
 ```sh
 shcontext scan .

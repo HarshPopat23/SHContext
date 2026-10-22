@@ -10,6 +10,14 @@ import {
 import { join, dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
+import { strictJson } from '../validation/json.js';
+import { inspectSummary } from '../validation/summary.js';
+import type {
+  GenerationManifest,
+  RepositoryInventory,
+} from '../core/contracts/index.js';
+import { policyIdentity, inputIdentity } from '../scanner/identity.js';
+import { generationId } from '../generation/summarize.js';
 import { BuildError } from '../generation/errors.js';
 import {
   GenerationManifestSchema,
@@ -24,6 +32,7 @@ import {
   byteOrder,
   digest,
   readBounded,
+  decode,
 } from '../scanner/filesystem.js';
 
 const manifestPath = '.shcontext/manifest.json';
@@ -55,28 +64,60 @@ function directory(root: string, path: string): void {
   if (!stat.isDirectory() || stat.isSymbolicLink()) throw fail();
 }
 /** Validate every named byte and derive expected folders/files from the persisted inventory. No API needed. */
-export function inspectOwnedTree(
+export interface OwnedSnapshot {
+  identity: string;
+  manifest: GenerationManifest;
+  inventory: RepositoryInventory;
+  summaries: Map<string, string>;
+}
+export function readOwnedTree(
   root: string,
   tree = join(root, 'context'),
-): string | null {
+): OwnedSnapshot | null {
   try {
     if (!exists(tree)) return null;
     directory(root, tree);
     if (!readdirSync(tree).length) return null;
     const manifestBytes = regular(root, join(tree, manifestPath));
     const manifest = GenerationManifestSchema.parse(
-      JSON.parse(manifestBytes.toString('utf8')),
+      strictJson(decode(manifestBytes)),
     );
     const report = RepositoryInventorySchema.parse(
-      JSON.parse(
-        regular(root, join(tree, '.shcontext/report.json')).toString('utf8'),
-      ),
+      strictJson(decode(regular(root, join(tree, '.shcontext/report.json')))),
     );
     if (
       report.input_id !== manifest.input_id ||
       report.coverage !== manifest.coverage
     )
       throw fail();
+    const policy = policyIdentity(
+      manifest.selection.configuration,
+      manifest.selection.control_files,
+      manifest.generation.default_policy,
+      manifest.generation.detector,
+    );
+    if (
+      inputIdentity(policy, report.entries) !== manifest.input_id ||
+      generationId(manifest.generation) !== manifest.generator.generation_id
+    )
+      throw fail();
+    if (report.entries.length > manifest.selection.configuration.maxEntries)
+      throw fail();
+    const hashedFiles = report.entries.filter(
+      (entry) => entry.kind === 'file' && entry.sha256 !== null,
+    );
+    if (
+      hashedFiles.some(
+        (entry) => entry.bytes! > manifest.selection.configuration.maxFileBytes,
+      ) ||
+      hashedFiles.reduce((total, entry) => total + entry.bytes!, 0) >
+        manifest.selection.configuration.maxInputBytes
+    )
+      throw fail();
+    for (const control of manifest.selection.control_files) {
+      const entry = report.entries.find((item) => item.path === control.path);
+      if (entry?.sha256 && entry.sha256 !== control.sha256) throw fail();
+    }
     const folders = report.entries
       .flatMap((entry) => {
         const path = includedFolder(entry);
@@ -132,7 +173,9 @@ export function inspectOwnedTree(
         parent = dirname(parent);
       }
     }
-    let entries = 0;
+    let entries = 0,
+      totalBytes = manifestBytes.length;
+    const summaries = new Map<string, string>();
     function walk(path: string) {
       directory(root, path ? join(tree, path) : tree);
       for (const name of readdirSync(path ? join(tree, path) : tree)) {
@@ -147,6 +190,10 @@ export function inspectOwnedTree(
         } else {
           if (!expectedFiles.delete(rel)) throw fail();
           const bytes = regular(root, absolute);
+          totalBytes += bytes.length;
+          if (totalBytes > 64 * 1_048_576) throw fail();
+          if (rel.endsWith('CONTEXT.md'))
+            summaries.set(`context/${rel}`, decode(bytes));
           if (
             rel !== manifestPath &&
             digest(bytes) !==
@@ -168,11 +215,31 @@ export function inspectOwnedTree(
       )
     )
       throw fail();
-    return digest(manifestBytes);
+    for (const folder of manifest.directories)
+      inspectSummary(
+        summaries.get(contextPath(folder.path))!,
+        folder,
+        manifest,
+        report,
+      );
+    return {
+      identity: digest(manifestBytes),
+      manifest,
+      inventory: report,
+      summaries,
+    };
   } catch (error) {
     if (error instanceof BuildError) throw error;
     throw fail();
   }
+}
+
+/** Ownership and format validation shared by the writer and offline verifier. */
+export function inspectOwnedTree(
+  root: string,
+  tree = join(root, 'context'),
+): string | null {
+  return readOwnedTree(root, tree)?.identity ?? null;
 }
 
 const JournalSchema = z.strictObject({

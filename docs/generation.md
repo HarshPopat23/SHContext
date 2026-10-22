@@ -4,7 +4,7 @@
 It reads the scanner/analysis snapshot, collects inspected evidence, generates
 leaves before parents, adds conservative interface/dependency facts, validates
 structured folder records and publishes the mirrored `context/` tree. This is a
-development implementation; `verify`, incremental updates and query remain planned.
+development implementation; offline `verify` is now implemented; incremental updates and query remain planned.
 
 ## Configure and run
 
@@ -187,8 +187,8 @@ snapshot or a guarantee against hostile filesystem races, power loss or network
 filesystem lock semantics. Files/journals are flushed; directory entries are not
 fsynced portably. Use a quiescent local checkout. The build never rewrites source
 or Git state. A nullable Git HEAD is omitted (`null`) from provenance for now;
-source and component hashes determine identities. Offline freshness verification
-is a later command; publication ownership validation does not claim freshness.
+source and component hashes determine identities. [Offline verification](verification.md) checks freshness separately from publication
+ownership and explanation accuracy.
 
 ## Research and acceptance evidence
 

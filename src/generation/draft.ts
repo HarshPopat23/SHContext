@@ -47,7 +47,11 @@ export function checkedDraft(
   const draft = result.data;
   const evidence = new Map(available.map((item) => [item.id, item]));
   const allowedFiles = base.files
-    .filter((file) => file.disposition === 'analyzed')
+    .filter(
+      (file) =>
+        file.disposition === 'analyzed' &&
+        available.some((item) => item.path === file.path),
+    )
     .map((file) => file.path);
   if (
     draft.files.length !== allowedFiles.length ||
