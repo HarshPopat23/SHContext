@@ -47,7 +47,7 @@ export const ReferenceKindSchema = z.enum([
 export const SourceReferenceSchema = z
   .strictObject({
     kind: ReferenceKindSchema,
-    specifier: TextSchema.nullable(),
+    specifier: z.string().nullable(),
     start_byte: UIntSchema,
     end_byte: PositiveIntSchema,
     evidence: SourceSpanSchema,
@@ -77,7 +77,7 @@ export const DependencyEdgeSchema = z
       reference: SourceReferenceSchema,
       resolution: z.literal('external'),
       to: z.null(),
-      reason: z.literal('external_package'),
+      reason: z.enum(['external_package', 'external_builtin']),
     }),
     z.strictObject({
       schema_version: SchemaVersionSchema,

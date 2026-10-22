@@ -1,0 +1,4 @@
+{
+  // Source aliases are recorded, never interpreted as proven links.
+  "compilerOptions": { "target": "ES2022", "strict": true, "paths": {"@app/*": ["src/*"]} },
+}
