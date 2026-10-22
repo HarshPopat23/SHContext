@@ -1,0 +1,234 @@
+[
+  {
+    "id": "b1",
+    "request": "Generate SHContext context for /work/shop for the first time.",
+    "expected": [
+      "context-build"
+    ]
+  },
+  {
+    "id": "b2",
+    "request": "Fully regenerate all of /work/shop's SHContext folder summaries.",
+    "expected": [
+      "context-build"
+    ]
+  },
+  {
+    "id": "b3",
+    "request": "Create a mirrored context directory for this selected repository.",
+    "expected": [
+      "context-build"
+    ]
+  },
+  {
+    "id": "b4",
+    "request": "Build the React application for production.",
+    "expected": []
+  },
+  {
+    "id": "b5",
+    "request": "Explain how I could generate SHContext context; do not run anything.",
+    "expected": []
+  },
+  {
+    "id": "b6",
+    "request": "Write a new README introduction for this repository.",
+    "expected": []
+  },
+  {
+    "id": "u1",
+    "request": "Refresh existing SHContext context after I renamed the authentication folder.",
+    "expected": [
+      "context-update"
+    ]
+  },
+  {
+    "id": "u2",
+    "request": "Bring /work/shop's generated context up to date, reusing unchanged summaries.",
+    "expected": [
+      "context-update"
+    ]
+  },
+  {
+    "id": "u3",
+    "request": "Update SHContext summaries for the files I just deleted.",
+    "expected": [
+      "context-update"
+    ]
+  },
+  {
+    "id": "u4",
+    "request": "Update npm dependencies to their latest versions.",
+    "expected": []
+  },
+  {
+    "id": "u5",
+    "request": "Update my Git branch from main.",
+    "expected": []
+  },
+  {
+    "id": "u6",
+    "request": "Explain incremental context updates without executing a workflow.",
+    "expected": []
+  },
+  {
+    "id": "v1",
+    "request": "Check whether /work/shop's generated SHContext context is stale; do not change files.",
+    "expected": [
+      "context-verify"
+    ]
+  },
+  {
+    "id": "v2",
+    "request": "Inspect SHContext hashes, links and folder coverage in this repository.",
+    "expected": [
+      "context-verify"
+    ]
+  },
+  {
+    "id": "v3",
+    "request": "Tell me whether this context tree is missing or corrupt.",
+    "expected": [
+      "context-verify"
+    ]
+  },
+  {
+    "id": "v4",
+    "request": "Verify this Bitcoin transaction's signatures.",
+    "expected": []
+  },
+  {
+    "id": "v5",
+    "request": "Run the application's unit tests to verify login behavior.",
+    "expected": []
+  },
+  {
+    "id": "v6",
+    "request": "What does freshness mean in general? Do not inspect this repository.",
+    "expected": []
+  },
+  {
+    "id": "q1",
+    "request": "In /work/shop, where is authentication handled?",
+    "expected": [
+      "context-query"
+    ]
+  },
+  {
+    "id": "q2",
+    "request": "Use SHContext to find what imports src/auth/session.ts.",
+    "expected": [
+      "context-query"
+    ]
+  },
+  {
+    "id": "q3",
+    "request": "Show the normalize function and supporting source references in this repo.",
+    "expected": [
+      "context-query"
+    ]
+  },
+  {
+    "id": "q4",
+    "request": "Write a SQL query counting active customers.",
+    "expected": []
+  },
+  {
+    "id": "q5",
+    "request": "Search the web for current authentication recommendations.",
+    "expected": []
+  },
+  {
+    "id": "q6",
+    "request": "Explain JavaScript closures without using a repository.",
+    "expected": []
+  },
+  {
+    "id": "p1",
+    "request": "Benchmark SHContext's sequential generation against four folder workers.",
+    "expected": [
+      "context-benchmark"
+    ]
+  },
+  {
+    "id": "p2",
+    "request": "Run the repeatable SHContext worker evaluation and check evidence/output equality.",
+    "expected": [
+      "context-benchmark"
+    ]
+  },
+  {
+    "id": "p3",
+    "request": "Measure SHContext's controlled generation latency with the existing harness.",
+    "expected": [
+      "context-benchmark"
+    ]
+  },
+  {
+    "id": "p4",
+    "request": "Load test our web API with a thousand concurrent users.",
+    "expected": []
+  },
+  {
+    "id": "p5",
+    "request": "Compare PostgreSQL query performance.",
+    "expected": []
+  },
+  {
+    "id": "p6",
+    "request": "Estimate actual OpenAI billing from a synthetic timing number.",
+    "expected": []
+  },
+  {
+    "id": "x1",
+    "request": "First check whether SHContext context is fresh, then tell me where login is implemented.",
+    "expected": [
+      "context-verify",
+      "context-query"
+    ]
+  },
+  {
+    "id": "x2",
+    "request": "Refresh stale SHContext summaries and then find the session expiration check.",
+    "expected": [
+      "context-update",
+      "context-query"
+    ]
+  },
+  {
+    "id": "x3",
+    "request": "Is this SHContext context valid? Do not regenerate it.",
+    "expected": [
+      "context-verify"
+    ]
+  },
+  {
+    "id": "x4",
+    "request": "Do not build context. Just show which source file handles payments in /work/shop.",
+    "expected": [
+      "context-query"
+    ]
+  },
+  {
+    "id": "x5",
+    "request": "Quote this sentence in a document: 'run context-build on /work/shop'. Do not run it.",
+    "expected": []
+  },
+  {
+    "id": "x6",
+    "request": "Tell me what plugins and skills are; do not use this repository.",
+    "expected": []
+  },
+  {
+    "id": "x7",
+    "request": "Build context only if I later ask; right now just explain the command syntax.",
+    "expected": []
+  },
+  {
+    "id": "x8",
+    "request": "Check the freshness of the SHContext summaries, without testing the application's runtime behavior.",
+    "expected": [
+      "context-verify"
+    ]
+  }
+]

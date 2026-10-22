@@ -1,0 +1,161 @@
+{
+  "method": "Independent native agent, fresh context, skill names/descriptions and requests only; expected labels withheld. Not a Claude Code model session.",
+  "metadata_sha256": "0d9d440d52bac69106c34d0a62f49dcb39fe08fc9bb594354a053e06379a978c",
+  "cases_sha256": "890e6118ac2217ead8485fc8222c3e19f6888426ca7315047c46d6ce3d5d5a35",
+  "total": 38,
+  "matched": 38,
+  "predictions": [
+    {
+      "id": "b1",
+      "selected": ["context-build"]
+    },
+    {
+      "id": "b2",
+      "selected": ["context-build"]
+    },
+    {
+      "id": "b3",
+      "selected": ["context-build"]
+    },
+    {
+      "id": "b4",
+      "selected": []
+    },
+    {
+      "id": "b5",
+      "selected": []
+    },
+    {
+      "id": "b6",
+      "selected": []
+    },
+    {
+      "id": "u1",
+      "selected": ["context-update"]
+    },
+    {
+      "id": "u2",
+      "selected": ["context-update"]
+    },
+    {
+      "id": "u3",
+      "selected": ["context-update"]
+    },
+    {
+      "id": "u4",
+      "selected": []
+    },
+    {
+      "id": "u5",
+      "selected": []
+    },
+    {
+      "id": "u6",
+      "selected": []
+    },
+    {
+      "id": "v1",
+      "selected": ["context-verify"]
+    },
+    {
+      "id": "v2",
+      "selected": ["context-verify"]
+    },
+    {
+      "id": "v3",
+      "selected": ["context-verify"]
+    },
+    {
+      "id": "v4",
+      "selected": []
+    },
+    {
+      "id": "v5",
+      "selected": []
+    },
+    {
+      "id": "v6",
+      "selected": []
+    },
+    {
+      "id": "q1",
+      "selected": ["context-query"]
+    },
+    {
+      "id": "q2",
+      "selected": ["context-query"]
+    },
+    {
+      "id": "q3",
+      "selected": ["context-query"]
+    },
+    {
+      "id": "q4",
+      "selected": []
+    },
+    {
+      "id": "q5",
+      "selected": []
+    },
+    {
+      "id": "q6",
+      "selected": []
+    },
+    {
+      "id": "p1",
+      "selected": ["context-benchmark"]
+    },
+    {
+      "id": "p2",
+      "selected": ["context-benchmark"]
+    },
+    {
+      "id": "p3",
+      "selected": ["context-benchmark"]
+    },
+    {
+      "id": "p4",
+      "selected": []
+    },
+    {
+      "id": "p5",
+      "selected": []
+    },
+    {
+      "id": "p6",
+      "selected": []
+    },
+    {
+      "id": "x1",
+      "selected": ["context-verify", "context-query"]
+    },
+    {
+      "id": "x2",
+      "selected": ["context-update", "context-query"]
+    },
+    {
+      "id": "x3",
+      "selected": ["context-verify"]
+    },
+    {
+      "id": "x4",
+      "selected": ["context-query"]
+    },
+    {
+      "id": "x5",
+      "selected": []
+    },
+    {
+      "id": "x6",
+      "selected": []
+    },
+    {
+      "id": "x7",
+      "selected": []
+    },
+    {
+      "id": "x8",
+      "selected": ["context-verify"]
+    }
+  ]
+}

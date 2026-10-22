@@ -77,6 +77,8 @@
     "CONTRIBUTING.md",
     "LICENSE",
     "README.md",
+    "skills/",
+    ".claude-plugin/",
     "benchmarks/agent-results.md",
     "benchmarks/agent-results.json"
   ],
@@ -91,7 +93,9 @@
     "test": "npm run build && node --test --test-concurrency=1 \"tests/*.test.mjs\"",
     "check": "npm run format:check && npm run typecheck && npm test",
     "test:integration": "npm run build && node --test --test-concurrency=1 tests/cli.test.mjs tests/build-cli.test.mjs tests/verify-cli.test.mjs tests/update-cli.test.mjs tests/query-cli.test.mjs tests/agents-cli.test.mjs tests/package.test.mjs",
-    "benchmark:agents": "npm run build && node benchmarks/agents.mjs"
+    "benchmark:agents": "npm run build && node benchmarks/agents.mjs",
+    "test:skills": "node --test --test-concurrency=1 tests/skills.test.mjs tests/skills-install.test.mjs",
+    "test:plugin": "node scripts/check-plugin.mjs"
   },
   "devDependencies": {
     "@types/babel__traverse": "7.28.0",

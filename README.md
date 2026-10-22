@@ -10,8 +10,23 @@ to root, add conservative relationships and publish a mirrored `context/` tree.
 The reusable library exposes shared schemas, JS/TS analysis, generation and local
 context querying. Four execution roles run sequentially by default; bounded folder
 concurrency and source-based model review are opt-in.
-Installable skills remain
-planned; `0.0.0` is not a completed v0.1 release.
+Five installable skills package these workflows for Claude Code;
+`0.0.0` is not a completed stable CLI release.
+
+## Install the workflow plugin
+
+Prepare the source checkout below, set its absolute path as `SHCONTEXT_HOME`, then
+run these inside Claude Code after this change is merged:
+
+```text
+/plugin marketplace add HarshPopat23/SHContext
+/plugin install shcontext@shcontext-workflows
+```
+
+Use `/shcontext:context-build`, `/shcontext:context-update`,
+`/shcontext:context-verify`, `/shcontext:context-query` or
+`/shcontext:context-benchmark`. See the [skills guide](docs/skills.md) for local/PR
+installation, required executables, configuration, supported hosts and failures.
 
 ## Try the foundation
 
