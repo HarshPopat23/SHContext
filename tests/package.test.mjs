@@ -50,6 +50,10 @@ test(
         'dist/providers/index.d.ts',
         'dist/validation/index.d.ts',
         'dist/update/index.d.ts',
+        'dist/query/index.d.ts',
+        'dist/agents/index.d.ts',
+        'benchmarks/agent-results.md',
+        'benchmarks/agent-results.json',
         'LICENSE',
       ]) {
         assert.ok(paths.includes(path), `Missing package entry: ${path}`);
@@ -150,6 +154,9 @@ test(
             "const built = await buildRepository('sample', {provider:new OpenAIProvider({model:'test-model', apiKey:'test-unused'})});",
             "import { updateRepository } from 'shcontext/update';",
             "const updated = await updateRepository('sample'); if(updated.changed || updated.model_calls !== 0) process.exitCode=1;",
+            "import { queryRepository } from 'shcontext/query';",
+            "const queried = queryRepository('sample','nothing matches'); if(queried.status !== 'no_match') process.exitCode=1;",
+            "import { AGENT_ROLES } from 'shcontext/agents'; if(Object.keys(AGENT_ROLES).length !== 4 || built.execution.requests !== 0) process.exitCode=1;",
             "if(verifyRepository('sample').state !== 'fresh') process.exitCode=1;",
             "if(built.bundle.folders.length !== 1 || built.bundle.inventory.coverage !== 'complete') process.exitCode=1;",
           ].join('\n'),
@@ -159,6 +166,14 @@ test(
       writeFileSync(
         join(consumer, 'consumer.mts'),
         [
+          "import { queryRepository, type QueryResult } from 'shcontext/query';",
+          "import { queryRepository as rootQuery } from 'shcontext';",
+          "export const query = (): QueryResult => queryRepository('.', 'auth');",
+          'export const sameQuery: typeof queryRepository = rootQuery;',
+          "import { Coordinator, type ExecutionOptions, type AgentReview } from 'shcontext/agents';",
+          'export const executionOptions: ExecutionOptions = {workers:4,budget:{maxRequests:20}};',
+          'export const coordinator = (): Coordinator => new Coordinator(provider,executionOptions);',
+          "export function reviewed(value: AgentReview): boolean {return value.status === 'no-issues-found';}",
           "import { updateRepository, type UpdateResult } from 'shcontext/update';",
           "import { updateRepository as rootUpdate } from 'shcontext';",
           "export const update = (): Promise<UpdateResult> => updateRepository('.', {provider});",

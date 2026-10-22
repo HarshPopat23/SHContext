@@ -47,15 +47,6 @@ for (const args of [['--unknown'], ['--help=invalid'], ['mystery'], ['--']]) {
   });
 }
 
-test('planned commands fail explicitly instead of pretending to analyze', () => {
-  for (const command of ['query']) {
-    const result = invoke([command, '.']);
-    assert.equal(result.status, 1);
-    assert.equal(result.stdout, '');
-    assert.match(result.stderr, /not implemented in this foundation/);
-  }
-});
-
 test('help works in an unrelated directory without reading project configuration', () => {
   const directory = mkdtempSync(join(tmpdir(), 'shcontext cwd '));
   try {

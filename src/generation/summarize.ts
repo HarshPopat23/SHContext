@@ -3,6 +3,7 @@ import {
   type IncrementalCache,
 } from '../update/cache.js';
 import { folderInputHash, rebaseSummary } from '../update/reuse.js';
+import type { Coordinator } from '../agents/coordinator.js';
 import { join } from 'node:path';
 import { analyzeRepository } from '../core/analyze-repository.js';
 import { scanRepository, type ScanResult } from '../scanner/index.js';
@@ -24,7 +25,7 @@ import {
   type RepositoryAnalysis,
 } from '../core/contracts/index.js';
 import { contextPath, folderOf } from '../core/contracts/primitives.js';
-import type { ModelProvider, CancellationSignal } from '../providers/index.js';
+import type { CancellationSignal } from '../providers/index.js';
 import {
   INSTRUCTIONS,
   DRAFT_JSON_SCHEMA,
@@ -32,9 +33,10 @@ import {
   checkedDraft,
   asClaim,
 } from './draft.js';
+import { standardLimitations, NO_EVIDENCE_LIMITATION } from './limitations.js';
 import { BuildError } from './errors.js';
 
-export const GENERATOR_VERSION = 'context-pipeline-v3';
+export const GENERATOR_VERSION = 'context-pipeline-v4';
 export const RENDERER_VERSION = 'markdown-v1';
 export const TEMPLATE_VERSION = 'context-sections-v1';
 export function generationIdentity(
@@ -89,9 +91,9 @@ export function throwIfCancelled(signal?: CancellationSignal): void {
 export async function summarize(
   root: string,
   scan: ScanResult,
-  provider: ModelProvider,
-  signal?: CancellationSignal,
-  previous?: IncrementalCache | null,
+  signal: CancellationSignal | undefined,
+  previous: IncrementalCache | null | undefined,
+  coordinator: Coordinator,
 ) {
   throwIfCancelled(signal);
   const report = analyzeRepository(root, {
@@ -147,21 +149,21 @@ export async function summarize(
   const records: IncrementalCache['folders'] = [];
   const regenerated: string[] = [],
     reused: string[] = [];
-  let model_calls = 0;
   // Descendants precede ancestors; siblings have deterministic UTF-8 ordering.
   paths.sort(
     (a, b) =>
       (b === '.' ? 0 : b.split('/').length) -
         (a === '.' ? 0 : a.split('/').length) || byteOrder(a, b),
   );
-  for (const path of paths) {
+  const processFolder = async (path: string) => {
+    const role = path === '.' ? 'Architecture Analyst' : 'Folder Analyst';
     throwIfCancelled(signal);
     const entries = scan.inventory.entries.filter((entry) =>
       under(entry.path, path),
     );
-    const children = [...folders.values()].filter(
-      (child) => folderOf(child.source_path) === path,
-    );
+    const children = [...folders.values()]
+      .filter((child) => folderOf(child.source_path) === path)
+      .sort((a, b) => byteOrder(a.source_path, b.source_path));
     const files = scan.inventory.entries.filter(
       (entry) =>
         entry.kind === 'file' &&
@@ -205,15 +207,7 @@ export async function summarize(
       children: children
         .map((child) => ({ path: child.source_path, coverage: child.coverage }))
         .sort((a, b) => byteOrder(a.path, b.path)),
-      limitations: [
-        'Mechanical citation checks do not establish semantic truth. Review explanations against source.',
-        'Static file references are not a complete call graph. Tests were not executed.',
-        ...(entries.some(isPartial)
-          ? [
-              'Partial coverage: unsupported, unreadable, oversized, sensitive or invalid source remains unanalyzed; see the inventory report.',
-            ]
-          : []),
-      ],
+      limitations: standardLimitations(entries.some(isPartial)),
       evidence: [],
     };
     // Interfaces are observed declaration facts. They do not assert runtime availability.
@@ -307,7 +301,8 @@ export async function summarize(
       folders.set(path, summary);
       records.push({ input_hash, summary });
       reused.push(path);
-      continue;
+      coordinator.record(role, path, 'reused');
+      return;
     }
     regenerated.push(path);
     // A parent can synthesize inspected child evidence; an entirely unanalyzable subtree needs no model.
@@ -319,8 +314,7 @@ export async function summarize(
       let draft: ReturnType<typeof checkedDraft> | undefined;
       for (let attempt = 0; attempt < 2; attempt++) {
         throwIfCancelled(signal);
-        model_calls++;
-        const raw = await provider.generate({
+        const raw = await coordinator.generate(role, path, {
           instructions: INSTRUCTIONS,
           input: attempt
             ? `${input}\nThe preceding response failed local validation. Return a complete replacement using only supplied evidence and exact direct-file coverage, within the word limit.`
@@ -350,10 +344,10 @@ export async function summarize(
         execution: 'not-run',
       }));
       base.limitations.push(...draft.uncertainty);
-    } else
-      base.limitations.push(
-        'No analyzable evidence establishes this folder’s purpose or behavior.',
-      );
+    } else {
+      coordinator.record(role, path, 'completed');
+      base.limitations.push(NO_EVIDENCE_LIMITATION);
+    }
     const used = new Set(
       [
         ...base.purpose,
@@ -368,6 +362,14 @@ export async function summarize(
     const summary = FolderSummarySchema.parse(base);
     folders.set(path, summary);
     records.push({ input_hash, summary });
+  };
+  // A wave contains disjoint folders at one depth; every child finishes before its parent.
+  const depthOf = (path: string) => (path === '.' ? 0 : path.split('/').length);
+  for (const depth of [...new Set(paths.map(depthOf))]) {
+    await coordinator.map(
+      paths.filter((path) => depthOf(path) === depth),
+      processFolder,
+    );
   }
   if (scanRepository(root).inventory.input_id !== scan.inventory.input_id)
     throw new BuildError(
@@ -385,7 +387,8 @@ export async function summarize(
     }),
     regenerated: regenerated.sort(byteOrder),
     reused: reused.sort(byteOrder),
-    model_calls,
+    model_calls: coordinator.report().requests,
+    sources,
     report,
     folders: [...folders.values()].sort((a, b) =>
       byteOrder(a.source_path, b.source_path),

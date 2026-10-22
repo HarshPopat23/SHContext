@@ -7,8 +7,10 @@ source references and explicit coverage limits.
 The CLI implements local `scan <directory>` and `build <directory>` with one
 OpenAI provider, incremental `update <directory>`, plus offline `verify <directory>`. Builds collect inspected evidence, summarize folders from leaves
 to root, add conservative relationships and publish a mirrored `context/` tree.
-The reusable library exposes shared schemas, JS/TS analysis and generation.
-Query and installable skills remain
+The reusable library exposes shared schemas, JS/TS analysis, generation and local
+context querying. Four execution roles run sequentially by default; bounded folder
+concurrency and source-based model review are opt-in.
+Installable skills remain
 planned; `0.0.0` is not a completed v0.1 release.
 
 ## Try the foundation
@@ -101,6 +103,24 @@ mechanical integrity and freshness; explanation accuracy requires source review.
 See [verification](docs/verification.md) for states, exit codes, review guidance and
 interrupted-run handling.
 
+## Query context
+
+Run `shcontext query "Where is authentication handled?"` in your repository, or add
+`--root /path/to/repository --json` for structured results. It searches paths,
+symbols, text and summaries, follows resolved dependencies and inspects source.
+Missing or stale context is explicit. Queries need no key and make no writes.
+See [querying](docs/querying.md).
+
+## Execution roles
+
+Build/update use Coordinator, Folder Analyst, Architecture Analyst and Verifier
+roles with one writer. Use `--workers 4` for a bounded folder pool, `--retries 1`
+for explicitly transient failures, and `--review` for extra fallible source-based
+model review. Request/token caps and optional caller-priced spending reservations
+cover every attempt. See [roles and limits](docs/agents.md) and the
+[controlled benchmark](benchmarks/agent-results.md); controlled-provider results
+do not establish live-model quality or billing.
+
 ## Project documents
 
 - [Product specification](docs/specification.md): scope, inputs, exclusions,
@@ -111,6 +131,8 @@ interrupted-run handling.
   consistency, and implementation order.
 - [Development decisions](docs/development.md): tooling choices and sources.
 - [Code structure and dependencies](docs/code-structure.md): extraction API and conservative graph.
+- [Context querying](docs/querying.md): local retrieval, source references and freshness states.
+- [Execution roles](docs/agents.md): sequential/parallel work, source review and spending limits.
 - [Offline verification](docs/verification.md): integrity, freshness, source review and recovery.
 - [Context generation](docs/generation.md): build command, provider, evidence and recoverable publication.
 - [Repository scanner](docs/scanner.md): implemented discovery, CLI/API and limitations.

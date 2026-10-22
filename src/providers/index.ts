@@ -8,3 +8,4 @@ export type {
   TransportRequest,
   TransportResponse,
 } from './types.js';
+export { RetryableProviderError } from './errors.js';

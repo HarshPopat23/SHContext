@@ -14,7 +14,7 @@ shcontext verify .
 
 The library exposes `updateRepository(root, options?)` from `shcontext`,
 `shcontext/core` and `shcontext/update`. Options are the existing `BuildOptions`
-(`provider`, `signal`). `UpdateResult` contains the validated `bundle`,
+(`provider`, `signal`, plus [execution/review controls](agents.md)). `UpdateResult` contains the validated `bundle`,
 `output_paths`, `changed`, sorted `regenerated`/`reused` folder paths,
 `model_calls`, and `changes`. CLI stdout contains those status fields plus
 `schema_version`, `input_id` and `coverage`, without the full bundle.
@@ -168,8 +168,7 @@ exercise no-op requests/writes, exact regeneration sets, policy/component
 invalidation, citation rebasing, moves/ambiguity, dependency resolution changes,
 corruption, source races, ownership and transaction recovery. A positive source
 edit verifies that the zero-call oracle detects actual generation. Package tests
-exercise the installed update API and declarations without consumer Node/DOM
-types. Controlled providers test orchestration and traceability; they do not
+exercise the installed update API and declarations without consumer @types/node; standard TypeScript libraries still supply URL for Zod. Controlled providers test orchestration and traceability; they do not
 measure independent live-model explanation quality.
 
 A controlled exercise used public
@@ -193,3 +192,11 @@ operation, and offline verification was `fresh + partial` after every update.
 Unsupported metadata files account for partial coverage. The responses were
 authored for orchestration/traceability evaluation; this is not a live-model
 quality benchmark.
+
+The four-role pipeline also applies to updates. Worker-count changes alone do not
+invalidate semantic inputs; controlled-provider output remains identical. Source
+consistency is checked for reused records. Ordinary no-op updates still make no
+model calls. Explicit `--review` requests additional model review of reused
+summaries without rewriting context. The execution report accounts for these
+requests separately from `regenerated` folders; `model_calls` includes all provider
+attempts, including review, repairs and explicitly enabled transient retries.
