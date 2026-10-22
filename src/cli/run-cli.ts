@@ -1,4 +1,7 @@
 import { updateRepository, type UpdateResult } from '../update/index.js';
+import { queryRepository, QueryError } from '../query/index.js';
+import { AgentExecutionError } from '../agents/errors.js';
+import { ReviewError } from '../agents/verifier.js';
 import { parseArgs } from 'node:util';
 import { scanRepository, ScanError } from '../scanner/index.js';
 import { getProjectInfo } from '../core/index.js';
@@ -9,8 +12,6 @@ interface CliOutput {
   stdout: (text: string) => void;
   stderr: (text: string) => void;
 }
-
-const plannedCommands = new Set(['query']);
 
 function help(): string {
   return `SHContext — repository context generator (development foundation)
@@ -25,10 +26,14 @@ Commands:
   scan <directory>   Print a local JSON inventory without model calls or writes
   build <directory>  Generate context/ using the configured OpenAI model
   update <directory> Refresh affected summaries using the structured cache
+  query <question>   Search context and inspected source (defaults to current directory)
   verify <directory> Check context integrity and freshness offline (read-only)
 
 Exit codes: 0 complete, 2 partial, 1 operational/configuration failure
-Planned later: query
+Query options: --root <directory>, --limit <1–20>, --depth <0–3>, --json
+Build/update options: --workers <1–8> (default 1), --retries <0–2>, --review
+  --max-requests <n>, --max-input-tokens <n>, --max-output-tokens <n>
+  --max-cost-usd <amount> requires --input-usd-per-million and --output-usd-per-million
 
 Design: https://github.com/HarshPopat23/SHContext/tree/main/docs
 `;
@@ -45,12 +50,100 @@ export async function runCli(
       options: {
         help: { type: 'boolean', short: 'h' },
         version: { type: 'boolean', short: 'v' },
+        root: { type: 'string' },
+        limit: { type: 'string' },
+        depth: { type: 'string' },
+        json: { type: 'boolean' },
+        workers: { type: 'string' },
+        retries: { type: 'string' },
+        review: { type: 'boolean' },
+        'max-requests': { type: 'string' },
+        'max-input-tokens': { type: 'string' },
+        'max-output-tokens': { type: 'string' },
+        'max-cost-usd': { type: 'string' },
+        'input-usd-per-million': { type: 'string' },
+        'output-usd-per-million': { type: 'string' },
       },
       strict: true,
       allowPositionals: true,
     });
 
     const command = positionals[0];
+    const queryFlags = ['root', 'limit', 'depth', 'json'] as const;
+    const agentFlags = [
+      'workers',
+      'retries',
+      'review',
+      'max-requests',
+      'max-input-tokens',
+      'max-output-tokens',
+      'max-cost-usd',
+      'input-usd-per-million',
+      'output-usd-per-million',
+    ] as const;
+    if (
+      !values.help &&
+      ((command !== 'query' &&
+        queryFlags.some((key) => values[key] !== undefined)) ||
+        (!['build', 'update'].includes(command ?? '') &&
+          agentFlags.some((key) => values[key] !== undefined)))
+    ) {
+      output.stderr(
+        'Options do not apply to this command. Run shcontext --help.\n',
+      );
+      return 1;
+    }
+    const number = (value: string | undefined) =>
+      value === undefined
+        ? undefined
+        : /^\d+(?:\.\d+)?$/.test(value)
+          ? Number(value)
+          : NaN;
+    if (command === 'query') {
+      if (values.help) {
+        output.stdout(help());
+        return 0;
+      }
+      if (positionals.length !== 2 || values.version) {
+        output.stderr(
+          'Usage: shcontext query "question" [--root directory] [--json]\n',
+        );
+        return 1;
+      }
+      try {
+        const result = queryRepository(
+          values.root ?? process.cwd(),
+          positionals[1]!,
+          {
+            ...(values.limit !== undefined
+              ? { limit: number(values.limit)! }
+              : {}),
+            ...(values.depth !== undefined
+              ? { depth: number(values.depth)! }
+              : {}),
+          },
+        );
+        output.stdout(
+          values.json
+            ? `${JSON.stringify(result, null, 2)}\n`
+            : `${result.answer}\n`,
+        );
+        output.stderr(
+          `Query ${result.status}; context ${result.context.state}; source references require behavioral review.\n`,
+        );
+        return result.context.state !== 'fresh'
+          ? 1
+          : result.status === 'no_match' ||
+              result.context.coverage === 'partial'
+            ? 2
+            : 0;
+      } catch (error) {
+        output.stderr(
+          `${JSON.stringify(error instanceof QueryError || error instanceof ScanError ? { code: error.code, message: error.message } : { code: 'query_failed', message: 'Query could not obtain a stable selected-source snapshot.' })}\n`,
+        );
+        return 1;
+      }
+    }
     if (command === 'verify') {
       if (values.help) {
         output.stdout(help());
@@ -93,10 +186,33 @@ export async function runCli(
           command === 'update' ? updateRepository : buildRepository
         )(positionals[1]!, {
           signal: controller.signal,
+          ...(values.review !== undefined ? { review: values.review } : {}),
+          execution: {
+            ...(values.workers !== undefined
+              ? { workers: number(values.workers)! }
+              : {}),
+            ...(values.retries !== undefined
+              ? { maxRetries: number(values.retries)! }
+              : {}),
+            budget: {
+              ...Object.fromEntries(
+                [
+                  ['maxRequests', values['max-requests']],
+                  ['maxInputTokens', values['max-input-tokens']],
+                  ['maxOutputTokens', values['max-output-tokens']],
+                  ['maxCostUSD', values['max-cost-usd']],
+                  ['inputUSDPerMillion', values['input-usd-per-million']],
+                  ['outputUSDPerMillion', values['output-usd-per-million']],
+                ]
+                  .filter(([, value]) => value !== undefined)
+                  .map(([key, value]) => [key, number(value)]),
+              ),
+            },
+          },
         });
         const updated = command === 'update' ? (result as UpdateResult) : null;
         output.stdout(
-          `${JSON.stringify({ schema_version: 1, input_id: result.bundle.inventory.input_id, coverage: result.bundle.inventory.coverage, output_paths: result.output_paths, ...(updated ? { changed: updated.changed, regenerated: updated.regenerated, reused: updated.reused, model_calls: updated.model_calls, changes: updated.changes } : {}) }, null, 2)}\n`,
+          `${JSON.stringify({ schema_version: 1, input_id: result.bundle.inventory.input_id, coverage: result.bundle.inventory.coverage, output_paths: result.output_paths, execution: result.execution, ...(updated ? { changed: updated.changed, regenerated: updated.regenerated, reused: updated.reused, model_calls: updated.model_calls, changes: updated.changes } : {}) }, null, 2)}\n`,
         );
         output.stderr(
           updated
@@ -107,7 +223,17 @@ export async function runCli(
       } catch (error) {
         const diagnostic =
           error instanceof BuildError || error instanceof ScanError
-            ? { code: error.code, message: error.message }
+            ? {
+                code: error.code,
+                message: error.message,
+                ...(error instanceof AgentExecutionError ||
+                error instanceof ReviewError
+                  ? { execution: error.execution }
+                  : {}),
+                ...(error instanceof ReviewError
+                  ? { reviews: error.reviews }
+                  : {}),
+              }
             : {
                 code: command === 'update' ? 'update_failed' : 'build_failed',
                 message:
@@ -154,9 +280,7 @@ export async function runCli(
       }
     }
     if (command !== undefined) {
-      const message = plannedCommands.has(command)
-        ? `Command ${JSON.stringify(command)} is not implemented in this foundation.`
-        : `Unknown command ${JSON.stringify(command)}.`;
+      const message = `Unknown command ${JSON.stringify(command)}.`;
       output.stderr(
         `${message}\nRun shcontext --help for available options.\n`,
       );

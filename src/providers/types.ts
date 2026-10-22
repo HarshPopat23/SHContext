@@ -9,6 +9,9 @@ export interface CancellationSignal {
   removeEventListener(type: 'abort', listener: () => void): void;
 }
 export interface SummaryRequest {
+  role?: 'Folder Analyst' | 'Architecture Analyst' | 'Verifier' | 'Coordinator';
+  /** Adapters must honor this output ceiling; it is included in spending reservations. */
+  max_output_tokens?: number;
   instructions: string;
   input: string;
   schema: Record<string, unknown>;

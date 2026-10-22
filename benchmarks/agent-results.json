@@ -1,0 +1,77 @@
+{
+  "mode": "controlled provider, no network or live model; semantic responses are authored, not an independent quality evaluation",
+  "node": "v24.19.0",
+  "platform": "linux",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "folder_count": 8,
+  "provider_latency_ms": 120,
+  "review": true,
+  "trials_per_mode": 3,
+  "sequential_median_ms": 2267.409046999999,
+  "parallel_median_ms": 1543.0959839999996,
+  "speedup": 1.469389506881122,
+  "saved_ms": 724.3130629999996,
+  "exact_output_equality": true,
+  "samples": [
+    {
+      "workers": 1,
+      "ms": 2270.0835670000006,
+      "requests": 18,
+      "peak": 1,
+      "folders": 9,
+      "evidence": 17,
+      "coverage": "complete",
+      "output_files": 12
+    },
+    {
+      "workers": 4,
+      "ms": 1540.630306,
+      "requests": 18,
+      "peak": 4,
+      "folders": 9,
+      "evidence": 17,
+      "coverage": "complete",
+      "output_files": 12
+    },
+    {
+      "workers": 4,
+      "ms": 1559.594631,
+      "requests": 18,
+      "peak": 4,
+      "folders": 9,
+      "evidence": 17,
+      "coverage": "complete",
+      "output_files": 12
+    },
+    {
+      "workers": 1,
+      "ms": 2265.935927999999,
+      "requests": 18,
+      "peak": 1,
+      "folders": 9,
+      "evidence": 17,
+      "coverage": "complete",
+      "output_files": 12
+    },
+    {
+      "workers": 1,
+      "ms": 2267.409046999999,
+      "requests": 18,
+      "peak": 1,
+      "folders": 9,
+      "evidence": 17,
+      "coverage": "complete",
+      "output_files": 12
+    },
+    {
+      "workers": 4,
+      "ms": 1543.0959839999996,
+      "requests": 18,
+      "peak": 4,
+      "folders": 9,
+      "evidence": 17,
+      "coverage": "complete",
+      "output_files": 12
+    }
+  ]
+}

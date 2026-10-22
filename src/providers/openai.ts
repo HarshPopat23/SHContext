@@ -1,3 +1,4 @@
+import { RetryableProviderError } from './errors.js';
 import { BuildError } from '../generation/errors.js';
 import type {
   ModelProvider,
@@ -110,16 +111,30 @@ export class OpenAIProvider implements ModelProvider {
   async generate(request: SummaryRequest): Promise<unknown> {
     if (request.signal?.aborted)
       throw new BuildError('cancelled', 'Build cancelled.');
+    if (
+      request.max_output_tokens !== undefined &&
+      (!Number.isInteger(request.max_output_tokens) ||
+        request.max_output_tokens < 1 ||
+        request.max_output_tokens > 32768)
+    )
+      throw new BuildError(
+        'provider_configuration',
+        'Request output ceiling must be 1–32768 tokens.',
+      );
+    const maxOutput = Math.min(
+      request.max_output_tokens ?? this.limits.maxOutputTokens,
+      this.limits.maxOutputTokens,
+    );
     const body = JSON.stringify({
       model: this.identity.model,
       store: false,
       instructions: request.instructions,
       input: request.input,
-      max_output_tokens: this.limits.maxOutputTokens,
+      max_output_tokens: maxOutput,
       text: {
         format: {
           type: 'json_schema',
-          name: 'folder_draft',
+          name: request.role === 'Verifier' ? 'source_review' : 'folder_draft',
           strict: true,
           schema: request.schema,
         },
@@ -134,15 +149,14 @@ export class OpenAIProvider implements ModelProvider {
       );
     if (
       this.inputReserved + estimated > this.limits.maxRunInputTokens ||
-      this.outputReserved + this.limits.maxOutputTokens >
-        this.limits.maxRunOutputTokens
+      this.outputReserved + maxOutput > this.limits.maxRunOutputTokens
     )
       throw new BuildError(
         'run_budget',
         'Build would exceed its provider run token ceiling; no additional request was sent.',
       );
     this.inputReserved += estimated;
-    this.outputReserved += this.limits.maxOutputTokens;
+    this.outputReserved += maxOutput;
     const controller = new AbortController();
     let timeout = false;
     const cancel = () => controller.abort();
@@ -181,7 +195,11 @@ export class OpenAIProvider implements ModelProvider {
       ]);
       if (controller.signal.aborted) throw new Error();
       if (response.status < 200 || response.status >= 300)
-        throw new BuildError(
+        throw new (
+          [429, 500, 502, 503, 504].includes(response.status)
+            ? RetryableProviderError
+            : BuildError
+        )(
           'provider_http',
           `OpenAI request failed with HTTP ${Number.isInteger(response.status) ? response.status : 'error'}; no response body was logged.`,
         );

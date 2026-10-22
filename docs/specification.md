@@ -23,17 +23,17 @@ proof that the application behaves as described at runtime.
 
 ### First-release boundary
 
-| Included in v0.1                                                        | Deferred beyond v0.1                                         |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------ |
-| Local directory input; Git awareness when available                     | Fetching repositories, hosted service, GitHub authentication |
-| JavaScript/TypeScript structural analysis and evidence-based summaries  | Full semantic support for other languages                    |
-| Markdown/configuration context at the limited levels below              | Runtime tracing, type checking, complete call graphs         |
-| Full builds, incremental updates, scan reports, mechanical verification | Question answering, CI automation                            |
-| One sequential generation workflow and one configured provider adapter  | Parallel agent scheduling, many provider adapters            |
-| Versioned output, source references, content-based freshness            | Guaranteed factual correctness or identical model prose      |
+| Included in v0.1                                                               | Deferred beyond v0.1                                         |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| Local directory input; Git awareness when available                            | Fetching repositories, hosted service, GitHub authentication |
+| JavaScript/TypeScript structural analysis and evidence-based summaries         | Full semantic support for other languages                    |
+| Markdown/configuration context at the limited levels below                     | Runtime tracing, type checking, complete call graphs         |
+| Full builds, incremental updates, scan reports, mechanical verification        | Embedding retrieval, CI automation                           |
+| Four sequential roles, opt-in bounded pool and one configured provider adapter | Many provider adapters, autonomous shell agents              |
+| Versioned output, source references, content-based freshness                   | Guaranteed factual correctness or identical model prose      |
 
 The build/update/query/verify/benchmark skills remain the longer-term product
-plan. In v0.1, build, update and verify have underlying operations;
+plan. In v0.1, build, update, query and verify have underlying operations;
 future packaging MUST distinguish available operations from planned ones.
 
 ## 2. Inputs and configuration
@@ -46,13 +46,14 @@ untracked files; do not substitute staged or HEAD contents. A directory need
 not be a Git checkout. Never execute its code, package scripts, tests, hooks,
 configuration modules, or instructions embedded in files during analysis.
 
-Command surface (`scan`, `build`, `update` and `verify` implemented):
+Command surface (`scan`, `build`, `update`, `query` and `verify` implemented):
 
 ```sh
 shcontext scan .
 shcontext build .
 shcontext update .
 shcontext verify .
+shcontext query "Where is authentication handled?"
 ```
 
 `scan` performs local content gates and syntax validation, then produces a JSON
@@ -60,7 +61,10 @@ inventory on stdout and concise diagnostics on stderr, with no model calls or
 generated context. `build` creates or replaces
 owned generated output. `update` selectively regenerates affected summaries and
 publishes through the same owned writer. `verify` reads existing output and current inputs without
-model calls or writes. These operations MUST NOT commit, push, or modify source.
+model calls or writes. `query` retrieves source-grounded navigation answers and
+reports freshness without model calls or writes; see [querying](querying.md).
+Build/update support the [four roles](agents.md), bounded concurrency and spending
+reservations. These operations MUST NOT commit, push, or modify source.
 
 Configuration is optional root `shcontext.config.json`, parsed as strict JSON
 with unknown keys rejected. Duplicate JSON keys MUST be rejected. The v0.1 keys

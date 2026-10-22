@@ -1,0 +1,8 @@
+[
+  {"question":"Where is authentication handled?","paths":["src/auth/session.ts","src/routes/login.ts"]},
+  {"question":"verifySession","paths":["src/auth/session.ts"],"neighbors":["src/auth/signature.ts","src/routes/login.ts"]},
+  {"question":"src/billing/invoice.ts","paths":["src/billing/invoice.ts"]},
+  {"question":"Where is the signed prefix checked?","paths":["src/auth/signature.ts"]},
+  {"question":"invoiceTotal","paths":["src/billing/invoice.ts"]},
+  {"question":"Where is quantum teleportation handled?","paths":[]}
+]

@@ -22,7 +22,9 @@ features are not evidence that SHContext has implemented equivalent behavior.
 | [Tree-sitter introduction](https://tree-sitter.github.io/tree-sitter/)                             | Syntax trees can remain partially available around errors                     | Treat syntax recovery as incomplete evidence; report parser errors explicitly                             |
 | [TypeScript module reference](https://www.typescriptlang.org/docs/handbook/modules/reference.html) | Resolution behavior varies with host and configuration                        | Limit v0.1 edges to explicitly resolved relative references and report ambiguity                          |
 
-More languages, embeddings and multi-agent execution are later extensions. They
+More languages and embeddings remain later extensions. The first four-role
+workflow and bounded asynchronous folder execution are now implemented; see
+[execution roles](agents.md). They
 must preserve selection, output ownership, provenance and partial-coverage rules.
 No vector database, hosted service, MCP server, or parallel scheduler is required
 for the first useful build.
@@ -32,18 +34,20 @@ for the first useful build.
 Use a TypeScript core with a thin CLI; select exact dependencies when building
 the relevant modules, pin versions, and test their behavior against this contract.
 
-| Proposed location | Responsibility                                                           | Must not do                                           |
-| ----------------- | ------------------------------------------------------------------------ | ----------------------------------------------------- |
-| `src/cli/`        | Parse commands, select root, render diagnostics, map exit codes          | Hide partial failures or publish directly             |
-| `src/core/`       | Config/schema validation, shared types, budgets, pipeline state          | Evaluate repository configuration code                |
-| `src/scanner/`    | Enumerate paths, track Git status, apply layered policy, hash safe input | Follow symlinks or silently prune for budget          |
-| `src/parsers/`    | JS/TS syntax adapters and bounded text/config inspection                 | Claim complete type/call/runtime knowledge            |
-| `src/graph/`      | Store evidence-backed relative edges, unresolved/external references     | Invent targets for aliases/dynamic references         |
-| `src/generation/` | Evidence selection, chunking, bottom-up summaries, rendering             | Let a model select arbitrary filesystem paths         |
-| `src/providers/`  | One initial adapter; request limits, bounded retries, response decoding  | Read repository files or select fallback destinations |
-| `src/validation/` | Format, path, evidence, coverage, identity and output checks             | Promise semantic truth from hash/link validity        |
-| `src/storage/`    | Staging, ownership checks, recoverable publication                       | Delete unowned output or modify source                |
-| `tests/fixtures/` | Small controlled repositories covering edge cases                        | Require real credentials for core tests               |
+| Proposed location | Responsibility                                                                     | Must not do                                           |
+| ----------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `src/cli/`        | Parse commands, select root, render diagnostics, map exit codes                    | Hide partial failures or publish directly             |
+| `src/core/`       | Config/schema validation, shared types, budgets, pipeline state                    | Evaluate repository configuration code                |
+| `src/scanner/`    | Enumerate paths, track Git status, apply layered policy, hash safe input           | Follow symlinks or silently prune for budget          |
+| `src/parsers/`    | JS/TS syntax adapters and bounded text/config inspection                           | Claim complete type/call/runtime knowledge            |
+| `src/graph/`      | Store evidence-backed relative edges, unresolved/external references               | Invent targets for aliases/dynamic references         |
+| `src/generation/` | Evidence selection, chunking, bottom-up summaries, rendering                       | Let a model select arbitrary filesystem paths         |
+| `src/providers/`  | One initial adapter; request limits, bounded retries, response decoding            | Read repository files or select fallback destinations |
+| `src/validation/` | Format, path, evidence, coverage, identity and output checks                       | Promise semantic truth from hash/link validity        |
+| `src/query/`      | Offline path/symbol/text/summary retrieval, graph navigation and source inspection | Hide stale/missing context or write source            |
+| `src/agents/`     | Bounded role scheduling, reservations, cancellation and source review              | Give folder workers independent output ownership      |
+| `src/storage/`    | Staging, ownership checks, recoverable publication                                 | Delete unowned output or modify source                |
+| `tests/fixtures/` | Small controlled repositories covering edge cases                                  | Require real credentials for core tests               |
 
 Selection and hashing are deterministic code, not model tasks. Model calls are
 restricted to bounded supplied evidence. A separate semantic reviewer can later
@@ -138,7 +142,8 @@ separate but is also charged against the same run ceilings.
 Folders with no analyzable text receive deterministic empty/inventory-only
 summaries and need no provider call. Parent summaries propagate all partial
 coverage and link child context. A root synthesis supplies the architecture
-overview; a separate architecture agent is not required for v0.1.
+overview through the Architecture Analyst role; it does not require another
+independent writer or an extra model destination.
 
 ### 4. Validation and publication
 
@@ -181,7 +186,7 @@ Do not rewrite prose, "repair" the manifest, or accept a matching Git HEAD as
 proof of freshness. Verify is intentionally usable on a clone containing only
 source, configuration, and committed generated context.
 
-## Incremental updates and future agent workflows
+## Incremental updates, queries and execution roles
 
 Implemented `update` reuses the same inventory and evidence contracts. Changes must
 invalidate the file's folder, affected ancestors and reverse evidence/dependency
@@ -191,25 +196,32 @@ Complete folder-input hashes drive bottom-up reuse, and a versioned structured
 cache preserves claim boundaries. See [incremental updates](incremental-updates.md)
 for exact invalidation, migration and optional Git move hints.
 
-Four optional runtime roles map to existing stages: Coordinator, Folder Analyst,
-Architecture Analyst and Verifier. They are not four required concurrent agents.
-Start sequentially; later use a bounded pool for independent folder work, return
-structured results, and let a single writer publish. Agents cannot weaken the
-core's selection or evidence rules. Skill files orchestrate existing operations;
-an MCP server is an optional integration, not the indexing engine.
+Four runtime roles now map to existing stages: Coordinator, Folder Analyst,
+Architecture Analyst and Verifier. Sequential execution is the default; an opt-in
+bounded async pool overlaps disjoint folder model requests by depth. Parent
+records wait for children, and one writer owns staging/publication. Optional model
+review inspects claims and model-authored limitations against supplied source,
+without certifying correctness. Request/token and caller-priced spending
+reservations cover all attempts. See [roles and limits](agents.md).
+
+[Context querying](querying.md) performs offline path/symbol/text/summary search,
+bounded resolved graph traversal and current source inspection. It checks context
+freshness, labels stale/missing/invalid/unknown results and never silently rebuilds.
+There is no embedding/index service or provider call in this first query workflow.
+Skill packaging and an optional MCP integration remain separate later work.
 
 ## Implementation and verification order
 
-| Order | Deliverable                                         | Evidence needed before advancing                                                                                    |
-| ----- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| 1     | Config, shared schemas, path rules, scanner         | Fixtures for tracked/untracked files, ignore precedence, unusual paths, pruned boundaries and limits                |
-| 2     | Parser adapters and graph                           | Symbols and resolved/unresolved edges checked against small JS/TS examples; error/declaration cases                 |
-| 3     | Renderer and deterministic inventory-only build     | Every included folder represented; metadata/links/ownership verified without a model                                |
-| 4     | Provider adapter and sequential semantic generation | Mocked timeout/budget/schema failures; real sample summaries manually checked against evidence                      |
-| 5     | Publication and offline verify                      | Race, output-tampering, interrupted-swap recovery and clean-clone verification exercises                            |
-| 6     | Incremental update                                  | Exact changed-folder sets, zero-request no-op, cache invalidation and ownership-safe deletion tests                 |
-| 7     | First release and build/verify skills               | Specification acceptance matrix satisfied and limitations documented                                                |
-| Later | Query, benchmarks, parallel workers                 | Compare correctness, useful file retrieval, latency, token use and cost against sequential/simple-summary baselines |
+| Order | Deliverable                                             | Evidence needed before advancing                                                                                    |
+| ----- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 1     | Config, shared schemas, path rules, scanner             | Fixtures for tracked/untracked files, ignore precedence, unusual paths, pruned boundaries and limits                |
+| 2     | Parser adapters and graph                               | Symbols and resolved/unresolved edges checked against small JS/TS examples; error/declaration cases                 |
+| 3     | Renderer and deterministic inventory-only build         | Every included folder represented; metadata/links/ownership verified without a model                                |
+| 4     | Provider adapter and sequential semantic generation     | Mocked timeout/budget/schema failures; real sample summaries manually checked against evidence                      |
+| 5     | Publication and offline verify                          | Race, output-tampering, interrupted-swap recovery and clean-clone verification exercises                            |
+| 6     | Incremental update                                      | Exact changed-folder sets, zero-request no-op, cache invalidation and ownership-safe deletion tests                 |
+| 7     | First release and build/verify skills                   | Specification acceptance matrix satisfied and limitations documented                                                |
+| Later | Query/role quality studies, embeddings, skill packaging | Compare correctness, useful file retrieval, latency, token use and cost against sequential/simple-summary baselines |
 
 Tests must cover the product's observable contracts, not just snapshots of its
 own implementation. Include binary-only/empty folders, unsupported files,

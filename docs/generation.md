@@ -1,10 +1,11 @@
 # Building repository context
 
-`shcontext build <directory>` implements the first sequential generation pipeline.
+`shcontext build <directory>` implements source-based generation, sequential by
+default, with [bounded folder concurrency](agents.md) available.
 It reads the scanner/analysis snapshot, collects inspected evidence, generates
 leaves before parents, adds conservative interface/dependency facts, validates
 structured folder records and publishes the mirrored `context/` tree. This is a
-development implementation; offline `verify` and [incremental updates](incremental-updates.md) are implemented; query remains planned.
+development implementation; offline `verify` and [incremental updates](incremental-updates.md) are implemented; [context querying](querying.md) is implemented.
 
 ## Configure and run
 
@@ -211,7 +212,7 @@ Acceptance was defined before implementation using the requested
 [unlazy workflow](https://github.com/Leonxlnx/unlazy). `generation.test.mjs`,
 `provider.test.mjs`, `storage.test.mjs` and `build-cli.test.mjs` exercise the
 pipeline, invalid output, failures, budgets and recovery; package tests exercise
-installed declarations without consumer Node/DOM types. Core tests use controlled
+installed declarations without consumer @types/node (standard TypeScript libraries still supply URL for Zod). Core tests use controlled
 providers and require no credentials. They are not live-model quality evidence.
 A live OpenAI evaluation must separately record repository commit, configured
 model, reviewed claims/citations and limits. No OpenAI key was available during
@@ -230,3 +231,14 @@ benchmark inventory and documentation limitations were reviewed against the
 inspected source. Responses were authored for this exercise and injected at the
 transport boundary; no HTTP/model call occurred. This proves pipeline wiring
 and traceability on a real tree, not independently generated summary quality.
+
+## Execution roles and optional review
+
+The pipeline now assigns folder drafts to Folder Analyst and root synthesis to
+Architecture Analyst, under one Coordinator and source Verifier. The default
+remains sequential. [Execution options](agents.md) add a bounded sibling pool,
+explicit transient retries, per-request timeout/cancellation, shared request/token
+and caller-priced spending reservations, and optional source-based model review.
+The underlying provider's limits remain independent. All workers return records;
+only the existing journaled writer publishes. Model review is fallible and does
+not turn a mechanically fresh result into proof of explanation accuracy.
