@@ -6,3 +6,5 @@ export type { AnalysisOptions } from './analyze-repository.js';
 export { buildRepository, BuildError } from '../generation/index.js';
 export type { BuildOptions, BuildResult } from '../generation/index.js';
 export { verifyRepository } from '../validation/index.js';
+export { updateRepository } from '../update/index.js';
+export type { UpdateResult, SourceChanges } from '../update/index.js';

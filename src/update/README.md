@@ -1,9 +1,8 @@
 # Update
 
-Reserved for incremental invalidation and regeneration after the v0.1 full-build
-workflow works. No updater is implemented yet. Changes must account for ancestors
-and evidence consumers. See [architecture](../../docs/architecture.md).
-
-The planned updater consumes `GenerationManifest`, the new `RepositoryInventory`
-and reference/evidence changes. Use the shared contracts rather than defining
-another manifest interface. See the [handoff guide](../../docs/data-contracts.md).
+`updateRepository` shares the full-build analysis, validation and journaled writer.
+It reuses owned structured summaries only when complete folder inputs match.
+`cache.ts` defines portable cache version 1; `reuse.ts` hashes semantic inputs and
+rebinds evidence labels; `changes.ts` reports file changes and optional move hints.
+See [incremental updates](../../docs/incremental-updates.md) for the API, impact
+rules, migration, ownership and limits.

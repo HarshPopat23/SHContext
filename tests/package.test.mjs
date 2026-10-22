@@ -49,6 +49,7 @@ test(
         'dist/generation/index.d.ts',
         'dist/providers/index.d.ts',
         'dist/validation/index.d.ts',
+        'dist/update/index.d.ts',
         'LICENSE',
       ]) {
         assert.ok(paths.includes(path), `Missing package entry: ${path}`);
@@ -147,6 +148,8 @@ test(
             "writeFileSync('sample/.shcontextignore', 'shcontext.config.json\\n.shcontextignore\\n');",
             "import { verifyRepository } from 'shcontext/validation';",
             "const built = await buildRepository('sample', {provider:new OpenAIProvider({model:'test-model', apiKey:'test-unused'})});",
+            "import { updateRepository } from 'shcontext/update';",
+            "const updated = await updateRepository('sample'); if(updated.changed || updated.model_calls !== 0) process.exitCode=1;",
             "if(verifyRepository('sample').state !== 'fresh') process.exitCode=1;",
             "if(built.bundle.folders.length !== 1 || built.bundle.inventory.coverage !== 'complete') process.exitCode=1;",
           ].join('\n'),
@@ -156,6 +159,10 @@ test(
       writeFileSync(
         join(consumer, 'consumer.mts'),
         [
+          "import { updateRepository, type UpdateResult } from 'shcontext/update';",
+          "import { updateRepository as rootUpdate } from 'shcontext';",
+          "export const update = (): Promise<UpdateResult> => updateRepository('.', {provider});",
+          'export const sameUpdate: typeof updateRepository = rootUpdate;',
           "import { verifyRepository } from 'shcontext/validation';",
           "import { type VerificationResult } from 'shcontext/contracts';",
           "export const verification: VerificationResult = verifyRepository('.');",

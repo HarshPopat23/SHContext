@@ -1,3 +1,4 @@
+import { legacyOutput } from './helpers/verification.mjs';
 import assert from 'node:assert/strict';
 import { rmSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -88,6 +89,7 @@ for (const [name, edit] of [
 
 test('matching-source evidence outside line bounds is invalid, while changed-source references are stale', async (t) => {
   const { root } = await built(t);
+  legacyOutput(root);
   editOutput(root, 'context/src/core/CONTEXT.md', (s) =>
     s.replace(
       /(\[src\/core\/normalize\\\.ts\][^\n]* — lines 1–)[0-9]+/,
@@ -119,6 +121,8 @@ test('a coherently fabricated inventory cannot omit a currently eligible folder 
   put(root, '.shcontextignore', 'shcontext.config.json\n.shcontextignore\n');
   put(root, 'empty/.gitignore', '');
   const { bundle } = await buildRepository(root, { provider: fakeProvider() });
+  legacyOutput(root);
+  bundle.manifest.outputs = readManifest(root).outputs;
   assert.equal(verifyRepository(root).state, 'fresh');
   bundle.inventory.entries = bundle.inventory.entries.filter(
     (e) => e.path !== 'empty/' && e.path !== 'empty/.gitignore',

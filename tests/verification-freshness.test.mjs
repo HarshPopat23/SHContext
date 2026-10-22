@@ -1,3 +1,4 @@
+import { legacyOutput } from './helpers/verification.mjs';
 import assert from 'node:assert/strict';
 import { rmSync, mkdirSync, utimesSync } from 'node:fs';
 import { join } from 'node:path';
@@ -99,6 +100,7 @@ test('timestamps and excluded content bytes do not determine freshness', async (
 
 test('a coherent older component identity is stale, and malformed identity is invalid', async (t) => {
   const { root } = await built(t);
+  legacyOutput(root);
   const manifest = readManifest(root),
     old = manifest.generator.generation_id;
   manifest.generation.generator = 'older-version';

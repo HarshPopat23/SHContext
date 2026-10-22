@@ -23,17 +23,17 @@ proof that the application behaves as described at runtime.
 
 ### First-release boundary
 
-| Included in v0.1                                                       | Deferred beyond v0.1                                         |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------ |
-| Local directory input; Git awareness when available                    | Fetching repositories, hosted service, GitHub authentication |
-| JavaScript/TypeScript structural analysis and evidence-based summaries | Full semantic support for other languages                    |
-| Markdown/configuration context at the limited levels below             | Runtime tracing, type checking, complete call graphs         |
-| Full builds, scan reports, mechanical verification                     | Incremental generation, question answering, CI automation    |
-| One sequential generation workflow and one configured provider adapter | Parallel agent scheduling, many provider adapters            |
-| Versioned output, source references, content-based freshness           | Guaranteed factual correctness or identical model prose      |
+| Included in v0.1                                                        | Deferred beyond v0.1                                         |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Local directory input; Git awareness when available                     | Fetching repositories, hosted service, GitHub authentication |
+| JavaScript/TypeScript structural analysis and evidence-based summaries  | Full semantic support for other languages                    |
+| Markdown/configuration context at the limited levels below              | Runtime tracing, type checking, complete call graphs         |
+| Full builds, incremental updates, scan reports, mechanical verification | Question answering, CI automation                            |
+| One sequential generation workflow and one configured provider adapter  | Parallel agent scheduling, many provider adapters            |
+| Versioned output, source references, content-based freshness            | Guaranteed factual correctness or identical model prose      |
 
 The build/update/query/verify/benchmark skills remain the longer-term product
-plan. In v0.1, only build and verify have an underlying generation workflow;
+plan. In v0.1, build, update and verify have underlying operations;
 future packaging MUST distinguish available operations from planned ones.
 
 ## 2. Inputs and configuration
@@ -46,18 +46,20 @@ untracked files; do not substitute staged or HEAD contents. A directory need
 not be a Git checkout. Never execute its code, package scripts, tests, hooks,
 configuration modules, or instructions embedded in files during analysis.
 
-Command surface (`scan`, `build` and `verify` implemented):
+Command surface (`scan`, `build`, `update` and `verify` implemented):
 
 ```sh
 shcontext scan .
 shcontext build .
+shcontext update .
 shcontext verify .
 ```
 
 `scan` performs local content gates and syntax validation, then produces a JSON
 inventory on stdout and concise diagnostics on stderr, with no model calls or
 generated context. `build` creates or replaces
-owned generated output. `verify` reads existing output and current inputs without
+owned generated output. `update` selectively regenerates affected summaries and
+publishes through the same owned writer. `verify` reads existing output and current inputs without
 model calls or writes. These operations MUST NOT commit, push, or modify source.
 
 Configuration is optional root `shcontext.config.json`, parsed as strict JSON
@@ -226,9 +228,9 @@ comparison does not establish semantic truth. Verification MUST check mechanical
 invariants but MUST NOT advertise hallucination detection as guaranteed.
 
 Build MUST rediscover/recheck inputs before publication. Abort if they changed
-during the run, leaving previous output intact. Full regeneration is sufficient
-for v0.1. Later incremental updates must invalidate affected ancestors and
-summaries that cite changed evidence, not only the changed file's folder.
+during the run, leaving previous output intact. Incremental updates invalidate affected ancestors and summaries whose evidence or
+dependency descriptions changed; see [incremental updates](incremental-updates.md)
+for exact cache inputs and conservative invalidation.
 
 ## 7. Output ownership and Git policy
 
@@ -239,8 +241,8 @@ implicit force overwrite. Store manual notes outside `context/`. To recover,
 move edited/unowned output aside, then rebuild; SHContext does not delete it.
 
 **Recommended team mode:** commit the entire generated `context/`, including
-portable manifest and report, after review, alongside source changes. Never
-commit `.shcontext/` staging/cache/logs or credentials. Committing is a user/team
+portable manifest, report and structured cache, after review, alongside source changes. Never
+commit root `.shcontext/` staging/logs or credentials. Committing is a user/team
 choice: local-only users can ignore `context/` and rebuild on their checkout.
 The tool MUST NOT edit `.gitignore`, stage files, or commit automatically.
 

@@ -103,6 +103,7 @@ const ControlPathSchema = FilePathSchema.refine(
 export const OutputPathSchema = RelativePathSchema.refine((path) => {
   if (
     path === 'context/.shcontext/report.json' ||
+    path === 'context/.shcontext/cache.json' ||
     path === 'context/CONTEXT.md'
   )
     return true;
@@ -216,6 +217,11 @@ export const GenerationManifestSchema = z
     const expectedOutputs = [
       ...value.directories.map((directory) => contextPath(directory.path)),
       'context/.shcontext/report.json',
+      ...(value.outputs.some(
+        (item) => item.path === 'context/.shcontext/cache.json',
+      )
+        ? ['context/.shcontext/cache.json']
+        : []),
     ];
     const actual = new Set(value.outputs.map((entry) => entry.path));
     if (
@@ -226,7 +232,7 @@ export const GenerationManifestSchema = z
         ctx,
         ['outputs'],
         'invalid_manifest',
-        'Owned outputs must cover every folder and the report, excluding the manifest itself.',
+        'Owned outputs must cover every folder, the report and optional structured cache, excluding the manifest itself.',
       );
     const folded = value.outputs.map((entry) => entry.path.toLowerCase());
     if (new Set(folded).size !== folded.length)

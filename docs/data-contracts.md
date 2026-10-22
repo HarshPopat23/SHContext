@@ -67,7 +67,7 @@ escaping and refer to the submitted record, not the filesystem.
 
 The renderer fills inventories, counts, paths, IDs and other mechanical
 metadata. Model-generated claims cannot supply arbitrary output paths. The
-updater will compare manifests and reverse evidence/dependency consumers; it
+updater compares complete folder inputs, manifests and evidence/dependency consumers; it
 must not reinterpret absence of a field as successful analysis.
 
 ## Entry, location and claim rules
@@ -215,3 +215,9 @@ and package entry declarations. Existing `FileAnalysis` and `DependencyEdge`
 records are reused. Explicit builtin references use `external_builtin`; empty
 literal specifiers remain strings and fail resolution rather than being mislabeled
 computed. Module bindings retain `reference_start_byte` joins and source evidence.
+
+The version-1 owned output path set also permits optional
+`context/.shcontext/cache.json`. Its strict `IncrementalCacheSchema` is shared by
+the generator, updater and ownership reader in `src/update/cache.ts`, reusing
+`FolderSummarySchema` rather than defining a second summary format. See
+[incremental updates](incremental-updates.md) for the persisted cache and migration.
