@@ -1,7 +1,7 @@
 # Generated context format
 
-Status: proposed v0.1 output contract, schema version `1`. No generator exists
-yet. Product scope and selection rules are in [the specification](specification.md);
+Status: v0.1 output contract, schema version `1`; the first [generator](generation.md)
+is implemented. Product scope and selection rules are in [the specification](specification.md);
 processing responsibilities are in [the architecture](architecture.md).
 
 ## Layout and path mapping
