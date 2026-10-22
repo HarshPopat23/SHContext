@@ -1,0 +1,16 @@
+{
+  ".": "directory_enumerated",
+  ".gitignore": "supported_configuration",
+  ".shcontextignore": "supported_configuration",
+  "build/": "noise_directory",
+  "docs/": "directory_enumerated",
+  "docs/README.md": "supported_text",
+  "ignored/": "gitignore",
+  "private.txt": "shcontextignore",
+  "src/": "directory_enumerated",
+  "src/auto.ts": "generated_code",
+  "src/broken.ts": "syntax_error",
+  "src/main.ts": "supported_source",
+  "src/tool.py": "unsupported_language",
+  "src/view.tsx": "supported_source"
+}

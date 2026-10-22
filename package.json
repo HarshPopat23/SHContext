@@ -33,7 +33,11 @@
       "types": "./dist/core/contracts/index.d.ts",
       "import": "./dist/core/contracts/index.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./scanner": {
+      "types": "./dist/scanner/index.d.ts",
+      "import": "./dist/scanner/index.js"
+    }
   },
   "bin": {
     "shcontext": "./dist/cli/index.js"
@@ -63,6 +67,9 @@
     "typescript": "7.0.2"
   },
   "dependencies": {
+    "@babel/parser": "7.29.9",
+    "ignore": "7.0.13",
+    "jsonc-parser": "3.3.1",
     "zod": "4.6.7"
   }
 }

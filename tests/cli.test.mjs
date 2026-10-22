@@ -25,7 +25,7 @@ for (const args of [[], ['--help'], ['-h']]) {
     assert.equal(result.status, 0);
     assert.equal(result.stderr, '');
     assert.match(result.stdout, /Usage: shcontext \[options\]/);
-    assert.match(result.stdout, /Repository commands are not implemented yet/);
+    assert.match(result.stdout, /scan <directory>/);
   });
 }
 
@@ -48,7 +48,7 @@ for (const args of [['--unknown'], ['--help=invalid'], ['mystery'], ['--']]) {
 }
 
 test('planned commands fail explicitly instead of pretending to analyze', () => {
-  for (const command of ['scan', 'build', 'verify', 'update', 'query']) {
+  for (const command of ['build', 'verify', 'update', 'query']) {
     const result = invoke([command, '.']);
     assert.equal(result.status, 1);
     assert.equal(result.stdout, '');

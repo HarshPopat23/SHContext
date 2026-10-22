@@ -202,3 +202,8 @@ migration/rebuild policy, never silent acceptance of newer records.
 | [TypeScript narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)              | Use discriminated unions for dependency resolution and validation outcomes                            |
 | [JSON Schema object semantics](https://json-schema.org/understanding-json-schema/reference/object) | Make required/null behavior and rejection of additional fields explicit                               |
 | [Zod JSON Schema conversion](https://zod.dev/json-schema)                                          | Do not present a structural export as a replacement for relational checks                             |
+
+The [repository scanner](scanner.md) now implements the scanner handoff through
+`scanRepository(root)`. Its extra selection metadata prepares the manifest while
+CLI stdout remains the `RepositoryInventory` schema. Version 1 also recognizes
+`skipped: generated_code` as a declared, non-partial policy exclusion.

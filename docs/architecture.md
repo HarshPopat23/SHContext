@@ -217,3 +217,10 @@ demonstrate the limit: mechanical verification cannot establish semantic truth.
 The present documentation change does not implement these tests or claim a
 working release. Implementation pull requests must add the relevant checks as
 each contract becomes executable.
+
+## Implemented discovery
+
+The [scanner](scanner.md) implements discovery and content gates through the
+shared inventory boundary. It computes policy/input identities and exposes
+selection metadata for later manifests. Its local syntax validation does not
+implement the planned symbol extractor, dependency graph or context generator.
