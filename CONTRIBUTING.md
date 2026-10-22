@@ -1,7 +1,8 @@
 # Contributing to SHContext
 
 SHContext is under development. The foundation exposes help/version and a small
-typed package-identity API. Repository analysis is specified but not implemented.
+typed package-identity API plus shared runtime data contracts. Repository analysis
+is specified but not implemented.
 Read the [specification](docs/specification.md), [format](docs/context-format.md)
 and [architecture](docs/architecture.md) before adding behavior.
 
@@ -25,21 +26,22 @@ Use `npm install` when deliberately changing dependencies and commit the updated
 
 ## Commands and checks
 
-| Command                 | Purpose                                                                                 |
-| ----------------------- | --------------------------------------------------------------------------------------- |
-| `npm run build`         | Clean `dist/` and emit Node ESM, declarations and source maps                           |
-| `npm run typecheck`     | Strict source checking without emission                                                 |
-| `npm run format`        | Apply the pinned Prettier version                                                       |
-| `npm run format:check`  | Check formatting without writes                                                         |
-| `npm test`              | Build, run CLI/library tests, pack/install the package offline and check consumer types |
-| `npm run check`         | Formatting, type checking and the test suite                                            |
-| `npm run cli -- --help` | Run the compiled CLI without a global installation                                      |
+| Command                 | Purpose                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| `npm run build`         | Clean `dist/` and emit Node ESM, declarations and source maps                              |
+| `npm run typecheck`     | Strict source checking without emission                                                    |
+| `npm run format`        | Apply the pinned Prettier version                                                          |
+| `npm run format:check`  | Check formatting without writes                                                            |
+| `npm test`              | Build, run CLI/library tests, pack/install with a fresh npm cache and check consumer types |
+| `npm run check`         | Formatting, type checking and the test suite                                               |
+| `npm run cli -- --help` | Run the compiled CLI without a global installation                                         |
 
 Tests use Node's built-in runner and live at `tests/*.test.mjs`; fixture files are
 not executable tests. Keep fixtures small and self-contained, and never include
 credentials or downloaded private repositories. `tests/package.test.mjs` requires
-`npm test` so it can reuse npm's executable path; it exercises a temporary local
-installation, not the public registry. Test files run sequentially because
+`npm test` so it can reuse npm's executable path. It installs SHContext from a
+local tarball into a temporary consumer with a fresh npm cache; registry access
+is required to fetch runtime dependencies. Test files run sequentially because
 packing runs `prepare`, which rebuilds `dist/`.
 
 Formatting excludes byte-sensitive fixtures and generated artifacts. The existing
@@ -52,8 +54,10 @@ partial-coverage cases. No model/API key is required for foundation checks.
 Keep process argument handling in `src/cli/`; importing `shcontext` or
 `shcontext/core` must not start the CLI or inspect a user's repository. Use `.js`
 extensions in relative TypeScript imports so emitted ESM resolves in Node.
-Do not export placeholder scanners/providers. The next milestone owns shared
-repository schemas and configuration, not this scaffold.
+Do not export placeholder scanners/providers. Import shared schemas/types from
+`shcontext/contracts`; read the [contract guide](docs/data-contracts.md) before
+changing handoff records. Configuration-file loading and pipeline operations
+remain future work.
 
 `npm pack` builds a tarball through `prepare`. Its allowlist includes compiled
 output, corresponding TypeScript sources for source/declaration maps, docs and
