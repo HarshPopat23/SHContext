@@ -1,6 +1,7 @@
 import { parseArgs } from 'node:util';
 import { scanRepository, ScanError } from '../scanner/index.js';
 import { getProjectInfo } from '../core/index.js';
+import { verifyRepository } from '../validation/index.js';
 import { buildRepository, BuildError } from '../generation/index.js';
 
 interface CliOutput {
@@ -8,7 +9,7 @@ interface CliOutput {
   stderr: (text: string) => void;
 }
 
-const plannedCommands = new Set(['verify', 'update', 'query']);
+const plannedCommands = new Set(['update', 'query']);
 
 function help(): string {
   return `SHContext — repository context generator (development foundation)
@@ -22,9 +23,9 @@ Options:
 Commands:
   scan <directory>   Print a local JSON inventory without model calls or writes
   build <directory>  Generate context/ using the configured OpenAI model
+  verify <directory> Check context integrity and freshness offline (read-only)
 
 Exit codes: 0 complete, 2 partial, 1 operational/configuration failure
-Planned for v0.1: verify
 Planned later: update, query
 
 Design: https://github.com/HarshPopat23/SHContext/tree/main/docs
@@ -48,6 +49,28 @@ export async function runCli(
     });
 
     const command = positionals[0];
+    if (command === 'verify') {
+      if (values.help) {
+        output.stdout(help());
+        return 0;
+      }
+      if (positionals.length !== 2 || values.version) {
+        output.stderr(
+          'Usage: shcontext verify <directory>\nRun shcontext --help for available options.\n',
+        );
+        return 1;
+      }
+      const result = verifyRepository(positionals[1]!);
+      output.stdout(`${JSON.stringify(result, null, 2)}\n`);
+      output.stderr(
+        `Verify ${result.state}; coverage ${result.coverage}. Mechanical checks do not establish explanation accuracy; review claims against source.\n`,
+      );
+      return result.state === 'fresh'
+        ? result.coverage === 'partial'
+          ? 2
+          : 0
+        : 1;
+    }
     if (command === 'build') {
       if (values.help) {
         output.stdout(help());

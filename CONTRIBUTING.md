@@ -1,6 +1,6 @@
 # Contributing to SHContext
 
-SHContext is under development. The CLI exposes scan/build, and the library
+SHContext is under development. The CLI exposes scan/build/verify, and the library
 provides shared runtime contracts, repository analysis and context generation.
 Read the [generation guide](docs/generation.md) for provider and publication limits.
 Read the [specification](docs/specification.md), [format](docs/context-format.md)
@@ -58,7 +58,7 @@ extensions in relative TypeScript imports so emitted ESM resolves in Node.
 Do not export placeholder scanners/providers. Import shared schemas/types from
 `shcontext/contracts`; read the [contract guide](docs/data-contracts.md) before
 changing handoff records. Generation and provider entry points are available from
-`shcontext/generation` and `shcontext/providers`; provider credentials remain host
+`shcontext/generation`, `shcontext/providers` and `shcontext/validation`; provider credentials remain host
 configuration, outside analyzed repository files.
 
 `npm pack` builds a tarball through `prepare`. Its allowlist includes compiled

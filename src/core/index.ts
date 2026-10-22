@@ -5,3 +5,4 @@ export { analyzeRepository } from './analyze-repository.js';
 export type { AnalysisOptions } from './analyze-repository.js';
 export { buildRepository, BuildError } from '../generation/index.js';
 export type { BuildOptions, BuildResult } from '../generation/index.js';
+export { verifyRepository } from '../validation/index.js';

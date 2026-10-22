@@ -1,10 +1,8 @@
 # Validation
 
-Reserved for context schema, evidence, ownership and freshness checks.
-No context verifier is implemented yet. Mechanical integrity does not establish
-semantic truth. See the [format contract](../../docs/context-format.md).
-
-Shared schemas and `validateContract` already validate data in memory. A future
-filesystem verifier consumes those types and emits `ValidationFinding` records
-inside `VerificationResult`; it must separately read bytes and evaluate freshness.
-See the [handoff guide](../../docs/data-contracts.md).
+`verifyRepository` validates persisted ownership, identities, Markdown, evidence,
+coverage and current discovery without writes, network access or a model. The
+writer shares metadata/format checks before publication. See
+[verification](../../docs/verification.md) for result precedence, exit codes,
+source-based review and interrupted-run handling. Mechanical freshness does not
+establish explanation accuracy.

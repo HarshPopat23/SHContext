@@ -48,6 +48,7 @@ test(
         'dist/scanner/index.d.ts',
         'dist/generation/index.d.ts',
         'dist/providers/index.d.ts',
+        'dist/validation/index.d.ts',
         'LICENSE',
       ]) {
         assert.ok(paths.includes(path), `Missing package entry: ${path}`);
@@ -144,7 +145,9 @@ test(
             "import { OpenAIProvider } from 'shcontext/providers';",
             "mkdirSync('sample'); writeFileSync('sample/shcontext.config.json', JSON.stringify({version:1,provider:{id:'openai',model:'test-model'}}));",
             "writeFileSync('sample/.shcontextignore', 'shcontext.config.json\\n.shcontextignore\\n');",
+            "import { verifyRepository } from 'shcontext/validation';",
             "const built = await buildRepository('sample', {provider:new OpenAIProvider({model:'test-model', apiKey:'test-unused'})});",
+            "if(verifyRepository('sample').state !== 'fresh') process.exitCode=1;",
             "if(built.bundle.folders.length !== 1 || built.bundle.inventory.coverage !== 'complete') process.exitCode=1;",
           ].join('\n'),
         ],
@@ -153,6 +156,9 @@ test(
       writeFileSync(
         join(consumer, 'consumer.mts'),
         [
+          "import { verifyRepository } from 'shcontext/validation';",
+          "import { type VerificationResult } from 'shcontext/contracts';",
+          "export const verification: VerificationResult = verifyRepository('.');",
           "import { buildRepository, type BuildResult } from 'shcontext/generation';",
           "import { OpenAIProvider, type ModelProvider } from 'shcontext/providers';",
           "export const provider: ModelProvider = new OpenAIProvider({model: 'explicit-model', apiKey:'host-key'});",

@@ -5,10 +5,10 @@ directory that mirrors source folders and explains their responsibilities with
 source references and explicit coverage limits.
 
 The CLI implements local `scan <directory>` and `build <directory>` with one
-OpenAI provider. Builds collect inspected evidence, summarize folders from leaves
+OpenAI provider, plus offline `verify <directory>`. Builds collect inspected evidence, summarize folders from leaves
 to root, add conservative relationships and publish a mirrored `context/` tree.
 The reusable library exposes shared schemas, JS/TS analysis and generation.
-Offline verification, incremental updates, query and installable skills remain
+Incremental updates, query and installable skills remain
 planned; `0.0.0` is not a completed v0.1 release.
 
 ## Try the foundation
@@ -73,7 +73,7 @@ console.log(report.modules, report.edges, report.entry_points);
 [Code structure documentation](docs/code-structure.md) declares language scope,
 resolution rules, configuration inspection and unsupported-language fallback.
 Only resolved edges have confirmed file targets under the declared policy.
-Generation is implemented; update and offline freshness verification remain planned.
+Generation and offline verification are implemented; incremental update remains planned.
 
 ## Generate context
 
@@ -85,6 +85,14 @@ or committing `context/`. See [generation](docs/generation.md) for the complete
 setup, library API, budgets, ownership and current limitations. Tests use
 controlled providers; live-model quality evaluation remains pending credentials.
 
+## Verify context offline
+
+Run `shcontext verify /path/to/repository` without credentials. It checks owned
+output, metadata, links, evidence and current source identities. `fresh` describes
+mechanical integrity and freshness; explanation accuracy requires source review.
+See [verification](docs/verification.md) for states, exit codes, review guidance and
+interrupted-run handling.
+
 ## Project documents
 
 - [Product specification](docs/specification.md): scope, inputs, exclusions,
@@ -95,6 +103,7 @@ controlled providers; live-model quality evaluation remains pending credentials.
   consistency, and implementation order.
 - [Development decisions](docs/development.md): tooling choices and sources.
 - [Code structure and dependencies](docs/code-structure.md): extraction API and conservative graph.
+- [Offline verification](docs/verification.md): integrity, freshness, source review and recovery.
 - [Context generation](docs/generation.md): build command, provider, evidence and recoverable publication.
 - [Repository scanner](docs/scanner.md): implemented discovery, CLI/API and limitations.
 - [Shared data contracts](docs/data-contracts.md): module handoffs, validation and examples.

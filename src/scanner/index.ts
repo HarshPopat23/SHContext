@@ -6,8 +6,8 @@ import {
   FolderPathSchema,
   RepositoryInventorySchema,
   countInventory,
-  isPartial,
   type EffectiveConfig,
+  isPartial,
   type InventoryEntry,
   type RepositoryInventory,
 } from '../core/contracts/index.js';
@@ -20,6 +20,7 @@ import {
   errorCode,
   readBounded,
 } from './filesystem.js';
+import { policyIdentity, inputIdentity } from './identity.js';
 import { tracking } from './git.js';
 import {
   classify,
@@ -78,13 +79,6 @@ function ignored(path: string, scopes: RuleScope[]): boolean {
     if (result.unignored) excluded = false;
   }
   return excluded;
-}
-function tuples(value: unknown): unknown {
-  if (value && typeof value === 'object' && !Array.isArray(value))
-    return Object.entries(value)
-      .sort(([a], [b]) => byteOrder(a, b))
-      .map(([key, item]) => [key, tuples(item)]);
-  return value;
 }
 /** Read current working-tree bytes. Never writes files or invokes a model. */
 export function scanRepository(selectedRoot: string): ScanResult {
@@ -423,29 +417,13 @@ export function scanRepository(selectedRoot: string): ScanResult {
   const control_files = [...controls.values()].sort((a, b) =>
     byteOrder(a.path, b.path),
   );
-  const policy_id = digest(
-    JSON.stringify([
-      'policy-v1',
-      tuples(configuration),
-      control_files.map((file) => [file.path, file.sha256]),
-      DEFAULT_POLICY_VERSION,
-      DETECTOR_VERSION,
-    ]),
+  const policy_id = policyIdentity(
+    configuration,
+    control_files,
+    DEFAULT_POLICY_VERSION,
+    DETECTOR_VERSION,
   );
-  const input_id = digest(
-    JSON.stringify([
-      'input-v1',
-      policy_id,
-      entries.map((entry) => [
-        entry.path,
-        entry.kind,
-        entry.disposition,
-        entry.reason,
-        entry.mode,
-        entry.sha256,
-      ]),
-    ]),
-  );
+  const input_id = inputIdentity(policy_id, entries);
   const inventory = RepositoryInventorySchema.parse({
     schema_version: 1,
     input_id,
