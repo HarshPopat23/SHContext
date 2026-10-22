@@ -207,3 +207,11 @@ The [repository scanner](scanner.md) now implements the scanner handoff through
 `scanRepository(root)`. Its extra selection metadata prepares the manifest while
 CLI stdout remains the `RepositoryInventory` schema. Version 1 also recognizes
 `skipped: generated_code` as a declared, non-partial policy exclusion.
+
+The [code structure stage](code-structure.md) exports `RepositoryAnalysisSchema`
+and `RepositoryAnalysis` as the `repositoryAnalysis` contract: inventory plus
+file analyses, module import/export bindings, graph edges, configuration facts
+and package entry declarations. Existing `FileAnalysis` and `DependencyEdge`
+records are reused. Explicit builtin references use `external_builtin`; empty
+literal specifiers remain strings and fail resolution rather than being mislabeled
+computed. Module bindings retain `reference_start_byte` joins and source evidence.

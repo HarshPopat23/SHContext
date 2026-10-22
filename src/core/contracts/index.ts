@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { RepositoryAnalysisSchema } from './structure.js';
 import { FileAnalysisSchema, DependencyEdgeSchema } from './analysis.js';
 import { ContractBundleSchema } from './bundle.js';
 import {
@@ -12,6 +13,7 @@ import { GenerationManifestSchema } from './manifest.js';
 import { FindingCodeSchema, SCHEMA_VERSION } from './primitives.js';
 
 export * from './analysis.js';
+export * from './structure.js';
 export * from './bundle.js';
 export * from './findings.js';
 export * from './folder.js';
@@ -35,6 +37,7 @@ export type {
 
 export const contractSchemas = Object.freeze({
   repositoryInventory: RepositoryInventorySchema,
+  repositoryAnalysis: RepositoryAnalysisSchema,
   fileAnalysis: FileAnalysisSchema,
   dependencyEdge: DependencyEdgeSchema,
   folderSummary: FolderSummarySchema,

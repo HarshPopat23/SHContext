@@ -11,3 +11,8 @@ those features are implemented; this foundation does not claim to analyze it.
 ignored files are committed to test pruning. Tests create Git indexes, binary
 bytes, symlinks, permission failures and special files in temporary directories
 so these platform-specific cases do not depend on Git checkout permissions.
+
+`extraction/repository/` contains known JS/TS imports, exports, package entry
+points, aliases, ambiguous/missing/excluded targets and an unsupported Python file.
+The extraction tests declare expected symbol and edge arrays independently of
+implementation output. Ignored source fixtures are force-added for checkout.

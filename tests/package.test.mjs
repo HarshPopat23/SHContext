@@ -115,9 +115,21 @@ test(
         consumer,
       );
 
+      runNode(
+        [
+          '--input-type=module',
+          '--eval',
+          "import { analyzeRepository } from 'shcontext/analysis'; const report = analyzeRepository('.'); if (!report.configuration.some(item => item.path === 'package.json')) process.exitCode = 1;",
+        ],
+        consumer,
+      );
+
       writeFileSync(
         join(consumer, 'consumer.mts'),
         [
+          "import { analyzeRepository } from 'shcontext/analysis';",
+          "import { type RepositoryAnalysis } from 'shcontext/contracts';",
+          "export const report: RepositoryAnalysis = analyzeRepository('.');",
           "import { scanRepository, type ScanResult } from 'shcontext/scanner';",
           "export const scan: ScanResult = scanRepository('.');",
           "import { getProjectInfo, type ProjectInfo } from 'shcontext';",

@@ -224,3 +224,11 @@ The [scanner](scanner.md) implements discovery and content gates through the
 shared inventory boundary. It computes policy/input identities and exposes
 selection metadata for later manifests. Its local syntax validation does not
 implement the planned symbol extractor, dependency graph or context generator.
+
+## Implemented structural handoff
+
+`src/core/analyze-repository.ts` composes discovery, checked source reads, JS/TS
+extraction, bounded configuration inspection and conservative graph construction.
+It exports a validated `RepositoryAnalysis` for later evidence/generation stages.
+See [code structure](code-structure.md) for declared syntax, exact dependency
+rules, entry-point declarations and unsupported/unresolved cases.

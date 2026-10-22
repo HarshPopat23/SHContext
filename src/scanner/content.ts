@@ -1,5 +1,5 @@
 import { extname, basename } from 'node:path';
-import { parse, type ParserPlugin } from '@babel/parser';
+import { parseSource } from '../parsers/syntax.js';
 import type { InventoryEntry } from '../core/contracts/index.js';
 
 export const DETECTOR_VERSION = 'credentials-v1';
@@ -49,28 +49,8 @@ export function classify(
       extension,
     )
   ) {
-    const plugins: ParserPlugin[] = [];
-    if (['.ts', '.tsx', '.mts', '.cts'].includes(extension))
-      plugins.push([
-        'typescript',
-        {
-          dts: /\.d\.[cm]?ts$/i.test(path),
-          disallowAmbiguousJSXLike: ['.mts', '.cts'].includes(extension),
-        },
-      ]);
-    if (['.jsx', '.tsx'].includes(extension)) plugins.push('jsx');
     try {
-      parse(text, {
-        sourceType:
-          extension === '.cjs'
-            ? 'commonjs'
-            : ['.mjs', '.mts'].includes(extension)
-              ? 'module'
-              : 'unambiguous',
-        plugins,
-        errorRecovery: false,
-        attachComment: false,
-      });
+      parseSource(path, text);
     } catch (error) {
       const syntax = error instanceof SyntaxError;
       return {

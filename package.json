@@ -37,6 +37,10 @@
     "./scanner": {
       "types": "./dist/scanner/index.d.ts",
       "import": "./dist/scanner/index.js"
+    },
+    "./analysis": {
+      "types": "./dist/core/analyze-repository.d.ts",
+      "import": "./dist/core/analyze-repository.js"
     }
   },
   "bin": {
@@ -62,12 +66,15 @@
     "check": "npm run format:check && npm run typecheck && npm test"
   },
   "devDependencies": {
+    "@types/babel__traverse": "7.28.0",
     "@types/node": "26.6.5",
     "prettier": "3.9.10",
     "typescript": "7.0.2"
   },
   "dependencies": {
     "@babel/parser": "7.29.9",
+    "@babel/traverse": "7.29.10",
+    "@babel/types": "7.29.8",
     "ignore": "7.0.13",
     "jsonc-parser": "3.3.1",
     "zod": "4.6.7"

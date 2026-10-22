@@ -7,7 +7,8 @@ source references and explicit coverage limits.
 The current CLI implements `scan <directory>`: deterministic local discovery,
 exclusions, content gates, syntax validation and a JSON inventory, with no model
 calls or source writes. It also provides typed library APIs, shared contracts,
-packaging and development checks. Context generation and installable skills
+packaging and development checks. The analysis API extracts JS/TS symbols,
+imports/exports, file dependencies and declared package entry points. Context generation and installable skills
 remain future work; `0.0.0` is not a completed v0.1 release.
 
 ## Try the foundation
@@ -61,6 +62,17 @@ console.log(inventory.coverage);
 Scan exits `0` for complete coverage, `2` for partial coverage, and `1` for an
 operational/configuration failure. [Scanner documentation](docs/scanner.md)
 explains policy, configuration, output, exclusions, identity and limitations.
+For local structural analysis:
+
+```ts
+import { analyzeRepository } from 'shcontext/analysis';
+const report = analyzeRepository('./my-project');
+console.log(report.modules, report.edges, report.entry_points);
+```
+
+[Code structure documentation](docs/code-structure.md) declares language scope,
+resolution rules, configuration inspection and unsupported-language fallback.
+Only resolved edges have confirmed file targets under the declared policy.
 Generation, update and verification remain future work.
 
 ## Project documents
@@ -72,6 +84,7 @@ Generation, update and verification remain future work.
 - [Architecture](docs/architecture.md): processing stages, module boundaries,
   consistency, and implementation order.
 - [Development decisions](docs/development.md): tooling choices and sources.
+- [Code structure and dependencies](docs/code-structure.md): extraction API and conservative graph.
 - [Repository scanner](docs/scanner.md): implemented discovery, CLI/API and limitations.
 - [Shared data contracts](docs/data-contracts.md): module handoffs, validation and examples.
 - [Contributing](CONTRIBUTING.md): installation, checks and package boundaries.
