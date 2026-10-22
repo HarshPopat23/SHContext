@@ -158,7 +158,7 @@ export function scanRepository(selectedRoot: string): ScanResult {
           item = handle.readSync()
         ) {
           try {
-            names.push(decode(Buffer.from(item.name)));
+            names.push(decode(Buffer.from(item.name), true));
           } catch {
             throw new ScanError(
               'unsupported_path',
@@ -285,15 +285,20 @@ export function scanRepository(selectedRoot: string): ScanResult {
       if (directory) {
         let nested = tracked.submodules.has(path);
         try {
-          lstatSync(join(location, '.git'));
-          nested = true;
+          if (!nested) {
+            lstatSync(join(location, '.git'));
+            nested = true;
+          }
         } catch (error) {
-          if (errorCode(error) !== 'ENOENT')
-            throw new ScanError(
-              'repository_boundary',
-              'Cannot inspect a potential nested repository boundary.',
-              reportPath,
-            );
+          if (errorCode(error) !== 'ENOENT') {
+            entry.diagnostics.push({
+              code: errorCode(error),
+              message:
+                'Cannot inspect this directory; descendants are unknown.',
+            });
+            finish('unreadable', 'directory_unreadable');
+            continue;
+          }
         }
         if (nested) {
           finish('skipped', 'nested_repository');

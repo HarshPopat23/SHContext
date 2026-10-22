@@ -94,6 +94,9 @@ export function readBounded(
     closeSync(fd);
   }
 }
-export function decode(bytes: Buffer): string {
-  return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+export function decode(bytes: Buffer, preserveBOM = false): string {
+  return new TextDecoder('utf-8', {
+    fatal: true,
+    ignoreBOM: preserveBOM,
+  }).decode(bytes);
 }

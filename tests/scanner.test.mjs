@@ -639,3 +639,13 @@ test('Git tracking ignores inherited index/worktree overrides and fsmonitor comm
     'supported_source',
   );
 });
+
+test('Unicode filename bytes, including an initial BOM character, are preserved', (t) => {
+  const root = temporary(t);
+  put(root, '\ufeffname.ts', 'export const a=1;');
+  put(root, 'café.ts', 'export const b=2;');
+  const data = reason(root);
+  assert.equal(data['\ufeffname.ts'], 'supported_source');
+  assert.equal(data['café.ts'], 'supported_source');
+  assert.equal(data['name.ts'], undefined);
+});
