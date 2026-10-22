@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Context Verify'
+  short_description: 'Inspect context integrity and source freshness'
+  default_prompt: 'Use $context-verify to inspect context without changing files.'

@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Context Benchmark'
+  short_description: 'Measure repeatable SHContext worker performance'
+  default_prompt: 'Use $context-benchmark to compare sequential and parallel execution.'

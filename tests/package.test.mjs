@@ -54,9 +54,16 @@ test(
         'dist/agents/index.d.ts',
         'benchmarks/agent-results.md',
         'benchmarks/agent-results.json',
+        '.claude-plugin/plugin.json',
+        '.claude-plugin/marketplace.json',
+        'docs/skills.md',
         'LICENSE',
       ]) {
         assert.ok(paths.includes(path), `Missing package entry: ${path}`);
+      }
+      for (const name of ['build', 'update', 'verify', 'query', 'benchmark']) {
+        assert.ok(paths.includes(`skills/context-${name}/SKILL.md`));
+        assert.ok(paths.includes(`skills/context-${name}/agents/openai.yaml`));
       }
       assert.ok(
         paths.includes('src/core/project-info.ts'),

@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Context Build'
+  short_description: 'Generate source-based repository context'
+  default_prompt: 'Use $context-build to generate context for this repository.'

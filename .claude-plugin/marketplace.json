@@ -1,0 +1,6 @@
+{
+  "name": "shcontext-workflows",
+  "owner": { "name": "Harsh Popat" },
+  "metadata": { "description": "SHContext repository context workflows." },
+  "plugins": [{ "name": "shcontext", "source": "./", "strict": true }]
+}

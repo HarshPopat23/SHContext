@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Context Query'
+  short_description: 'Find repository answers with source references'
+  default_prompt: 'Use $context-query to find where authentication is handled.'

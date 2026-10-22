@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Context Update'
+  short_description: 'Refresh affected repository context summaries'
+  default_prompt: 'Use $context-update to refresh context after these source changes.'
