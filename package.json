@@ -41,6 +41,14 @@
     "./analysis": {
       "types": "./dist/core/analyze-repository.d.ts",
       "import": "./dist/core/analyze-repository.js"
+    },
+    "./generation": {
+      "types": "./dist/generation/index.d.ts",
+      "import": "./dist/generation/index.js"
+    },
+    "./providers": {
+      "types": "./dist/providers/index.d.ts",
+      "import": "./dist/providers/index.js"
     }
   },
   "bin": {
@@ -63,7 +71,8 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "test": "npm run build && node --test --test-concurrency=1 \"tests/*.test.mjs\"",
-    "check": "npm run format:check && npm run typecheck && npm test"
+    "check": "npm run format:check && npm run typecheck && npm test",
+    "test:integration": "npm run build && node --test --test-concurrency=1 tests/cli.test.mjs tests/build-cli.test.mjs tests/package.test.mjs"
   },
   "devDependencies": {
     "@types/babel__traverse": "7.28.0",

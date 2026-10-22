@@ -4,12 +4,12 @@ SHContext is a repository context generator under development. It will create a 
 directory that mirrors source folders and explains their responsibilities with
 source references and explicit coverage limits.
 
-The current CLI implements `scan <directory>`: deterministic local discovery,
-exclusions, content gates, syntax validation and a JSON inventory, with no model
-calls or source writes. It also provides typed library APIs, shared contracts,
-packaging and development checks. The analysis API extracts JS/TS symbols,
-imports/exports, file dependencies and declared package entry points. Context generation and installable skills
-remain future work; `0.0.0` is not a completed v0.1 release.
+The CLI implements local `scan <directory>` and `build <directory>` with one
+OpenAI provider. Builds collect inspected evidence, summarize folders from leaves
+to root, add conservative relationships and publish a mirrored `context/` tree.
+The reusable library exposes shared schemas, JS/TS analysis and generation.
+Offline verification, incremental updates, query and installable skills remain
+planned; `0.0.0` is not a completed v0.1 release.
 
 ## Try the foundation
 
@@ -73,7 +73,17 @@ console.log(report.modules, report.edges, report.entry_points);
 [Code structure documentation](docs/code-structure.md) declares language scope,
 resolution rules, configuration inspection and unsupported-language fallback.
 Only resolved edges have confirmed file targets under the declared policy.
-Generation, update and verification remain future work.
+Generation is implemented; update and offline freshness verification remain planned.
+
+## Generate context
+
+Configure `provider: { "id": "openai", "model": "YOUR_STRUCTURED_OUTPUT_MODEL" }`
+in a version-1 `shcontext.config.json`, supply `OPENAI_API_KEY` in your host
+environment, and run `shcontext build /path/to/repository`. This sends eligible
+source to OpenAI. Review exclusions, citations and generated output before sharing
+or committing `context/`. See [generation](docs/generation.md) for the complete
+setup, library API, budgets, ownership and current limitations. Tests use
+controlled providers; live-model quality evaluation remains pending credentials.
 
 ## Project documents
 
@@ -85,6 +95,7 @@ Generation, update and verification remain future work.
   consistency, and implementation order.
 - [Development decisions](docs/development.md): tooling choices and sources.
 - [Code structure and dependencies](docs/code-structure.md): extraction API and conservative graph.
+- [Context generation](docs/generation.md): build command, provider, evidence and recoverable publication.
 - [Repository scanner](docs/scanner.md): implemented discovery, CLI/API and limitations.
 - [Shared data contracts](docs/data-contracts.md): module handoffs, validation and examples.
 - [Contributing](CONTRIBUTING.md): installation, checks and package boundaries.

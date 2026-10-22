@@ -2,7 +2,7 @@ import { extname, basename } from 'node:path';
 import { parseSource } from '../parsers/syntax.js';
 import type { InventoryEntry } from '../core/contracts/index.js';
 
-export const DETECTOR_VERSION = 'credentials-v1';
+export const DETECTOR_VERSION = 'credentials-v2';
 export const DEFAULT_POLICY_VERSION = 'scanner-policy-v1';
 export const PARSER_VERSION = 'babel-parser-7.29.9-scan-v1';
 export function sensitiveContent(text: string): boolean {
@@ -11,7 +11,8 @@ export function sensitiveContent(text: string): boolean {
     /\bAKIA[A-Z0-9]{16}\b/.test(text) ||
     /\bgh[pousr]_[A-Za-z0-9]{36,}\b/.test(text) ||
     /\bgithub_pat_[A-Za-z0-9_]{50,}\b/.test(text) ||
-    /\bgsk_[A-Za-z0-9]{40,}\b/.test(text)
+    /\bgsk_[A-Za-z0-9]{40,}\b/.test(text) ||
+    /\bsk-(?:proj-|svcacct-)?[A-Za-z0-9_-]{20,}\b/.test(text)
   );
 }
 export function classify(

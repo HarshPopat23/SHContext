@@ -232,3 +232,13 @@ extraction, bounded configuration inspection and conservative graph construction
 It exports a validated `RepositoryAnalysis` for later evidence/generation stages.
 See [code structure](code-structure.md) for declared syntax, exact dependency
 rules, entry-point declarations and unsupported/unresolved cases.
+
+## Implemented first build
+
+`buildRepository` and `shcontext build` now compose the scanner and analysis APIs,
+checked evidence reads, sequential leaf-to-root synthesis, one bounded OpenAI
+adapter, structured validation, Markdown rendering and recoverable publication.
+See [generation](generation.md) for operating limits and recovery boundaries.
+Oversized requests fail without truncation; large-folder chunking and offline
+freshness verification remain planned. Live-provider quality evaluation is blocked
+until host credentials are supplied; controlled-provider tests do not prove it.

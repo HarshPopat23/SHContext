@@ -109,7 +109,7 @@ not infer generation from formatting, `.gitattributes`, or dependency graphs.
 Generated files are declared exclusions and do not alone make coverage partial.
 
 The versioned local credential detector recognizes private-key headers and
-specific AWS access-key, GitHub-token and Groq-token shapes. Filename exclusions
+specific AWS access-key, GitHub-token, Groq-token and OpenAI-key shapes. Filename exclusions
 apply first. This is a conservative pattern check, not a complete secret audit;
 unknown credentials and false positives remain possible. No matches, snippets,
 or sensitive-content hashes are returned. A control-file match aborts rather

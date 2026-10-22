@@ -48,7 +48,7 @@ for (const args of [['--unknown'], ['--help=invalid'], ['mystery'], ['--']]) {
 }
 
 test('planned commands fail explicitly instead of pretending to analyze', () => {
-  for (const command of ['build', 'verify', 'update', 'query']) {
+  for (const command of ['verify', 'update', 'query']) {
     const result = invoke([command, '.']);
     assert.equal(result.status, 1);
     assert.equal(result.stdout, '');

@@ -1,13 +1,14 @@
 import { parseArgs } from 'node:util';
 import { scanRepository, ScanError } from '../scanner/index.js';
 import { getProjectInfo } from '../core/index.js';
+import { buildRepository, BuildError } from '../generation/index.js';
 
 interface CliOutput {
   stdout: (text: string) => void;
   stderr: (text: string) => void;
 }
 
-const plannedCommands = new Set(['build', 'verify', 'update', 'query']);
+const plannedCommands = new Set(['verify', 'update', 'query']);
 
 function help(): string {
   return `SHContext — repository context generator (development foundation)
@@ -19,10 +20,11 @@ Options:
   -v, --version    Show the package version
 
 Commands:
-  scan <directory>  Print a local JSON inventory without model calls or writes
+  scan <directory>   Print a local JSON inventory without model calls or writes
+  build <directory>  Generate context/ using the configured OpenAI model
 
 Exit codes: 0 complete, 2 partial, 1 operational/configuration failure
-Planned for v0.1: build, verify
+Planned for v0.1: verify
 Planned later: update, query
 
 Design: https://github.com/HarshPopat23/SHContext/tree/main/docs
@@ -30,7 +32,10 @@ Design: https://github.com/HarshPopat23/SHContext/tree/main/docs
 }
 
 /** Help/version are side-effect free; scan reads only the explicitly selected root. */
-export function runCli(args: string[], output: CliOutput): number {
+export async function runCli(
+  args: string[],
+  output: CliOutput,
+): Promise<number> {
   try {
     const { values, positionals } = parseArgs({
       args,
@@ -43,6 +48,47 @@ export function runCli(args: string[], output: CliOutput): number {
     });
 
     const command = positionals[0];
+    if (command === 'build') {
+      if (values.help) {
+        output.stdout(help());
+        return 0;
+      }
+      if (positionals.length !== 2 || values.version) {
+        output.stderr(
+          'Usage: shcontext build <directory>\nRun shcontext --help for available options.\n',
+        );
+        return 1;
+      }
+      const controller = new AbortController();
+      const cancel = () => controller.abort();
+      process.once('SIGINT', cancel);
+      process.once('SIGTERM', cancel);
+      try {
+        const result = await buildRepository(positionals[1]!, {
+          signal: controller.signal,
+        });
+        output.stdout(
+          `${JSON.stringify({ schema_version: 1, input_id: result.bundle.inventory.input_id, coverage: result.bundle.inventory.coverage, output_paths: result.output_paths }, null, 2)}\n`,
+        );
+        output.stderr(
+          `Build ${result.bundle.inventory.coverage}: ${result.bundle.folders.length} folder summaries published. Review citations before committing context/.\n`,
+        );
+        return result.bundle.inventory.coverage === 'partial' ? 2 : 0;
+      } catch (error) {
+        const diagnostic =
+          error instanceof BuildError || error instanceof ScanError
+            ? { code: error.code, message: error.message }
+            : {
+                code: 'build_failed',
+                message: 'Build failed without publishing a new context tree.',
+              };
+        output.stderr(`${JSON.stringify(diagnostic)}\n`);
+        return 1;
+      } finally {
+        process.removeListener('SIGINT', cancel);
+        process.removeListener('SIGTERM', cancel);
+      }
+    }
     if (command === 'scan') {
       if (values.help) {
         output.stdout(help());

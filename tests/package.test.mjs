@@ -46,6 +46,8 @@ test(
         'dist/index.d.ts',
         'dist/core/index.d.ts',
         'dist/scanner/index.d.ts',
+        'dist/generation/index.d.ts',
+        'dist/providers/index.d.ts',
         'LICENSE',
       ]) {
         assert.ok(paths.includes(path), `Missing package entry: ${path}`);
@@ -124,9 +126,37 @@ test(
         consumer,
       );
 
+      runNode(
+        [
+          '--input-type=module',
+          '--eval',
+          "import { buildRepository } from 'shcontext/generation'; import { OpenAIProvider } from 'shcontext/providers'; import { buildRepository as root } from 'shcontext'; if (root !== buildRepository || typeof OpenAIProvider !== 'function') process.exitCode=1;",
+        ],
+        consumer,
+      );
+      runNode(
+        [
+          '--input-type=module',
+          '--eval',
+          [
+            "import { mkdirSync, writeFileSync } from 'node:fs';",
+            "import { buildRepository } from 'shcontext/generation';",
+            "import { OpenAIProvider } from 'shcontext/providers';",
+            "mkdirSync('sample'); writeFileSync('sample/shcontext.config.json', JSON.stringify({version:1,provider:{id:'openai',model:'test-model'}}));",
+            "writeFileSync('sample/.shcontextignore', 'shcontext.config.json\\n.shcontextignore\\n');",
+            "const built = await buildRepository('sample', {provider:new OpenAIProvider({model:'test-model', apiKey:'test-unused'})});",
+            "if(built.bundle.folders.length !== 1 || built.bundle.inventory.coverage !== 'complete') process.exitCode=1;",
+          ].join('\n'),
+        ],
+        consumer,
+      );
       writeFileSync(
         join(consumer, 'consumer.mts'),
         [
+          "import { buildRepository, type BuildResult } from 'shcontext/generation';",
+          "import { OpenAIProvider, type ModelProvider } from 'shcontext/providers';",
+          "export const provider: ModelProvider = new OpenAIProvider({model: 'explicit-model', apiKey:'host-key'});",
+          "export const build = (): Promise<BuildResult> => buildRepository('.', {provider});",
           "import { analyzeRepository } from 'shcontext/analysis';",
           "import { type RepositoryAnalysis } from 'shcontext/contracts';",
           "export const report: RepositoryAnalysis = analyzeRepository('.');",
