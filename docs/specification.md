@@ -1,7 +1,7 @@
 # SHContext specification
 
-Status: design contract for the first implementation, not documentation of an
-existing executable. Target release: v0.1. Contract version: 1.
+Status: v0.1 design contract. The local `scan` operation is implemented; see
+[scanner usage and limits](scanner.md). Generation and verification remain planned. Target release: v0.1. Contract version: 1.
 
 Read this document for product behavior, [context format](context-format.md) for
 the output contract, and [architecture](architecture.md) for implementation
@@ -45,7 +45,7 @@ untracked files; do not substitute staged or HEAD contents. A directory need
 not be a Git checkout. Never execute its code, package scripts, tests, hooks,
 configuration modules, or instructions embedded in files during analysis.
 
-Proposed commands, not currently implemented:
+Command surface (`scan` implemented; `build` and `verify` proposed):
 
 ```sh
 shcontext scan .
@@ -159,6 +159,11 @@ individual files are instead recorded as skipped and make coverage partial.
 Configuration mode is a bounded text inspection mode, not a promise to implement
 every parser for those formats. Invalid configuration syntax is marked uncertain
 when detected; only SHContext's own strict configuration must parse successfully.
+Generated code is excluded as `skipped: generated_code` when identified by a
+minified filename (`*.min.js`/`*.min.css`) or a recognized generated comment
+header in the first 4 KiB; see [detector scope](scanner.md#content-gates-and-limits).
+This is a declared policy exclusion and does not alone make coverage partial.
+
 Lockfiles (`package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`,
 `Cargo.lock`, `poetry.lock`, `uv.lock`) are `skipped: lockfile`, not expanded.
 

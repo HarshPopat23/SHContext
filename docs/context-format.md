@@ -127,15 +127,15 @@ The same inventory record shape is used by `scan` and persisted build reports:
 | `sha256`      | Raw-byte digest for readable non-sensitive selected text, otherwise `null` |
 | `diagnostics` | Sanitized code/message pairs, never source/credential excerpts             |
 
-| Disposition      | Example reasons                                                                                    | Coverage effect                              |
-| ---------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `analyzed`       | `supported_source`, `supported_text`, `supported_configuration`                                    | None                                         |
-| `inventory-only` | `unsupported_language`                                                                             | Partial                                      |
-| `ignored`        | `gitignore`, `shcontextignore`, `noise_directory`, `sensitive_path`, `tool_output`, `vcs_metadata` | None; explicit policy scope                  |
-| `skipped`        | `binary`, `non_utf8`, `lockfile`, `source_map`, `symlink`, `special_file`, `nested_repository`     | None; declared exclusions                    |
-| `skipped`        | `too_large`, `sensitive_content`                                                                   | Partial                                      |
-| `unreadable`     | `permission_denied`, `read_failed`, `directory_unreadable`                                         | Partial and unverifiable input               |
-| `parse-error`    | `syntax_error`, `parser_failed`                                                                    | Partial; no behavioral summary for that file |
+| Disposition      | Example reasons                                                                                                  | Coverage effect                              |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `analyzed`       | `supported_source`, `supported_text`, `supported_configuration`                                                  | None                                         |
+| `inventory-only` | `unsupported_language`                                                                                           | Partial                                      |
+| `ignored`        | `gitignore`, `shcontextignore`, `noise_directory`, `sensitive_path`, `tool_output`, `vcs_metadata`               | None; explicit policy scope                  |
+| `skipped`        | `binary`, `non_utf8`, `lockfile`, `source_map`, `generated_code`, `symlink`, `special_file`, `nested_repository` | None; declared exclusions                    |
+| `skipped`        | `too_large`, `sensitive_content`                                                                                 | Partial                                      |
+| `unreadable`     | `permission_denied`, `read_failed`, `directory_unreadable`                                                       | Partial and unverifiable input               |
+| `parse-error`    | `syntax_error`, `parser_failed`                                                                                  | Partial; no behavioral summary for that file |
 
 An enumerated real directory without a boundary diagnostic is `analyzed` with
 `reason: directory_enumerated`, `mode: none`, and null size/hash. This means its

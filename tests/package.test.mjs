@@ -45,6 +45,7 @@ test(
         'dist/index.js',
         'dist/index.d.ts',
         'dist/core/index.d.ts',
+        'dist/scanner/index.d.ts',
         'LICENSE',
       ]) {
         assert.ok(paths.includes(path), `Missing package entry: ${path}`);
@@ -105,9 +106,20 @@ test(
         consumer,
       );
 
+      runNode(
+        [
+          '--input-type=module',
+          '--eval',
+          "import { scanRepository } from 'shcontext/scanner'; const result = scanRepository('.'); if (!result.inventory.entries.some(entry => entry.path === 'package.json')) process.exitCode = 1;",
+        ],
+        consumer,
+      );
+
       writeFileSync(
         join(consumer, 'consumer.mts'),
         [
+          "import { scanRepository, type ScanResult } from 'shcontext/scanner';",
+          "export const scan: ScanResult = scanRepository('.');",
           "import { getProjectInfo, type ProjectInfo } from 'shcontext';",
           "import { getProjectInfo as core } from 'shcontext/core';",
           'export const info: ProjectInfo = getProjectInfo();',
