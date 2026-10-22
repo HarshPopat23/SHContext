@@ -10,6 +10,12 @@ import {
 import { join, dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
+import {
+  IncrementalCacheSchema,
+  CACHE_PATH,
+  type IncrementalCache,
+} from '../update/cache.js';
+import { renderFolder } from '../generation/render.js';
 import { strictJson } from '../validation/json.js';
 import { inspectSummary } from '../validation/summary.js';
 import type {
@@ -69,6 +75,7 @@ export interface OwnedSnapshot {
   manifest: GenerationManifest;
   inventory: RepositoryInventory;
   summaries: Map<string, string>;
+  cache: IncrementalCache | null;
 }
 export function readOwnedTree(
   root: string,
@@ -176,6 +183,7 @@ export function readOwnedTree(
     let entries = 0,
       totalBytes = manifestBytes.length;
     const summaries = new Map<string, string>();
+    let cacheText: string | undefined;
     function walk(path: string) {
       directory(root, path ? join(tree, path) : tree);
       for (const name of readdirSync(path ? join(tree, path) : tree)) {
@@ -192,6 +200,7 @@ export function readOwnedTree(
           const bytes = regular(root, absolute);
           totalBytes += bytes.length;
           if (totalBytes > 64 * 1_048_576) throw fail();
+          if (rel === '.shcontext/cache.json') cacheText = decode(bytes);
           if (rel.endsWith('CONTEXT.md'))
             summaries.set(`context/${rel}`, decode(bytes));
           if (
@@ -222,7 +231,25 @@ export function readOwnedTree(
         manifest,
         report,
       );
+    let cache: IncrementalCache | null = null;
+    if (manifest.outputs.some((item) => item.path === CACHE_PATH)) {
+      cache = IncrementalCacheSchema.parse(strictJson(cacheText!));
+      if (
+        cache.input_id !== manifest.input_id ||
+        cache.generation_id !== manifest.generator.generation_id ||
+        JSON.stringify(
+          cache.folders.map((item) => item.summary.source_path),
+        ) !== JSON.stringify(folders) ||
+        cache.folders.some(
+          (item) =>
+            renderFolder(item.summary) !==
+            summaries.get(contextPath(item.summary.source_path)),
+        )
+      )
+        throw fail();
+    }
     return {
+      cache,
       identity: digest(manifestBytes),
       manifest,
       inventory: report,

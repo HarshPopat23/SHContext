@@ -1,3 +1,8 @@
+import {
+  IncrementalCacheSchema,
+  type IncrementalCache,
+} from '../update/cache.js';
+import { folderInputHash, rebaseSummary } from '../update/reuse.js';
 import { join } from 'node:path';
 import { analyzeRepository } from '../core/analyze-repository.js';
 import { scanRepository, type ScanResult } from '../scanner/index.js';
@@ -29,7 +34,7 @@ import {
 } from './draft.js';
 import { BuildError } from './errors.js';
 
-export const GENERATOR_VERSION = 'context-pipeline-v2';
+export const GENERATOR_VERSION = 'context-pipeline-v3';
 export const RENDERER_VERSION = 'markdown-v1';
 export const TEMPLATE_VERSION = 'context-sections-v1';
 export function generationIdentity(
@@ -86,6 +91,7 @@ export async function summarize(
   scan: ScanResult,
   provider: ModelProvider,
   signal?: CancellationSignal,
+  previous?: IncrementalCache | null,
 ) {
   throwIfCancelled(signal);
   const report = analyzeRepository(root, {
@@ -135,6 +141,13 @@ export async function summarize(
     return path === null ? [] : [path];
   });
   const folders = new Map<string, FolderSummary>();
+  const cached = new Map(
+    (previous?.folders ?? []).map((item) => [item.summary.source_path, item]),
+  );
+  const records: IncrementalCache['folders'] = [];
+  const regenerated: string[] = [],
+    reused: string[] = [];
+  let model_calls = 0;
   // Descendants precede ancestors; siblings have deterministic UTF-8 ordering.
   paths.sort(
     (a, b) =>
@@ -255,33 +268,58 @@ export async function summarize(
         mode: file.mode,
         content: sources.get(file.path)!,
       }));
+    const wordLimit =
+      path === '.'
+        ? scan.configuration.rootWordLimit
+        : scan.configuration.folderWordLimit;
+    const inputData = {
+      source_path: path,
+      narrative_word_limit: wordLimit,
+      files: base.files.map(({ path, disposition, mode, limitations }) => ({
+        path,
+        disposition,
+        mode,
+        limitations,
+      })),
+      sources: directSources,
+      children,
+      evidence: available,
+      interfaces: base.interfaces_and_entry_points,
+      dependencies: base.dependencies_and_consumers,
+    };
+    const input_hash = folderInputHash(
+      id,
+      scan.policy_id,
+      entries,
+      edges,
+      scan.inventory,
+      inputData,
+      allEvidence,
+    );
+    const old = cached.get(path);
+    if (previous?.generation_id === id && old?.input_hash === input_hash) {
+      const summary = rebaseSummary(
+        old.summary,
+        allEvidence,
+        scan.inventory.input_id,
+        id,
+      );
+      folders.set(path, summary);
+      records.push({ input_hash, summary });
+      reused.push(path);
+      continue;
+    }
+    regenerated.push(path);
     // A parent can synthesize inspected child evidence; an entirely unanalyzable subtree needs no model.
     if (
       directSources.length ||
       children.some((child) => child.purpose.length)
     ) {
-      const wordLimit =
-        path === '.'
-          ? scan.configuration.rootWordLimit
-          : scan.configuration.folderWordLimit;
-      const input = JSON.stringify({
-        source_path: path,
-        narrative_word_limit: wordLimit,
-        files: base.files.map(({ path, disposition, mode, limitations }) => ({
-          path,
-          disposition,
-          mode,
-          limitations,
-        })),
-        sources: directSources,
-        children,
-        evidence: available,
-        interfaces: base.interfaces_and_entry_points,
-        dependencies: base.dependencies_and_consumers,
-      });
+      const input = JSON.stringify(inputData);
       let draft: ReturnType<typeof checkedDraft> | undefined;
       for (let attempt = 0; attempt < 2; attempt++) {
         throwIfCancelled(signal);
+        model_calls++;
         const raw = await provider.generate({
           instructions: INSTRUCTIONS,
           input: attempt
@@ -327,7 +365,9 @@ export async function summarize(
       ].flatMap((claim) => claim.evidence_ids),
     );
     base.evidence = available.filter((item) => used.has(item.id));
-    folders.set(path, FolderSummarySchema.parse(base));
+    const summary = FolderSummarySchema.parse(base);
+    folders.set(path, summary);
+    records.push({ input_hash, summary });
   }
   if (scanRepository(root).inventory.input_id !== scan.inventory.input_id)
     throw new BuildError(
@@ -335,6 +375,17 @@ export async function summarize(
       'Selected inputs changed during generation; previous context was retained.',
     );
   return {
+    cache: IncrementalCacheSchema.parse({
+      version: 1,
+      input_id: scan.inventory.input_id,
+      generation_id: id,
+      folders: records.sort((a, b) =>
+        byteOrder(a.summary.source_path, b.summary.source_path),
+      ),
+    }),
+    regenerated: regenerated.sort(byteOrder),
+    reused: reused.sort(byteOrder),
+    model_calls,
     report,
     folders: [...folders.values()].sort((a, b) =>
       byteOrder(a.source_path, b.source_path),

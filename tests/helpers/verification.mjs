@@ -69,3 +69,13 @@ export function denyRead(t, path) {
 export function verified(root) {
   return verifyRepository(root);
 }
+
+/** Exercise the pre-cache v1 format independently of cache/Markdown consistency. */
+export function legacyOutput(root) {
+  const manifest = readManifest(root);
+  manifest.outputs = manifest.outputs.filter(
+    (item) => item.path !== 'context/.shcontext/cache.json',
+  );
+  fs.rmSync(join(root, 'context/.shcontext/cache.json'));
+  saveManifest(root, manifest);
+}

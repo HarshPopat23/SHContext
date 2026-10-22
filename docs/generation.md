@@ -4,7 +4,7 @@
 It reads the scanner/analysis snapshot, collects inspected evidence, generates
 leaves before parents, adds conservative interface/dependency facts, validates
 structured folder records and publishes the mirrored `context/` tree. This is a
-development implementation; offline `verify` is now implemented; incremental updates and query remain planned.
+development implementation; offline `verify` and [incremental updates](incremental-updates.md) are implemented; query remains planned.
 
 ## Configure and run
 
@@ -160,8 +160,9 @@ The journal records UUID-owned names, old/new manifest digests and pending or
 validated phase, never bodies or credentials. The installed tree is checked before
 backup cleanup. Cleanup retains the backup manifest until last and can resume
 after partial deletion. Output includes only mirrored summaries and portable
-`context/.shcontext/{manifest,report}.json`; structured records are returned by
-the API, not persisted as an extra unowned artifact.
+`context/.shcontext/{manifest,report,cache}.json`. The owned structured cache
+preserves exact summaries for [incremental reuse](incremental-updates.md); no raw
+source bodies are persisted.
 
 A nonempty context tree must have a valid version-1 manifest and inventory,
 matching owned output hashes and exactly the expected files/directories. Extra,
@@ -186,7 +187,7 @@ This is a same-filesystem recoverable directory swap, not an atomic multi-file
 snapshot or a guarantee against hostile filesystem races, power loss or network
 filesystem lock semantics. Files/journals are flushed; directory entries are not
 fsynced portably. Use a quiescent local checkout. The build never rewrites source
-or Git state. A nullable Git HEAD is omitted (`null`) from provenance for now;
+or Git state. Git HEAD is recorded as nullable informational provenance when available;
 source and component hashes determine identities. [Offline verification](verification.md) checks freshness separately from publication
 ownership and explanation accuracy.
 

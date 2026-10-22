@@ -1,7 +1,7 @@
 {
   "name": "shcontext",
   "version": "0.0.0",
-  "description": "Repository context generator — development foundation.",
+  "description": "Repository context generator \u2014 development foundation.",
   "private": true,
   "license": "MIT",
   "author": "HarshPopat23",
@@ -53,6 +53,10 @@
     "./validation": {
       "types": "./dist/validation/index.d.ts",
       "import": "./dist/validation/index.js"
+    },
+    "./update": {
+      "types": "./dist/update/index.d.ts",
+      "import": "./dist/update/index.js"
     }
   },
   "bin": {
@@ -76,7 +80,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "test": "npm run build && node --test --test-concurrency=1 \"tests/*.test.mjs\"",
     "check": "npm run format:check && npm run typecheck && npm test",
-    "test:integration": "npm run build && node --test --test-concurrency=1 tests/cli.test.mjs tests/build-cli.test.mjs tests/verify-cli.test.mjs tests/package.test.mjs"
+    "test:integration": "npm run build && node --test --test-concurrency=1 tests/cli.test.mjs tests/build-cli.test.mjs tests/verify-cli.test.mjs tests/update-cli.test.mjs tests/package.test.mjs"
   },
   "devDependencies": {
     "@types/babel__traverse": "7.28.0",

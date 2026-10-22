@@ -1,3 +1,4 @@
+import { updateRepository, type UpdateResult } from '../update/index.js';
 import { parseArgs } from 'node:util';
 import { scanRepository, ScanError } from '../scanner/index.js';
 import { getProjectInfo } from '../core/index.js';
@@ -9,7 +10,7 @@ interface CliOutput {
   stderr: (text: string) => void;
 }
 
-const plannedCommands = new Set(['update', 'query']);
+const plannedCommands = new Set(['query']);
 
 function help(): string {
   return `SHContext — repository context generator (development foundation)
@@ -23,10 +24,11 @@ Options:
 Commands:
   scan <directory>   Print a local JSON inventory without model calls or writes
   build <directory>  Generate context/ using the configured OpenAI model
+  update <directory> Refresh affected summaries using the structured cache
   verify <directory> Check context integrity and freshness offline (read-only)
 
 Exit codes: 0 complete, 2 partial, 1 operational/configuration failure
-Planned later: update, query
+Planned later: query
 
 Design: https://github.com/HarshPopat23/SHContext/tree/main/docs
 `;
@@ -71,14 +73,14 @@ export async function runCli(
           : 0
         : 1;
     }
-    if (command === 'build') {
+    if (command === 'build' || command === 'update') {
       if (values.help) {
         output.stdout(help());
         return 0;
       }
       if (positionals.length !== 2 || values.version) {
         output.stderr(
-          'Usage: shcontext build <directory>\nRun shcontext --help for available options.\n',
+          `Usage: shcontext ${command} <directory>\nRun shcontext --help for available options.\n`,
         );
         return 1;
       }
@@ -87,14 +89,19 @@ export async function runCli(
       process.once('SIGINT', cancel);
       process.once('SIGTERM', cancel);
       try {
-        const result = await buildRepository(positionals[1]!, {
+        const result = await (
+          command === 'update' ? updateRepository : buildRepository
+        )(positionals[1]!, {
           signal: controller.signal,
         });
+        const updated = command === 'update' ? (result as UpdateResult) : null;
         output.stdout(
-          `${JSON.stringify({ schema_version: 1, input_id: result.bundle.inventory.input_id, coverage: result.bundle.inventory.coverage, output_paths: result.output_paths }, null, 2)}\n`,
+          `${JSON.stringify({ schema_version: 1, input_id: result.bundle.inventory.input_id, coverage: result.bundle.inventory.coverage, output_paths: result.output_paths, ...(updated ? { changed: updated.changed, regenerated: updated.regenerated, reused: updated.reused, model_calls: updated.model_calls, changes: updated.changes } : {}) }, null, 2)}\n`,
         );
         output.stderr(
-          `Build ${result.bundle.inventory.coverage}: ${result.bundle.folders.length} folder summaries published. Review citations before committing context/.\n`,
+          updated
+            ? `Update ${result.bundle.inventory.coverage}: ${updated.regenerated.length} refreshed, ${updated.reused.length} reused; ${updated.model_calls} model calls; context ${updated.changed ? 'published' : 'unchanged'}. Review citations before committing context/.\n`
+            : `Build ${result.bundle.inventory.coverage}: ${result.bundle.folders.length} folder summaries published. Review citations before committing context/.\n`,
         );
         return result.bundle.inventory.coverage === 'partial' ? 2 : 0;
       } catch (error) {
@@ -102,8 +109,11 @@ export async function runCli(
           error instanceof BuildError || error instanceof ScanError
             ? { code: error.code, message: error.message }
             : {
-                code: 'build_failed',
-                message: 'Build failed without publishing a new context tree.',
+                code: command === 'update' ? 'update_failed' : 'build_failed',
+                message:
+                  command === 'update'
+                    ? 'Update failed; inspect context and publication state before retrying.'
+                    : 'Build failed without publishing a new context tree.',
               };
         output.stderr(`${JSON.stringify(diagnostic)}\n`);
         return 1;

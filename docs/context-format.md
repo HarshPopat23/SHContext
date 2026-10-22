@@ -15,7 +15,8 @@ processing responsibilities are in [the architecture](architecture.md).
 
 Emit one summary per included directory, even when it contains no analyzable
 files. Root output also contains `context/.shcontext/manifest.json` and
-`context/.shcontext/report.json`. Root `.shcontext/` in the source tree is
+`context/.shcontext/report.json`. New builds also include owned structured
+`context/.shcontext/cache.json`; see [incremental updates](incremental-updates.md). Root `.shcontext/` in the source tree is
 reserved/excluded operational state, so its mirrored name cannot collide with
 portable metadata. No source file is copied into the generated tree.
 
@@ -52,7 +53,8 @@ The angle-bracket values above describe the grammar, not literal valid digests.
 `coverage` is `complete` or `partial`. `source_path` has no trailing slash.
 No `fresh: true` field is stored: freshness must be checked against current input.
 `input_id` identifies the full selected repository snapshot; `generation_id`
-identifies the transformation. v0.1 can invalidate the entire output on changes.
+identifies the transformation. Updates can reuse narrative while rebinding this
+metadata to the new snapshot.
 
 | Required heading                 | Required content                                                                                         |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -180,7 +182,11 @@ per-kind/disposition subtree counts; the renderer owns that mechanical metadata.
 | `analysis_failures` | One primary limitation per affected path: unsupported language, access/parser failure, oversized or sensitive content    |
 | `diagnostics`       | Sanitized run-level code/message records                                                                                 |
 
-The output list includes `context/.shcontext/report.json`. The manifest does not
+The output list includes `context/.shcontext/report.json` and, when present,
+`context/.shcontext/cache.json`. The optional version-1 structured cache stores
+complete `FolderSummary` records and folder input hashes, validated against exact
+rendered Markdown. Old outputs without a cache remain readable; their first update
+regenerates to populate it. Cache presence requires complete, matching owned bytes. The manifest does not
 hash itself, avoiding a circular digest. Reject unknown schema versions and
 unsafe/duplicate paths. A manifest is an ownership/integrity record, not a signed
 authenticity guarantee. Verification MUST also derive expected folder/output

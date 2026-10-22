@@ -181,13 +181,15 @@ Do not rewrite prose, "repair" the manifest, or accept a matching Git HEAD as
 proof of freshness. Verify is intentionally usable on a clone containing only
 source, configuration, and committed generated context.
 
-## Future incremental and agent workflows
+## Incremental updates and future agent workflows
 
-Future `update` reuses the same inventory and evidence contracts. Changes must
+Implemented `update` reuses the same inventory and evidence contracts. Changes must
 invalidate the file's folder, affected ancestors and reverse evidence/dependency
 consumers. Moves/deletions remove only owned obsolete output. Cyclic imports do
-not require recursive generation: graph construction precedes folder synthesis,
-and invalidation uses a visited set. If impact is uncertain, rebuild conservatively.
+not require recursive generation: graph construction precedes folder synthesis.
+Complete folder-input hashes drive bottom-up reuse, and a versioned structured
+cache preserves claim boundaries. See [incremental updates](incremental-updates.md)
+for exact invalidation, migration and optional Git move hints.
 
 Four optional runtime roles map to existing stages: Coordinator, Folder Analyst,
 Architecture Analyst and Verifier. They are not four required concurrent agents.
@@ -198,15 +200,16 @@ an MCP server is an optional integration, not the indexing engine.
 
 ## Implementation and verification order
 
-| Order | Deliverable                                             | Evidence needed before advancing                                                                                    |
-| ----- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| 1     | Config, shared schemas, path rules, scanner             | Fixtures for tracked/untracked files, ignore precedence, unusual paths, pruned boundaries and limits                |
-| 2     | Parser adapters and graph                               | Symbols and resolved/unresolved edges checked against small JS/TS examples; error/declaration cases                 |
-| 3     | Renderer and deterministic inventory-only build         | Every included folder represented; metadata/links/ownership verified without a model                                |
-| 4     | Provider adapter and sequential semantic generation     | Mocked timeout/budget/schema failures; real sample summaries manually checked against evidence                      |
-| 5     | Publication and offline verify                          | Race, output-tampering, interrupted-swap recovery and clean-clone verification exercises                            |
-| 6     | First release and build/verify skills                   | Specification acceptance matrix satisfied and limitations documented                                                |
-| Later | Incremental update, query, benchmarks, parallel workers | Compare correctness, useful file retrieval, latency, token use and cost against sequential/simple-summary baselines |
+| Order | Deliverable                                         | Evidence needed before advancing                                                                                    |
+| ----- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 1     | Config, shared schemas, path rules, scanner         | Fixtures for tracked/untracked files, ignore precedence, unusual paths, pruned boundaries and limits                |
+| 2     | Parser adapters and graph                           | Symbols and resolved/unresolved edges checked against small JS/TS examples; error/declaration cases                 |
+| 3     | Renderer and deterministic inventory-only build     | Every included folder represented; metadata/links/ownership verified without a model                                |
+| 4     | Provider adapter and sequential semantic generation | Mocked timeout/budget/schema failures; real sample summaries manually checked against evidence                      |
+| 5     | Publication and offline verify                      | Race, output-tampering, interrupted-swap recovery and clean-clone verification exercises                            |
+| 6     | Incremental update                                  | Exact changed-folder sets, zero-request no-op, cache invalidation and ownership-safe deletion tests                 |
+| 7     | First release and build/verify skills               | Specification acceptance matrix satisfied and limitations documented                                                |
+| Later | Query, benchmarks, parallel workers                 | Compare correctness, useful file retrieval, latency, token use and cost against sequential/simple-summary baselines |
 
 Tests must cover the product's observable contracts, not just snapshots of its
 own implementation. Include binary-only/empty folders, unsupported files,

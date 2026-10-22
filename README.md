@@ -5,10 +5,10 @@ directory that mirrors source folders and explains their responsibilities with
 source references and explicit coverage limits.
 
 The CLI implements local `scan <directory>` and `build <directory>` with one
-OpenAI provider, plus offline `verify <directory>`. Builds collect inspected evidence, summarize folders from leaves
+OpenAI provider, incremental `update <directory>`, plus offline `verify <directory>`. Builds collect inspected evidence, summarize folders from leaves
 to root, add conservative relationships and publish a mirrored `context/` tree.
 The reusable library exposes shared schemas, JS/TS analysis and generation.
-Incremental updates, query and installable skills remain
+Query and installable skills remain
 planned; `0.0.0` is not a completed v0.1 release.
 
 ## Try the foundation
@@ -73,7 +73,7 @@ console.log(report.modules, report.edges, report.entry_points);
 [Code structure documentation](docs/code-structure.md) declares language scope,
 resolution rules, configuration inspection and unsupported-language fallback.
 Only resolved edges have confirmed file targets under the declared policy.
-Generation and offline verification are implemented; incremental update remains planned.
+Generation, incremental updates and offline verification are implemented.
 
 ## Generate context
 
@@ -84,6 +84,14 @@ source to OpenAI. Review exclusions, citations and generated output before shari
 or committing `context/`. See [generation](docs/generation.md) for the complete
 setup, library API, budgets, ownership and current limitations. Tests use
 controlled providers; live-model quality evaluation remains pending credentials.
+
+## Update context
+
+Run `shcontext update /path/to/repository` after source changes. It refreshes
+affected summaries and parents, including changed evidence/dependencies, and
+reuses the rest. An unchanged run makes no model calls and needs no API key.
+See [incremental updates](docs/incremental-updates.md) for cache invalidation,
+move hints, migration and ownership.
 
 ## Verify context offline
 
