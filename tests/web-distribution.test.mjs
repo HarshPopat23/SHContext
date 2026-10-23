@@ -46,11 +46,34 @@ fs.copyFileSync(
 const offline = { ...env, PATH: tools };
 const installed = {};
 before(() => {
-  run(
-    process.execPath,
-    [join(repo, 'scripts/package-web-skills.mjs'), pack],
+  // A checkout contains files, not empty directories left behind by skill scaffolding.
+  const checkout = join(box, 'fresh source checkout');
+  run('git', ['clone', '--shared', '--no-checkout', repo, checkout]);
+  const paths = run(
+    'git',
+    ['ls-files', '--cached', '--others', '--exclude-standard', '-z'],
     0,
     { cwd: repo },
+  )
+    .stdout.split('\0')
+    .filter(Boolean);
+  for (const path of paths) {
+    fs.mkdirSync(dirname(join(checkout, path)), { recursive: true });
+    fs.copyFileSync(join(repo, path), join(checkout, path));
+  }
+  assert.equal(
+    fs.existsSync(join(checkout, 'skills-web/context-web-build/references')),
+    false,
+  );
+  // Producer dependencies are prepared already; consumers still receive production modules only.
+  fs.cpSync(join(repo, 'node_modules'), join(checkout, 'node_modules'), {
+    recursive: true,
+  });
+  run(
+    process.execPath,
+    [join(checkout, 'scripts/package-web-skills.mjs'), pack],
+    0,
+    { cwd: checkout },
   );
   for (const operation of ['build', 'update', 'verify', 'query']) {
     const target = join(box, 'installed-' + operation);

@@ -12,7 +12,9 @@ separate. Matching hashes or model review do not prove explanation correctness.
   it is not a Claude browser test.
 - **Actual Claude web acceptance: BLOCKED, not passed.** On October 23, 2026,
   opening `https://claude.ai/new` in the available browser redirected to Claude's
-  sign-in screen. No upload, Claude-authored draft, download or fresh-chat update
+  sign-in screen. A secure sign-in attempt selected Google, after which Claude
+  presented an hCaptcha challenge; the challenge was not attempted automatically.
+  No upload, Claude-authored draft, download or fresh-chat update
   has been observed in an authenticated Claude account. API calls do not substitute
   for this check. No authenticated Claude session is available in this browser.
 

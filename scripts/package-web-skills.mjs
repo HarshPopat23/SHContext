@@ -113,6 +113,7 @@ try {
     const resources = join(skill, 'resources');
     fs.mkdirSync(resources);
     fs.cpSync(runtime, join(resources, 'runtime'), { recursive: true });
+    fs.mkdirSync(join(skill, 'references'), { recursive: true });
     fs.copyFileSync(
       join(root, 'scripts/web-workspace.py'),
       join(resources, 'web.py'),
