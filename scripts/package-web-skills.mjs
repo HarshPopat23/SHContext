@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { build } from 'esbuild';
 import fs from 'node:fs';
 import { dirname, join, relative, resolve, isAbsolute, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -49,14 +50,49 @@ const staging = fs.mkdtempSync(join(out, '.staging-'));
 try {
   const runtime = join(staging, 'runtime');
   fs.mkdirSync(runtime);
-  // Compile directly into the bundle: no dependence on stale dist/ or a consumer install.
-  run(process.execPath, [
-    join(root, 'node_modules/typescript/bin/tsc'),
-    '--project',
-    'tsconfig.build.json',
-    '--outDir',
-    join(runtime, 'dist'),
-  ]);
+  // Produce plain JavaScript resources: Claude rejects >200 files and nested ZIPs.
+  // Babel's explicit createRequire call needs a bundler-visible literal require.
+  await build({
+    entryPoints: {
+      'web/runtime': join(root, 'src/web/runtime.ts'),
+      index: join(root, 'src/index.ts'),
+    },
+    outdir: join(runtime, 'dist'),
+    bundle: true,
+    platform: 'node',
+    target: 'node22.14',
+    format: 'esm',
+    mainFields: ['module', 'main'],
+    banner: {
+      js: "import { createRequire as __webCreateRequire } from 'node:module'; const require = __webCreateRequire(import.meta.url);",
+    },
+    plugins: [
+      {
+        name: 'babel-traverse-literal',
+        setup(builder) {
+          builder.onLoad(
+            { filter: /[/\\]parsers[/\\]javascript\.ts$/ },
+            ({ path }) => {
+              const source = fs.readFileSync(path, 'utf8');
+              const expression =
+                "createRequire(import.meta.url)('@babel/traverse')";
+              assert.ok(
+                source.includes(expression),
+                'Review Babel traversal bundling after parser changes.',
+              );
+              return {
+                contents: source.replace(
+                  expression,
+                  "require('@babel/traverse')",
+                ),
+                loader: 'ts',
+              };
+            },
+          );
+        },
+      },
+    ],
+  });
   fs.writeFileSync(
     join(runtime, 'package.json'),
     JSON.stringify(
@@ -87,12 +123,21 @@ try {
       entry.version,
       `Installed version differs from lock: ${path}`,
     );
-    fs.mkdirSync(dirname(join(runtime, path)), { recursive: true });
-    fs.cpSync(source, join(runtime, path), {
-      recursive: true,
-      dereference: false,
-      filter: (file) => !fs.lstatSync(file).isSymbolicLink(),
-    });
+    // Retain every production package's license separately from the bundled code.
+    const licenses = fs
+      .readdirSync(source)
+      .filter((name) =>
+        /^(?:licen[sc]e|copying|notice)(?:[.\-]|$)/i.test(name),
+      );
+    assert.ok(licenses.length, `Missing license: ${path}`);
+    const licenseRoot = join(
+      runtime,
+      'licenses',
+      path.slice('node_modules/'.length).replaceAll('@', ''),
+    );
+    fs.mkdirSync(licenseRoot, { recursive: true });
+    for (const name of licenses)
+      fs.copyFileSync(join(source, name), join(licenseRoot, name));
     dependencies.push({
       path,
       version: entry.version,
@@ -102,8 +147,20 @@ try {
   }
   fs.writeFileSync(
     join(runtime, 'BUNDLE.json'),
-    JSON.stringify({ version: 1, revision, dirty, dependencies }, null, 2) +
-      '\n',
+    JSON.stringify(
+      {
+        version: 1,
+        revision,
+        dirty,
+        bundler: {
+          name: 'esbuild',
+          version: lock.packages['node_modules/esbuild'].version,
+        },
+        dependencies,
+      },
+      null,
+      2,
+    ) + '\n',
   );
   const artifacts = [];
   for (const operation of ['build', 'update', 'verify', 'query']) {
@@ -122,6 +179,15 @@ try {
       join(root, 'skills-web/shared/workflow.md'),
       join(skill, 'references/workflow.md'),
     );
+    const count = (directory) =>
+      fs
+        .readdirSync(directory, { withFileTypes: true })
+        .reduce(
+          (n, entry) =>
+            n + (entry.isDirectory() ? count(join(directory, entry.name)) : 1),
+          0,
+        );
+    assert.ok(count(skill) <= 200, 'Claude skills allow at most 200 files.');
     const target = join(out, name + '.zip');
     run(python, [
       '-c',
@@ -131,7 +197,9 @@ with zipfile.ZipFile(target,'x',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
  for p in sorted(source.rglob('*')):
   if p.is_symlink(): raise ValueError('Linked bundle resource')
   if p.is_file():
-   info=zipfile.ZipInfo(source.name+'/'+p.relative_to(source).as_posix(),(1980,1,1,0,0,0))
+   name=source.name+'/'+p.relative_to(source).as_posix()
+   assert all(c.isascii() and (c.isalnum() or c in '_./-') for c in name), 'Nonportable skill resource path'
+   info=zipfile.ZipInfo(name,(1980,1,1,0,0,0))
    info.external_attr=(stat.S_IFREG|0o644)<<16; info.compress_type=zipfile.ZIP_DEFLATED
    z.writestr(info,p.read_bytes(),compresslevel=9)`,
       skill,

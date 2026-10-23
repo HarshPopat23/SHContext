@@ -152,3 +152,7 @@ structure and freshness, not that an explanation is correct. Model review is not
 - Runtime and dependencies are bundled as JavaScript, not a Node executable.
   If Node/Python/code execution is unavailable, this workflow is blocked. Claude
   web account limits and installation policies may independently block execution.
+
+The upload contains at most 200 files and no nested archives. Compiled JavaScript
+bundles include locked production dependencies; their licenses and version
+inventory remain separate resources. No extraction or installation is required.

@@ -238,10 +238,23 @@ test('each independently uploadable skill contains its own locked runtime, licen
       'resources/web.py',
       'resources/runtime/dist/web/runtime.js',
       'resources/runtime/LICENSE',
-      'resources/runtime/node_modules/zod/package.json',
+      'resources/runtime/licenses/zod/LICENSE',
       'resources/runtime/BUNDLE.json',
     ])
       assert.ok(names.includes(name + '/' + path), path);
+    assert.ok(names.length <= 200, 'Claude upload file-count limit');
+    assert.ok(
+      names.every((path) => /^[a-zA-Z0-9_./-]+$/.test(path)),
+      'Portable upload resource paths',
+    );
+    assert.ok(
+      !names.some((path) => /\.(?:zip|skill)$/i.test(path)),
+      'No nested archives',
+    );
+    assert.ok(
+      !names.some((path) => path.includes('/node_modules/')),
+      'Dependencies are bundled',
+    );
     const skill = fs.readFileSync(
       join(
         dirname(installed[name.slice('context-web-'.length)]),
@@ -276,7 +289,7 @@ test('missing Node and incomplete bundle fail with actionable errors, never inst
   });
   assert.match(missing.stderr, /runtime_unavailable/);
   const resources = dirname(installed.query);
-  const dependency = join(resources, 'runtime/node_modules/zod');
+  const dependency = join(resources, 'runtime/dist/index.js');
   fs.renameSync(dependency, dependency + '-missing');
   try {
     web('query', ['preflight'], 1);
