@@ -1,0 +1,1085 @@
+{
+  "schema_version": 1,
+  "mode": "real pinned source repositories, scripted narrative controls; retrieval usefulness, not live prose quality",
+  "node": "v24.19.0",
+  "platform": "linux",
+  "repositories": [
+    {
+      "id": "is-number",
+      "scope": "Full pinned public repository; source-reviewed index.js claim, other scripted file prose is unreviewed.",
+      "tool_version": "0.1.0-alpha.1",
+      "generation_identity": {
+        "provider": {
+          "id": "openai",
+          "model": "scripted-control"
+        },
+        "generator": "context-pipeline-v4",
+        "parser": "babel-7.29.9-structure-v1",
+        "resolver": "relative-files-v1",
+        "prompt": "folder-evidence-v2",
+        "template": "context-sections-v1",
+        "renderer": "markdown-v1",
+        "detector": "credentials-v2",
+        "default_policy": "scanner-policy-v1"
+      },
+      "dataset_sha256": "sha256:3a9e6740a31fa656d22855ed3600fb26e8aa228bb8adf95b7030a54607935116",
+      "source": {
+        "url": "https://github.com/jonschlinkert/is-number.git",
+        "commit": "98e8ff1da1a89f93d1397a24d7413ed15421c139",
+        "license": "MIT",
+        "tracked_source_unchanged": true,
+        "repositories_executed": false
+      },
+      "coverage": "partial",
+      "eligible_folders": 2,
+      "inventory": {
+        "analyzed": 14,
+        "inventory-only": 2,
+        "ignored": 4
+      },
+      "generation": {
+        "elapsed_ms": 190.21762200000012,
+        "requests": 2,
+        "input_utf8_bytes": 37401,
+        "response_utf8_bytes": 2742,
+        "reserved_input_tokens": 51616,
+        "reserved_output_tokens": 8192,
+        "illustrative_reserved_cost_usd": 0.068,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_generation": {
+        "elapsed_ms": 32.73025300000063,
+        "requests": 2,
+        "input_utf8_bytes": 26432,
+        "response_utf8_bytes": 2721,
+        "reserved_input_tokens": 33147,
+        "reserved_output_tokens": 8192,
+        "illustrative_reserved_cost_usd": 0.04953099999999999,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "claims": {
+        "supported": 1,
+        "unsupported": 0,
+        "unreviewed": 11,
+        "candidates": 12,
+        "reviewed": [
+          {
+            "path": "index.js",
+            "text": "Accepts finite numeric inputs and finite nonempty numeric strings, rejecting whitespace-only strings.",
+            "verdict": "supported",
+            "source_sha256": "sha256:04255e482e181687823a95b207802ddd32e746c65dce4c95a5176fc192735960",
+            "start_line": 10,
+            "end_line": 18
+          }
+        ]
+      },
+      "questions": [
+        {
+          "id": "numeric-implementation",
+          "question": "Where does num.trim reject empty numeric strings?",
+          "expected": ["index.js"],
+          "cross_folder": false,
+          "shcontext": {
+            "paths": [
+              "benchmark/index.js",
+              "index.js",
+              "package.json",
+              ".eslintrc.json",
+              "test.js",
+              "benchmark/fixtures.js"
+            ],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 6,
+              "recall": 1,
+              "precision": 0.16666666666666666,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 146.1017870000005,
+            "status": "answered",
+            "relationship_labels_correct": true,
+            "references": [
+              {
+                "path": "benchmark/index.js",
+                "sha256": "sha256:43b43ab11a861cc3e3fd5d2d9eba58d292fa354de6d6f4f51c75862dd9b35454",
+                "start_line": 57,
+                "end_line": 66,
+                "symbol": null,
+                "basis": "source"
+              },
+              {
+                "path": "index.js",
+                "sha256": "sha256:04255e482e181687823a95b207802ddd32e746c65dce4c95a5176fc192735960",
+                "start_line": 9,
+                "end_line": 18,
+                "symbol": null,
+                "basis": "source"
+              },
+              {
+                "path": "package.json",
+                "sha256": "sha256:51c133f4e41df982aef69027249ff9d7262645029f437d079adc7c83328fb620",
+                "start_line": 42,
+                "end_line": 51,
+                "symbol": null,
+                "basis": "configuration"
+              },
+              {
+                "path": ".eslintrc.json",
+                "sha256": "sha256:da0ae7f8c82ae996ad8e1e4172ed41ee9a6ec237e4f524dcd4e97a07b9f67629",
+                "start_line": 59,
+                "end_line": 68,
+                "symbol": null,
+                "basis": "configuration"
+              },
+              {
+                "path": "test.js",
+                "sha256": "sha256:242b26bb2b9203945c6e869460a8a8289ddac859ed710b9e103f19a4a39829b6",
+                "start_line": 101,
+                "end_line": 110,
+                "symbol": null,
+                "basis": "source"
+              },
+              {
+                "path": "benchmark/fixtures.js",
+                "sha256": "sha256:6299e4e2e1cfc00a2c37a16d87d6f3e08dd6fcbbdade9d41f3bf0b4022bbafdc",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "source"
+              }
+            ],
+            "relationships": [
+              {
+                "from": "benchmark/index.js",
+                "to": null,
+                "reference": {
+                  "specifier": "benchmark"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "benchmark/index.js",
+                "to": null,
+                "reference": {
+                  "specifier": "ansi"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "benchmark/index.js",
+                "to": "benchmark/fixtures.js",
+                "reference": {
+                  "specifier": "./fixtures"
+                },
+                "resolution": "resolved"
+              },
+              {
+                "from": "test.js",
+                "to": null,
+                "reference": {
+                  "specifier": "mocha"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test.js",
+                "to": null,
+                "reference": {
+                  "specifier": "assert"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test.js",
+                "to": "index.js",
+                "reference": {
+                  "specifier": "./"
+                },
+                "resolution": "resolved"
+              }
+            ]
+          },
+          "literal_exploration": {
+            "paths": [
+              "benchmark/index.js",
+              "index.js",
+              "package.json",
+              ".eslintrc.json",
+              "test.js"
+            ],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 5,
+              "recall": 1,
+              "precision": 0.2,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 9.327054999999746
+          },
+          "flat_folder": {
+            "paths": ["index.js"],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 1,
+              "recall": 1,
+              "precision": 1,
+              "exact_set": true,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 0.26811300000008487
+          }
+        },
+        {
+          "id": "numeric-tests",
+          "question": "isNumber fixtures",
+          "expected": ["index.js", "test.js"],
+          "cross_folder": false,
+          "shcontext": {
+            "paths": [
+              "benchmark/index.js",
+              "test.js",
+              "benchmark/fixtures.js",
+              ".verb.md",
+              "README.md",
+              "index.js",
+              "package.json"
+            ],
+            "score": {
+              "hits": 2,
+              "expected": 2,
+              "returned": 7,
+              "recall": 1,
+              "precision": 0.2857142857142857,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 104.84561099999974,
+            "status": "answered",
+            "relationship_labels_correct": true,
+            "references": [
+              {
+                "path": "benchmark/index.js",
+                "sha256": "sha256:43b43ab11a861cc3e3fd5d2d9eba58d292fa354de6d6f4f51c75862dd9b35454",
+                "start_line": 2,
+                "end_line": 11,
+                "symbol": "fixtures",
+                "basis": "source"
+              },
+              {
+                "path": "test.js",
+                "sha256": "sha256:242b26bb2b9203945c6e869460a8a8289ddac859ed710b9e103f19a4a39829b6",
+                "start_line": 11,
+                "end_line": 20,
+                "symbol": "isNumber",
+                "basis": "source"
+              },
+              {
+                "path": "benchmark/fixtures.js",
+                "sha256": "sha256:6299e4e2e1cfc00a2c37a16d87d6f3e08dd6fcbbdade9d41f3bf0b4022bbafdc",
+                "start_line": 2,
+                "end_line": 11,
+                "symbol": null,
+                "basis": "source"
+              },
+              {
+                "path": ".verb.md",
+                "sha256": "sha256:51b88e0eac5f986869cbaec3f6654afa3727f776d55df67531444f70faf551d1",
+                "start_line": 2,
+                "end_line": 11,
+                "symbol": null,
+                "basis": "documentation"
+              },
+              {
+                "path": "README.md",
+                "sha256": "sha256:8e676a0587ba350889df0a5fb883aeab26609ee36432e29441f55af3a0cb16ba",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "documentation"
+              },
+              {
+                "path": "index.js",
+                "sha256": "sha256:04255e482e181687823a95b207802ddd32e746c65dce4c95a5176fc192735960",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "source"
+              },
+              {
+                "path": "package.json",
+                "sha256": "sha256:51c133f4e41df982aef69027249ff9d7262645029f437d079adc7c83328fb620",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "configuration"
+              }
+            ],
+            "relationships": [
+              {
+                "from": "benchmark/index.js",
+                "to": null,
+                "reference": {
+                  "specifier": "benchmark"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "benchmark/index.js",
+                "to": null,
+                "reference": {
+                  "specifier": "ansi"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "benchmark/index.js",
+                "to": "benchmark/fixtures.js",
+                "reference": {
+                  "specifier": "./fixtures"
+                },
+                "resolution": "resolved"
+              },
+              {
+                "from": "test.js",
+                "to": null,
+                "reference": {
+                  "specifier": "mocha"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test.js",
+                "to": null,
+                "reference": {
+                  "specifier": "assert"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test.js",
+                "to": "index.js",
+                "reference": {
+                  "specifier": "./"
+                },
+                "resolution": "resolved"
+              }
+            ]
+          },
+          "literal_exploration": {
+            "paths": [
+              "benchmark/fixtures.js",
+              "benchmark/index.js",
+              "test.js",
+              ".verb.md",
+              "README.md",
+              "index.js",
+              "package.json"
+            ],
+            "score": {
+              "hits": 2,
+              "expected": 2,
+              "returned": 7,
+              "recall": 1,
+              "precision": 0.2857142857142857,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 7.875661000000036
+          },
+          "flat_folder": {
+            "paths": ["benchmark/fixtures.js"],
+            "score": {
+              "hits": 0,
+              "expected": 2,
+              "returned": 1,
+              "recall": 0,
+              "precision": 0,
+              "exact_set": false,
+              "all_expected": false,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 0.046851000000060594
+          }
+        },
+        {
+          "id": "missing",
+          "question": "quantum teleportation",
+          "expected": [],
+          "cross_folder": false,
+          "shcontext": {
+            "paths": [],
+            "score": {
+              "hits": 0,
+              "expected": 0,
+              "returned": 0,
+              "recall": null,
+              "precision": null,
+              "exact_set": true,
+              "all_expected": true,
+              "correct_abstention": true
+            },
+            "elapsed_ms": 105.22106499999973,
+            "status": "no_match",
+            "relationship_labels_correct": true,
+            "references": [],
+            "relationships": []
+          },
+          "literal_exploration": {
+            "paths": [],
+            "score": {
+              "hits": 0,
+              "expected": 0,
+              "returned": 0,
+              "recall": null,
+              "precision": null,
+              "exact_set": true,
+              "all_expected": true,
+              "correct_abstention": true
+            },
+            "elapsed_ms": 9.268957999999657
+          },
+          "flat_folder": {
+            "paths": [],
+            "score": {
+              "hits": 0,
+              "expected": 0,
+              "returned": 0,
+              "recall": null,
+              "precision": null,
+              "exact_set": true,
+              "all_expected": true,
+              "correct_abstention": true
+            },
+            "elapsed_ms": 0.04866299999957846
+          }
+        }
+      ]
+    },
+    {
+      "id": "mitt",
+      "scope": "Full pinned public repository; source-reviewed src/index.ts claim, other scripted file prose is unreviewed. Root-package test imports may remain unresolved.",
+      "tool_version": "0.1.0-alpha.1",
+      "generation_identity": {
+        "provider": {
+          "id": "openai",
+          "model": "scripted-control"
+        },
+        "generator": "context-pipeline-v4",
+        "parser": "babel-7.29.9-structure-v1",
+        "resolver": "relative-files-v1",
+        "prompt": "folder-evidence-v2",
+        "template": "context-sections-v1",
+        "renderer": "markdown-v1",
+        "detector": "credentials-v2",
+        "default_policy": "scanner-policy-v1"
+      },
+      "dataset_sha256": "sha256:3647ba10761c2ecd2d853ebeb9a9e1d93bf59ec99c24b99c747ca16db7e522cf",
+      "source": {
+        "url": "https://github.com/developit/mitt.git",
+        "commit": "6b41670516ed8e8b738612f60491995470aa63b3",
+        "license": "MIT",
+        "tracked_source_unchanged": true,
+        "repositories_executed": false
+      },
+      "coverage": "partial",
+      "eligible_folders": 5,
+      "inventory": {
+        "analyzed": 16,
+        "inventory-only": 2,
+        "ignored": 3
+      },
+      "generation": {
+        "elapsed_ms": 158.07455599999957,
+        "requests": 5,
+        "input_utf8_bytes": 43735,
+        "response_utf8_bytes": 3659,
+        "reserved_input_tokens": 74711,
+        "reserved_output_tokens": 20480,
+        "illustrative_reserved_cost_usd": 0.115671,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_generation": {
+        "elapsed_ms": 50.54315099999985,
+        "requests": 5,
+        "input_utf8_bytes": 24662,
+        "response_utf8_bytes": 3614,
+        "reserved_input_tokens": 38075,
+        "reserved_output_tokens": 20480,
+        "illustrative_reserved_cost_usd": 0.079035,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "claims": {
+        "supported": 1,
+        "unsupported": 0,
+        "unreviewed": 10,
+        "candidates": 11,
+        "reviewed": [
+          {
+            "path": "src/index.ts",
+            "text": "Invokes type-matched event handlers before wildcard handlers, passing type and event to wildcard handlers.",
+            "verdict": "supported",
+            "source_sha256": "sha256:1536a2dd71d64785d811076beee6d970583ca555dd34ce839face641a200054b",
+            "start_line": 103,
+            "end_line": 121
+          }
+        ]
+      },
+      "questions": [
+        {
+          "id": "event-implementation",
+          "question": "Where are wildcard event handlers invoked?",
+          "expected": ["src/index.ts"],
+          "cross_folder": false,
+          "shcontext": {
+            "paths": [
+              "src/index.ts",
+              "test/index_test.ts",
+              "test/test-types-compilation.ts",
+              "README.md",
+              "LICENSE",
+              "package.json"
+            ],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 6,
+              "recall": 1,
+              "precision": 0.16666666666666666,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 150.48524700000053,
+            "status": "answered",
+            "relationship_labels_correct": true,
+            "references": [
+              {
+                "path": "src/index.ts",
+                "sha256": "sha256:1536a2dd71d64785d811076beee6d970583ca555dd34ce839face641a200054b",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": "EventType",
+                "basis": "source"
+              },
+              {
+                "path": "test/index_test.ts",
+                "sha256": "sha256:cc25b9f1d50cf07d0ae99141e592bfe0d1ca7e8a48332bf1870b31ba8e62c43b",
+                "start_line": 25,
+                "end_line": 34,
+                "symbol": "eventType",
+                "basis": "source"
+              },
+              {
+                "path": "test/test-types-compilation.ts",
+                "sha256": "sha256:ea625d6ba9a8bd1b44ab24715bd84745db2a38efec69d3441c1774bd89c67bc8",
+                "start_line": 4,
+                "end_line": 13,
+                "symbol": "SomeEventData",
+                "basis": "source"
+              },
+              {
+                "path": "README.md",
+                "sha256": "sha256:9b90f75f1ec4eba847115aa57b53cf46df90398e65e8ade7e3e51a3cc6c52664",
+                "start_line": 10,
+                "end_line": 19,
+                "symbol": null,
+                "basis": "documentation"
+              },
+              {
+                "path": "LICENSE",
+                "sha256": "sha256:1cab22f196264195a4caec8ca5630170fdde76ee8f43346e47021d087332d3b0",
+                "start_line": 16,
+                "end_line": 22,
+                "symbol": null,
+                "basis": "documentation"
+              },
+              {
+                "path": "package.json",
+                "sha256": "sha256:99966ad2891dfe56614f039f5d03ada4bda6dba810952272ae57359abb527b91",
+                "start_line": 3,
+                "end_line": 12,
+                "symbol": null,
+                "basis": "configuration"
+              }
+            ],
+            "relationships": [
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": ".."
+                },
+                "resolution": "unresolved"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "chai"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "sinon"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "sinon-chai"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/test-types-compilation.ts",
+                "to": null,
+                "reference": {
+                  "specifier": ".."
+                },
+                "resolution": "unresolved"
+              }
+            ]
+          },
+          "literal_exploration": {
+            "paths": [
+              "README.md",
+              "src/index.ts",
+              "test/index_test.ts",
+              "test/test-types-compilation.ts",
+              "LICENSE",
+              "package.json"
+            ],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 6,
+              "recall": 1,
+              "precision": 0.16666666666666666,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 11.10207199999968
+          },
+          "flat_folder": {
+            "paths": ["src/index.ts"],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 1,
+              "recall": 1,
+              "precision": 1,
+              "exact_set": true,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 0.04504799999995157
+          }
+        },
+        {
+          "id": "cross-folder",
+          "question": "mitt emitter tests",
+          "expected": ["src/index.ts", "test/index_test.ts"],
+          "cross_folder": true,
+          "shcontext": {
+            "paths": [
+              "src/index.ts",
+              "test/test-types-compilation.ts",
+              "README.md",
+              "package.json",
+              "test/index_test.ts"
+            ],
+            "score": {
+              "hits": 2,
+              "expected": 2,
+              "returned": 5,
+              "recall": 1,
+              "precision": 0.4,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 137.9294379999992,
+            "status": "answered",
+            "relationship_labels_correct": true,
+            "references": [
+              {
+                "path": "src/index.ts",
+                "sha256": "sha256:1536a2dd71d64785d811076beee6d970583ca555dd34ce839face641a200054b",
+                "start_line": 22,
+                "end_line": 31,
+                "symbol": "Emitter",
+                "basis": "source"
+              },
+              {
+                "path": "test/test-types-compilation.ts",
+                "sha256": "sha256:ea625d6ba9a8bd1b44ab24715bd84745db2a38efec69d3441c1774bd89c67bc8",
+                "start_line": 8,
+                "end_line": 17,
+                "symbol": "emitter",
+                "basis": "source"
+              },
+              {
+                "path": "README.md",
+                "sha256": "sha256:9b90f75f1ec4eba847115aa57b53cf46df90398e65e8ade7e3e51a3cc6c52664",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "documentation"
+              },
+              {
+                "path": "package.json",
+                "sha256": "sha256:99966ad2891dfe56614f039f5d03ada4bda6dba810952272ae57359abb527b91",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "configuration"
+              },
+              {
+                "path": "test/index_test.ts",
+                "sha256": "sha256:cc25b9f1d50cf07d0ae99141e592bfe0d1ca7e8a48332bf1870b31ba8e62c43b",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "source"
+              }
+            ],
+            "relationships": [
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": ".."
+                },
+                "resolution": "unresolved"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "chai"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "sinon"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "sinon-chai"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/test-types-compilation.ts",
+                "to": null,
+                "reference": {
+                  "specifier": ".."
+                },
+                "resolution": "unresolved"
+              }
+            ]
+          },
+          "literal_exploration": {
+            "paths": [
+              "README.md",
+              "package.json",
+              "src/index.ts",
+              "test/index_test.ts",
+              "test/test-types-compilation.ts"
+            ],
+            "score": {
+              "hits": 2,
+              "expected": 2,
+              "returned": 5,
+              "recall": 1,
+              "precision": 0.4,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 8.961982999999236
+          },
+          "flat_folder": {
+            "paths": [],
+            "score": {
+              "hits": 0,
+              "expected": 2,
+              "returned": 0,
+              "recall": 0,
+              "precision": null,
+              "exact_set": false,
+              "all_expected": false,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 0.31175900000016554
+          }
+        },
+        {
+          "id": "type-tests",
+          "question": "test-types-compilation",
+          "expected": ["test/test-types-compilation.ts"],
+          "cross_folder": false,
+          "shcontext": {
+            "paths": [
+              "test/test-types-compilation.ts",
+              "test/index_test.ts",
+              "package.json",
+              ".github/workflows/main.yml",
+              ".gitignore",
+              "src/index.ts",
+              "tsconfig.json"
+            ],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 7,
+              "recall": 1,
+              "precision": 0.14285714285714285,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 132.86424700000134,
+            "status": "answered",
+            "relationship_labels_correct": true,
+            "references": [
+              {
+                "path": "test/test-types-compilation.ts",
+                "sha256": "sha256:ea625d6ba9a8bd1b44ab24715bd84745db2a38efec69d3441c1774bd89c67bc8",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "source"
+              },
+              {
+                "path": "test/index_test.ts",
+                "sha256": "sha256:cc25b9f1d50cf07d0ae99141e592bfe0d1ca7e8a48332bf1870b31ba8e62c43b",
+                "start_line": 91,
+                "end_line": 100,
+                "symbol": null,
+                "basis": "source"
+              },
+              {
+                "path": "package.json",
+                "sha256": "sha256:99966ad2891dfe56614f039f5d03ada4bda6dba810952272ae57359abb527b91",
+                "start_line": 11,
+                "end_line": 20,
+                "symbol": null,
+                "basis": "configuration"
+              },
+              {
+                "path": ".github/workflows/main.yml",
+                "sha256": "sha256:76acc915042c58603ac0ccccf10b1243b374caf7ada817ce399c8efc6edc18f1",
+                "start_line": 18,
+                "end_line": 26,
+                "symbol": null,
+                "basis": "configuration"
+              },
+              {
+                "path": ".gitignore",
+                "sha256": "sha256:ce170d58a649f6289283725e36d3f174ed2eb4012656b5cc1a3b517510d84887",
+                "start_line": 1,
+                "end_line": 10,
+                "symbol": null,
+                "basis": "configuration"
+              },
+              {
+                "path": "src/index.ts",
+                "sha256": "sha256:1536a2dd71d64785d811076beee6d970583ca555dd34ce839face641a200054b",
+                "start_line": 16,
+                "end_line": 25,
+                "symbol": null,
+                "basis": "source"
+              },
+              {
+                "path": "tsconfig.json",
+                "sha256": "sha256:2569f69082a5b5e094466fdb4b5db9c8294b00e9c6d659b8a5571c77c695c9ec",
+                "start_line": 12,
+                "end_line": 16,
+                "symbol": null,
+                "basis": "configuration"
+              }
+            ],
+            "relationships": [
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": ".."
+                },
+                "resolution": "unresolved"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "chai"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "sinon"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/index_test.ts",
+                "to": null,
+                "reference": {
+                  "specifier": "sinon-chai"
+                },
+                "resolution": "external"
+              },
+              {
+                "from": "test/test-types-compilation.ts",
+                "to": null,
+                "reference": {
+                  "specifier": ".."
+                },
+                "resolution": "unresolved"
+              }
+            ]
+          },
+          "literal_exploration": {
+            "paths": [
+              "package.json",
+              "test/test-types-compilation.ts",
+              "test/index_test.ts",
+              ".github/workflows/main.yml",
+              ".gitignore",
+              "src/index.ts",
+              "tsconfig.json"
+            ],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 7,
+              "recall": 1,
+              "precision": 0.14285714285714285,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 10.900830000000497
+          },
+          "flat_folder": {
+            "paths": ["test/test-types-compilation.ts", "test/index_test.ts"],
+            "score": {
+              "hits": 1,
+              "expected": 1,
+              "returned": 2,
+              "recall": 1,
+              "precision": 0.5,
+              "exact_set": false,
+              "all_expected": true,
+              "correct_abstention": null
+            },
+            "elapsed_ms": 0.04149200000028941
+          }
+        },
+        {
+          "id": "missing",
+          "question": "quantum teleportation",
+          "expected": [],
+          "cross_folder": false,
+          "shcontext": {
+            "paths": [],
+            "score": {
+              "hits": 0,
+              "expected": 0,
+              "returned": 0,
+              "recall": null,
+              "precision": null,
+              "exact_set": true,
+              "all_expected": true,
+              "correct_abstention": true
+            },
+            "elapsed_ms": 138.90805499999988,
+            "status": "no_match",
+            "relationship_labels_correct": true,
+            "references": [],
+            "relationships": []
+          },
+          "literal_exploration": {
+            "paths": [],
+            "score": {
+              "hits": 0,
+              "expected": 0,
+              "returned": 0,
+              "recall": null,
+              "precision": null,
+              "exact_set": true,
+              "all_expected": true,
+              "correct_abstention": true
+            },
+            "elapsed_ms": 13.706501000000571
+          },
+          "flat_folder": {
+            "paths": [],
+            "score": {
+              "hits": 0,
+              "expected": 0,
+              "returned": 0,
+              "recall": null,
+              "precision": null,
+              "exact_set": true,
+              "all_expected": true,
+              "correct_abstention": true
+            },
+            "elapsed_ms": 0.040580999999292544
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -158,7 +158,7 @@ official host installation and unauthenticated/live-host limitations.
 
 Increment plugin `version` when shipping changed skill behavior so installed
 marketplace caches can update. The plugin's initial `0.1.0` is a workflow-package
-version, not a claim that the CLI's `0.0.0` is a completed stable release. Update
+version, independent of the CLI's experimental alpha version. Update
 the tool checkout and marketplace together, validate, and rerun the workflows.
 
 The package uses the documented [plugin manifest](https://code.claude.com/docs/en/plugins/manifest-reference),

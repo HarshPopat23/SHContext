@@ -1,0 +1,95 @@
+{
+  "id": "controlled",
+  "scope": "Authored source and scripted provider; source-reviewed labels are controls, not live-model quality.",
+  "files": {
+    "src/auth/session.ts": "import { signed } from './signature';\nexport function verifySession(token: string, expiresAt: number, now: number) { return signed(token) && expiresAt > now; }\n",
+    "src/auth/signature.ts": "export function signed(token: string) { return token.startsWith('signed:'); }\n",
+    "src/routes/login.ts": "import { verifySession } from '../auth/session';\nexport function login(token: string, expiresAt: number, now: number) { return verifySession(token, expiresAt, now); }\nimport adapter from './missing';\n",
+    "src/billing/invoice.ts": "export function invoiceTotal(values: number[]) { return values.reduce((sum, value) => sum + value, 0); }\n",
+    "unrelated/info.ts": "export const info = 1;\n",
+    "legacy/tool.py": "def undocumented_behavior():\n    return 42\n"
+  },
+  "facts": [
+    {
+      "path": "src/auth/session.ts",
+      "start_line": 1,
+      "end_line": 2,
+      "text": "Checks the signed prefix and requires the supplied session expiry to be later than the supplied current time.",
+      "basis": "signed(token) && expiresAt > now"
+    },
+    {
+      "path": "src/auth/signature.ts",
+      "start_line": 1,
+      "end_line": 1,
+      "text": "Checks whether the token starts with the signed prefix.",
+      "basis": "token.startsWith('signed:')"
+    },
+    {
+      "path": "src/routes/login.ts",
+      "start_line": 1,
+      "end_line": 2,
+      "text": "Delegates login validation to verifySession with the supplied token and times.",
+      "basis": "return verifySession(token, expiresAt, now)"
+    },
+    {
+      "path": "src/billing/invoice.ts",
+      "start_line": 1,
+      "end_line": 1,
+      "text": "Computes an invoice total by summing values from zero.",
+      "basis": "values.reduce((sum, value) => sum + value, 0)"
+    },
+    {
+      "path": "unrelated/info.ts",
+      "start_line": 1,
+      "end_line": 1,
+      "text": "Exports the numeric info constant.",
+      "basis": "export const info"
+    }
+  ],
+  "negative_claim": {
+    "path": "src/auth/session.ts",
+    "text": "Cryptographically verifies signatures and rejects every replayed token.",
+    "verdict": "unsupported",
+    "reason": "The cited code only checks a prefix and supplied times; neither cryptography nor replay storage is implemented."
+  },
+  "questions": [
+    {
+      "id": "auth",
+      "question": "Where is authentication handled?",
+      "expected": ["src/auth/session.ts", "src/routes/login.ts"],
+      "cross_folder": true
+    },
+    {
+      "id": "consumer",
+      "question": "verifySession",
+      "expected": ["src/auth/session.ts", "src/routes/login.ts"],
+      "cross_folder": true,
+      "relationships": [
+        {
+          "from": "src/routes/login.ts",
+          "specifier": "./missing",
+          "resolution": "unresolved",
+          "to": null
+        }
+      ]
+    },
+    {
+      "id": "prefix",
+      "question": "Where is the signed prefix checked?",
+      "expected": ["src/auth/signature.ts"],
+      "cross_folder": false
+    },
+    {
+      "id": "total",
+      "question": "invoiceTotal",
+      "expected": ["src/billing/invoice.ts"],
+      "cross_folder": false
+    },
+    {
+      "id": "missing",
+      "question": "quantum teleportation",
+      "expected": [],
+      "cross_folder": false
+    }
+  ]
+}

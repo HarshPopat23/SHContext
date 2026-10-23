@@ -1,6 +1,7 @@
 export { OpenAIProvider, DEFAULT_PROVIDER_LIMITS } from './openai.js';
 export type {
   ModelProvider,
+  ProviderUsage,
   ProviderLimits,
   SummaryRequest,
   CancellationSignal,

@@ -1,10 +1,12 @@
 import { RetryableProviderError } from './errors.js';
 import { BuildError } from '../generation/errors.js';
+import { EMPTY_USAGE, addUsage } from './usage.js';
 import type {
   ModelProvider,
   ProviderLimits,
   ProviderTransport,
   SummaryRequest,
+  ProviderUsage,
 } from './types.js';
 
 export const DEFAULT_PROVIDER_LIMITS: Readonly<ProviderLimits> = Object.freeze({
@@ -63,6 +65,13 @@ export class OpenAIProvider implements ModelProvider {
   private outputReserved = 0;
   private readonly apiKey: string;
   private readonly send: ProviderTransport;
+  private usage: ProviderUsage = { ...EMPTY_USAGE };
+  private usageInFlight = 0;
+
+  /** Safe scalar snapshot, separate from conservative reservations and billing invoices. */
+  getUsage(): ProviderUsage {
+    return { ...this.usage, in_flight_requests: this.usageInFlight };
+  }
 
   constructor(options: {
     model: string;
@@ -162,6 +171,8 @@ export class OpenAIProvider implements ModelProvider {
     const cancel = () => controller.abort();
     request.signal?.addEventListener('abort', cancel, { once: true });
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let dispatched = false;
+    let accounted = false;
     try {
       const cancelled = new Promise<never>((_, reject) => {
         controller.signal.addEventListener(
@@ -181,6 +192,8 @@ export class OpenAIProvider implements ModelProvider {
         }, this.limits.timeoutMs);
       });
       if (request.signal?.aborted) controller.abort();
+      dispatched = true;
+      this.usageInFlight++;
       const response = await Promise.race([
         this.send({
           url: endpoint,
@@ -206,12 +219,15 @@ export class OpenAIProvider implements ModelProvider {
       if (Buffer.byteLength(response.body) > responseByteLimit)
         throw new Error();
       const value = JSON.parse(response.body) as {
+        usage?: unknown;
         status?: string;
         output?: {
           type?: string;
           content?: { type?: string; text?: string }[];
         }[];
       };
+      this.usage = addUsage(this.usage, value.usage);
+      accounted = true;
       if (value.status !== 'completed' || !Array.isArray(value.output))
         throw new BuildError(
           'provider_incomplete',
@@ -238,6 +254,9 @@ export class OpenAIProvider implements ModelProvider {
         'OpenAI request or structured response failed; no source or response payload was logged.',
       );
     } finally {
+      if (dispatched) this.usageInFlight--;
+      if (dispatched && !accounted)
+        this.usage = addUsage(this.usage, undefined);
       clearTimeout(timer);
       request.signal?.removeEventListener('abort', cancel);
     }

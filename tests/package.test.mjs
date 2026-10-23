@@ -190,6 +190,8 @@ test(
           "export const verification: VerificationResult = verifyRepository('.');",
           "import { buildRepository, type BuildResult } from 'shcontext/generation';",
           "import { OpenAIProvider, type ModelProvider } from 'shcontext/providers';",
+          "import { type ProviderUsage } from 'shcontext/providers';",
+          "export const usage: ProviderUsage = new OpenAIProvider({model: 'explicit-model', apiKey:'host-key'}).getUsage();",
           "export const provider: ModelProvider = new OpenAIProvider({model: 'explicit-model', apiKey:'host-key'});",
           "export const build = (): Promise<BuildResult> => buildRepository('.', {provider});",
           "import { analyzeRepository } from 'shcontext/analysis';",

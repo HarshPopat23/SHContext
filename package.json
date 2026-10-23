@@ -1,7 +1,7 @@
 {
   "name": "shcontext",
-  "version": "0.0.0",
-  "description": "Repository context generator \u2014 development foundation.",
+  "version": "0.1.0-alpha.1",
+  "description": "Source-referenced repository context generator (alpha).",
   "private": true,
   "license": "MIT",
   "author": "HarshPopat23",
@@ -80,7 +80,12 @@
     "skills/",
     ".claude-plugin/",
     "benchmarks/agent-results.md",
-    "benchmarks/agent-results.json"
+    "benchmarks/agent-results.json",
+    "benchmarks/results/",
+    "benchmarks/datasets/",
+    "CHANGELOG.md",
+    "scripts/ci-freshness.mjs",
+    "examples/offline-demo.mjs"
   ],
   "scripts": {
     "clean": "node --input-type=module -e \"import { rmSync } from 'node:fs'; rmSync('dist', { recursive: true, force: true });\"",
@@ -95,7 +100,13 @@
     "test:integration": "npm run build && node --test --test-concurrency=1 tests/cli.test.mjs tests/build-cli.test.mjs tests/verify-cli.test.mjs tests/update-cli.test.mjs tests/query-cli.test.mjs tests/agents-cli.test.mjs tests/package.test.mjs",
     "benchmark:agents": "npm run build && node benchmarks/agents.mjs",
     "test:skills": "node --test --test-concurrency=1 tests/skills.test.mjs tests/skills-install.test.mjs",
-    "test:plugin": "node scripts/check-plugin.mjs"
+    "test:plugin": "node scripts/check-plugin.mjs",
+    "benchmark:quality": "npm run build && node benchmarks/quality.mjs",
+    "benchmark:real": "npm run build && node benchmarks/real.mjs",
+    "test:evaluation": "npm run build && node --test --test-concurrency=1 tests/evaluation.test.mjs",
+    "release:pack": "node scripts/package-release.mjs",
+    "test:release": "node --test --test-concurrency=1 tests/release.test.mjs",
+    "benchmark:live": "npm run build && node benchmarks/live.mjs"
   },
   "devDependencies": {
     "@types/babel__traverse": "7.28.0",

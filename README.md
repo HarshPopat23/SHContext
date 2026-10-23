@@ -11,7 +11,10 @@ The reusable library exposes shared schemas, JS/TS analysis, generation and loca
 context querying. Four execution roles run sequentially by default; bounded folder
 concurrency and source-based model review are opt-in.
 Five installable skills package these workflows for Claude Code;
-`0.0.0` is not a completed stable CLI release.
+The current `0.1.0-alpha.1` candidate remains experimental. Start with the
+[install/build/change/update/verify guide](docs/quickstart.md), including a complete
+offline walkthrough. See [evaluation methods and results](docs/benchmarks.md),
+[organization freshness CI](docs/ci.md) and [release preparation](docs/release.md).
 
 ## Install the workflow plugin
 
@@ -28,7 +31,7 @@ Use `/shcontext:context-build`, `/shcontext:context-update`,
 `/shcontext:context-benchmark`. See the [skills guide](docs/skills.md) for local/PR
 installation, required executables, configuration, supported hosts and failures.
 
-## Try the foundation
+## Try the source alpha
 
 Use Node.js 22.14+ on the 22 release line or Node.js 24, with npm 10+.
 
@@ -52,7 +55,7 @@ shcontext scan .
 ```
 
 Alternatively, `npm pack` creates a local tarball that can be installed with
-`npm install --global /path/to/shcontext-0.0.0.tgz`. This package is not published
+`npm install --global --ignore-scripts /path/to/shcontext-0.1.0-alpha.1.tgz`. This package is not published
 to npm; registry publication is disabled during development.
 
 ## Reusable library

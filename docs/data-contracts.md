@@ -3,7 +3,7 @@
 The first executable record contracts live in `src/core/contracts/`. Scanner,
 parser, graph, generator, updater and verifier code must import these definitions
 rather than defining parallel interfaces. All top-level records require
-`schema_version: 1`; the package version remains `0.0.0` during development.
+`schema_version: 1`; the alpha package version is independent of that schema version.
 
 This milestone implements data validation, not scanning, generation, filesystem
 verification, fingerprint computation or configuration-file loading. The CLI
