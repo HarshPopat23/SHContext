@@ -158,3 +158,5 @@ do not establish live-model quality or billing.
 - [Contributing](CONTRIBUTING.md): installation, checks and package boundaries.
 
 Released under the [MIT license](LICENSE).
+
+Claude Code can now generate and refresh context using its active session, without a separate model API key. Start with [Claude-native generation](docs/host-generation.md) and the [five skills](docs/skills.md). The OpenAI CLI adapter remains optional for unattended generation.

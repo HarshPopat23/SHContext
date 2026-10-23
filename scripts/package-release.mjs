@@ -57,6 +57,8 @@ const required = [
   'dist/index.d.ts',
   'scripts/ci-freshness.mjs',
   'examples/offline-demo.mjs',
+  'examples/host-demo.mjs',
+  'docs/host-generation.md',
   'docs/quickstart.md',
   'LICENSE',
   '.claude-plugin/plugin.json',

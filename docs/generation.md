@@ -1,5 +1,7 @@
 # Building repository context
 
+> Claude Code users: use [host generation](host-generation.md) to supply drafts through your active session without a separate API key. This page describes the optional OpenAI/injected-provider pipeline.
+
 `shcontext build <directory>` implements source-based generation, sequential by
 default, with [bounded folder concurrency](agents.md) available.
 It reads the scanner/analysis snapshot, collects inspected evidence, generates

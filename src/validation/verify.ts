@@ -12,11 +12,11 @@ import { readOwnedTree } from '../storage/publication.js';
 import { inspectSummary } from './summary.js';
 import {
   generationId,
+  promptVersion,
   GENERATOR_VERSION,
   RENDERER_VERSION,
   TEMPLATE_VERSION,
 } from '../generation/summarize.js';
-import { PROMPT_VERSION } from '../generation/draft.js';
 import { STRUCTURE_PARSER_VERSION } from '../parsers/syntax.js';
 import { RESOLVER_VERSION } from '../graph/index.js';
 import {
@@ -122,7 +122,7 @@ export function verifyRepository(selectedRoot: string): VerificationResult {
     generator: GENERATOR_VERSION,
     parser: STRUCTURE_PARSER_VERSION,
     resolver: RESOLVER_VERSION,
-    prompt: PROMPT_VERSION,
+    prompt: promptVersion(manifest.generation.provider.id),
     template: TEMPLATE_VERSION,
     renderer: RENDERER_VERSION,
     detector: DETECTOR_VERSION,

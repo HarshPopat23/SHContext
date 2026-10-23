@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Claude-native sequential prepare/submit/finalize generation and incremental updates, with no separate model API key. Existing OpenAI generation remains optional.
+- Plugin 0.2.0 uses active-host build/update instructions, source-bound structured drafts and shared staged publication. Host model/tokens/cost remain explicitly unverified.
+
 ## 0.1.0-alpha.1 — release candidate
 
 - Source-referenced JS/TS context generation, incremental updates, offline

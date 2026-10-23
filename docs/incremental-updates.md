@@ -1,5 +1,7 @@
 # Incremental updates
 
+> Claude Code users can use [host updates](host-generation.md) without a separate API key. This page also documents the optional provider-driven update operation.
+
 `shcontext update <directory>` reuses validated structured summaries and regenerates
 folders whose inputs changed. It works with a Git checkout or an ordinary local
 directory, uses the same selection policy as `build`, and never edits source,

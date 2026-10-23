@@ -99,6 +99,22 @@ test(
         .stdout,
       /OFFLINE WALKTHROUGH PASSED/,
     );
+    const hostDemo = join(box, 'host demo repository');
+    assert.match(
+      run([join(installed, 'examples/host-demo.mjs'), hostDemo], 0, consumer)
+        .stdout,
+      /HOST WALKTHROUGH PASSED/,
+    );
+    assert.equal(
+      JSON.parse(
+        run(
+          [join(installed, 'scripts/ci-freshness.mjs'), hostDemo],
+          0,
+          consumer,
+        ).stdout,
+      ).state,
+      'fresh',
+    );
     const verify = run(
       [join(installed, 'scripts/ci-freshness.mjs'), demo],
       0,

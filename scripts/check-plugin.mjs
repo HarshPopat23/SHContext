@@ -56,7 +56,12 @@ try {
     (entry) => entry.id === 'shcontext@shcontext-workflows',
   );
   assert.ok(item?.enabled, 'Installed plugin is not enabled.');
-  assert.equal(item.version, '0.1.0');
+  assert.equal(
+    item.version,
+    JSON.parse(
+      fs.readFileSync(join(root, '.claude-plugin/plugin.json'), 'utf8'),
+    ).version,
+  );
   assert.ok(item.installPath);
   for (const name of ['build', 'update', 'verify', 'query', 'benchmark'])
     assert.ok(

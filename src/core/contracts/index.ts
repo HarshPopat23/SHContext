@@ -99,3 +99,4 @@ export function validateContract<K extends ContractName>(
     }),
   };
 }
+export * from './host.js';

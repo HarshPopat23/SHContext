@@ -230,5 +230,24 @@
     "expected": [
       "context-verify"
     ]
+  },
+  {
+    "id": "host-build-no-api",
+    "request": "Generate context for /work/headlamp using this Claude Code session, without an OpenAI API key.",
+    "expected": [
+      "context-build"
+    ]
+  },
+  {
+    "id": "host-update-no-api",
+    "request": "Refresh the existing SHContext summaries in /work/headlamp after my edits using Claude, reusing unaffected folders and no separate API key.",
+    "expected": [
+      "context-update"
+    ]
+  },
+  {
+    "id": "host-advice-only",
+    "request": "Explain whether your Claude skills require an OpenAI key. Do not create or refresh any files.",
+    "expected": []
   }
 ]
