@@ -9,5 +9,9 @@ through the root `.claude-plugin/plugin.json`; the marketplace is
 Follow the [installation, requirements and failure guide](../docs/skills.md).
 Prepare a complete SHContext checkout with `npm ci` and expose its absolute path
 as `SHCONTEXT_HOME`. Plugin installation alone does not install that runtime.
-Build/changed update use the configured OpenAI provider; verify/query and the
-controlled benchmark are local. MCP is not required for these CLI workflows.
+Build/changed update use the active Claude Code host by default with no separate
+model API key; OpenAI automation is optional. Verify/query and the controlled
+benchmark are local. MCP is not required for these CLI workflows.
+
+Start with [the terminal walkthrough](../docs/claude-code.md), or use
+[the environment chooser](../docs/usage.md) for Claude web chat and Antigravity.

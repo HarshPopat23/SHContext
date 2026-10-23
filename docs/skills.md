@@ -1,5 +1,8 @@
 # Install the SHContext workflows
 
+For a first installation, follow [the terminal walkthrough](claude-code.md).
+The [environment chooser](usage.md) also links Antigravity and Claude Code cloud.
+
 This guide covers the existing Claude Code/local distribution. For uploaded
 repositories in Claude web chat, use the separate [web skill ZIPs](claude-web.md).
 
@@ -55,16 +58,16 @@ For a local checkout, launch Claude Code and run these **inside its session**:
 /plugin install shcontext@shcontext-workflows
 ```
 
-After this change is merged, the shared GitHub installation is:
+The shared GitHub installation is:
 
 ```text
 /plugin marketplace add HarshPopat23/SHContext
 /plugin install shcontext@shcontext-workflows
 ```
 
-Before merge, append `#feat/claude-native-context` to the GitHub marketplace
-source to install the PR branch. To pin a reviewed version, append `#<commit>`
-instead. The local route tests exactly the files in that checkout. The marketplace
+To pin a reviewed version, append `#<commit>` to the GitHub marketplace source.
+For a preview, use the actual reviewed PR branch rather than assuming main
+contains it. The local route tests exactly the files in that checkout. The marketplace
 entry uses `source: "./"`, relative to the marketplace root, and the plugin discovers
 the five directories under `skills/`. Neither file declares MCP servers or hooks.
 
