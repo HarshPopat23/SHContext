@@ -1,5 +1,8 @@
 # Install the SHContext workflows
 
+This guide covers the existing Claude Code/local distribution. For uploaded
+repositories in Claude web chat, use the separate [web skill ZIPs](claude-web.md).
+
 The five skills invoke implemented SHContext operations. Build/update use the
 active Claude Code session to analyze evidence and submit validated drafts by
 default, without a separate OpenAI API key. Claude account usage still applies.

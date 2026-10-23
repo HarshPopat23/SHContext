@@ -10,11 +10,25 @@ to root, add conservative relationships and publish a mirrored `context/` tree.
 The reusable library exposes shared schemas, JS/TS analysis, generation and local
 context querying. Four execution roles run sequentially by default; bounded folder
 concurrency and source-based model review are opt-in.
-Five installable skills package these workflows for Claude Code;
+Five installable skills package these workflows for Claude Code.
+Separate experimental [Claude web skills](docs/claude-web.md) accept uploaded
+source ZIPs and return downloadable context with no separate model API key.
 The current `0.1.0-alpha.1` candidate remains experimental. Start with the
 [install/build/change/update/verify guide](docs/quickstart.md), including a complete
 offline walkthrough. See [evaluation methods and results](docs/benchmarks.md),
 [organization freshness CI](docs/ci.md) and [release preparation](docs/release.md).
+
+## Use uploaded repositories in Claude web
+
+Build the web distribution with `npm run package:web -- /absolute/new/output`
+from a prepared checkout, or download the `shcontext-web-skills` CI artifact.
+Upload its individual `context-web-*.zip` files through **Customize → Skills**,
+enable code execution, and attach a source-only repository ZIP. Ask:
+“Use context-web-build to generate context for frontend/src/lib/router from this
+Headlamp archive and return a downloadable context ZIP.”
+See [installation, runtime requirements and updates](docs/claude-web.md).
+Actual Claude web account acceptance is [still pending](docs/claude-web-acceptance.md);
+the CLI/plugin installation below is separate.
 
 ## Install the workflow plugin
 

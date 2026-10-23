@@ -1,0 +1,102 @@
+[
+  {
+    "id": "b1",
+    "prompt": "Generate context for frontend/src/lib/router from the attached Headlamp ZIP.",
+    "expected": "context-web-build"
+  },
+  {
+    "id": "b2",
+    "prompt": "In Claude web chat, use SHContext to create folder summaries for this uploaded source archive.",
+    "expected": "context-web-build"
+  },
+  {
+    "id": "b3",
+    "prompt": "I attached a source-only ZIP. Build its first SHContext context archive.",
+    "expected": "context-web-build"
+  },
+  {
+    "id": "u1",
+    "prompt": "Here are updated source.zip and previous-context.zip. Refresh only affected SHContext summaries in web chat.",
+    "expected": "context-web-update"
+  },
+  {
+    "id": "u2",
+    "prompt": "Regenerate stale context from these two uploaded archives and return a new context ZIP.",
+    "expected": "context-web-update"
+  },
+  {
+    "id": "u3",
+    "prompt": "Use the saved SHContext cache ZIP and updated repository ZIP for an incremental update.",
+    "expected": "context-web-update"
+  },
+  {
+    "id": "v1",
+    "prompt": "Check whether this uploaded SHContext output is fresh against the attached source ZIP; do not regenerate.",
+    "expected": "context-web-verify"
+  },
+  {
+    "id": "v2",
+    "prompt": "Validate hashes and coverage for the source/context archives in Claude web.",
+    "expected": "context-web-verify"
+  },
+  {
+    "id": "v3",
+    "prompt": "Inspect validity of these SHContext context and source ZIPs and report stale files only.",
+    "expected": "context-web-verify"
+  },
+  {
+    "id": "q1",
+    "prompt": "Using these uploaded SHContext context and source ZIPs, where is authentication handled?",
+    "expected": "context-web-query"
+  },
+  {
+    "id": "q2",
+    "prompt": "Find route creation implementation in the attached source/context archives, with fresh source references.",
+    "expected": "context-web-query"
+  },
+  {
+    "id": "q3",
+    "prompt": "Search this uploaded SHContext context and repository ZIP for verifySession and its dependencies.",
+    "expected": "context-web-query"
+  },
+  {
+    "id": "n1",
+    "prompt": "Write a Python function to unzip files safely.",
+    "expected": null
+  },
+  {
+    "id": "n2",
+    "prompt": "Explain how Kubernetes authentication works in general.",
+    "expected": null
+  },
+  {
+    "id": "n3",
+    "prompt": "Run /shcontext:context-build on my local Claude Code checkout.",
+    "expected": null
+  },
+  {
+    "id": "n4",
+    "prompt": "Fix the TypeScript error in the code below.",
+    "expected": null
+  },
+  {
+    "id": "n5",
+    "prompt": "Create a plugin for Claude web chat.",
+    "expected": null
+  },
+  {
+    "id": "n6",
+    "prompt": "Summarize this financial report ZIP.",
+    "expected": null
+  },
+  {
+    "id": "n7",
+    "prompt": "Translate the phrase context update into Hindi.",
+    "expected": null
+  },
+  {
+    "id": "n8",
+    "prompt": "What is the difference between Claude Code and web skills?",
+    "expected": null
+  }
+]
