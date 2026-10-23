@@ -47,3 +47,48 @@ jobs:
         with:
           node-version: 24
       - run: npm exec --yes --package @anthropic-ai/claude-code@2.1.308 -- node scripts/check-plugin.mjs
+
+  evaluation:
+    name: Quality and pinned repository evaluation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run benchmark:quality -- --check --output "$RUNNER_TEMP/quality.json"
+      - run: npm run benchmark:real -- --check --output "$RUNNER_TEMP/real.json"
+      - run: npm run benchmark:agents -- --check
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: shcontext-evaluation
+          path: |
+            ${{ runner.temp }}/quality.json
+            ${{ runner.temp }}/real.json
+          if-no-files-found: warn
+
+  alpha:
+    name: Alpha package artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run release:pack -- "$RUNNER_TEMP/alpha-release" --require-clean
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: shcontext-alpha-preview
+          path: ${{ runner.temp }}/alpha-release/
+          if-no-files-found: error

@@ -22,6 +22,20 @@ export interface ModelProvider {
   /** Returns untrusted decoded JSON, never Markdown. Implementations must bound their work. */
   generate(request: SummaryRequest): Promise<unknown>;
 }
+/** Provider-reported usage only. Missing response metadata remains explicitly unreported. */
+export interface ProviderUsage {
+  in_flight_requests: number;
+  reported_requests: number;
+  unreported_requests: number;
+  input_tokens: number;
+  output_tokens: number;
+  cached_input_tokens: number;
+  cache_write_input_tokens: number;
+  reasoning_output_tokens: number;
+  unknown_input_breakdown_requests: number;
+  unknown_reasoning_breakdown_requests: number;
+  overflowed: boolean;
+}
 export interface ProviderLimits {
   timeoutMs: number;
   contextWindowTokens: number;

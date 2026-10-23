@@ -14,7 +14,7 @@ interface CliOutput {
 }
 
 function help(): string {
-  return `SHContext — repository context generator (development foundation)
+  return `SHContext — repository context generator (alpha)
 
 Usage: shcontext [options]
 

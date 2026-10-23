@@ -1,9 +1,12 @@
 # Benchmarks
 
-Reserved for versioned evaluation tasks, reviewed expected answers and reports.
-No benchmark score exists yet. Future evaluations should measure evidence
-quality, useful file retrieval, update correctness, tokens, latency and cost
-against declared baselines. See [architecture](../docs/architecture.md).
+Reproducible controlled changes, reviewed claim/file-discovery tasks and two
+pinned public repositories are implemented. Run `npm run benchmark:quality --
+--check` and `npm run benchmark:real -- --check`; the latter requires Git/network
+but never executes third-party code. Reports include literal source exploration
+and a flat folder summarizer, source references, exact update outcomes, runtime,
+request/byte/token reservations and explicit unavailable actual-model usage.
+See [methods](../docs/benchmarks.md) and [recorded results](results/README.md).
 
 `npm run benchmark:agents -- --check` compares sequential execution with four
 folder workers using a controlled provider and source review. It asserts identical

@@ -1,0 +1,31 @@
+# Copy into your organization's .github/workflows/ after this alpha is published.
+name: SHContext freshness
+on: [pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+      - name: Install reviewed SHContext alpha
+        env:
+          EXPECTED_SHA256: ${{ vars.SHCONTEXT_ALPHA_SHA256 }}
+        run: |
+          [[ "$EXPECTED_SHA256" =~ ^[a-f0-9]{64}$ ]]
+          curl --fail --location https://github.com/HarshPopat23/SHContext/releases/download/v0.1.0-alpha.1/shcontext-0.1.0-alpha.1.tgz --output "$RUNNER_TEMP/shcontext.tgz"
+          printf '%s  %s\n' "$EXPECTED_SHA256" "$RUNNER_TEMP/shcontext.tgz" | sha256sum --check
+          npm install --prefix "$RUNNER_TEMP/shcontext-tool" --ignore-scripts --no-audit --no-fund "$RUNNER_TEMP/shcontext.tgz"
+      - name: Verify committed context
+        run: node "$RUNNER_TEMP/shcontext-tool/node_modules/shcontext/scripts/ci-freshness.mjs" "$GITHUB_WORKSPACE" --report "$RUNNER_TEMP/shcontext-freshness.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: shcontext-freshness
+          path: ${{ runner.temp }}/shcontext-freshness.json
+          if-no-files-found: warn

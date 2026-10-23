@@ -2,6 +2,12 @@
 
 Bounded OpenAI Responses adapter and typed provider interface. See [generation](../../docs/generation.md) for host credentials, the fixed destination, finite budgets, cancellation and the one-attempt policy.
 
+`OpenAIProvider.getUsage()` returns only scalar reported-token counters, unknown
+breakdowns, unreported attempts and in-flight requests. It retains known usage
+when a response is incomplete and never treats a transport/HTTP failure as zero
+spending. It does not change conservative reservations or certify an invoice.
+See [evaluation accounting](../../docs/benchmarks.md#live-follow-up-protocol).
+
 The optional coordinator can retry only settled `RetryableProviderError` failures.
 Adapters must honor `SummaryRequest.max_output_tokens` and cancellation. Role
 metadata distinguishes Folder Analyst, Architecture Analyst and source Verifier

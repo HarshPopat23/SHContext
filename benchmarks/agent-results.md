@@ -18,7 +18,7 @@ owned publication; verification and byte-comparison assertions run outside it.
 
 | Measured property                            | Sequential | Four folder workers |
 | -------------------------------------------- | ---------: | ------------------: |
-| Median elapsed time                          | 2267.41 ms |          1543.10 ms |
+| Median elapsed time                          | 2259.41 ms |          1534.87 ms |
 | Peak in-flight requests                      |          1 |                   4 |
 | Requests, including model review             |         18 |                  18 |
 | Folder summaries                             |          9 |                   9 |
@@ -28,7 +28,7 @@ owned publication; verification and byte-comparison assertions run outside it.
 | Owned output hashes                          |  Identical |           Identical |
 
 Measured speedup: **1.47×**, saving approximately
-**724 ms** per controlled run. The threshold check
+**725 ms** per controlled run. The threshold check
 independently computes median speedup and requires more than 1.1×; it does not
 print a success marker unless coverage, output/evidence equality, request counts,
 concurrency and the measured speedup pass assertions.

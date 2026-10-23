@@ -7,15 +7,15 @@
   "provider_latency_ms": 120,
   "review": true,
   "trials_per_mode": 3,
-  "sequential_median_ms": 2267.409046999999,
-  "parallel_median_ms": 1543.0959839999996,
-  "speedup": 1.469389506881122,
-  "saved_ms": 724.3130629999996,
+  "sequential_median_ms": 2259.414334,
+  "parallel_median_ms": 1534.8714609999997,
+  "speedup": 1.4720544302308847,
+  "saved_ms": 724.5428730000003,
   "exact_output_equality": true,
   "samples": [
     {
       "workers": 1,
-      "ms": 2270.0835670000006,
+      "ms": 2259.414334,
       "requests": 18,
       "peak": 1,
       "folders": 9,
@@ -25,7 +25,7 @@
     },
     {
       "workers": 4,
-      "ms": 1540.630306,
+      "ms": 1534.8714609999997,
       "requests": 18,
       "peak": 4,
       "folders": 9,
@@ -35,7 +35,7 @@
     },
     {
       "workers": 4,
-      "ms": 1559.594631,
+      "ms": 1541.7769360000002,
       "requests": 18,
       "peak": 4,
       "folders": 9,
@@ -45,7 +45,7 @@
     },
     {
       "workers": 1,
-      "ms": 2265.935927999999,
+      "ms": 2259.96479,
       "requests": 18,
       "peak": 1,
       "folders": 9,
@@ -55,7 +55,7 @@
     },
     {
       "workers": 1,
-      "ms": 2267.409046999999,
+      "ms": 2258.123001,
       "requests": 18,
       "peak": 1,
       "folders": 9,
@@ -65,7 +65,7 @@
     },
     {
       "workers": 4,
-      "ms": 1543.0959839999996,
+      "ms": 1529.6366469999994,
       "requests": 18,
       "peak": 4,
       "folders": 9,

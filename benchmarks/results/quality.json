@@ -1,0 +1,1046 @@
+{
+  "schema_version": 1,
+  "mode": "controlled scripted provider; no live model evaluation",
+  "node": "v24.19.0",
+  "platform": "linux",
+  "evaluation": {
+    "id": "controlled",
+    "scope": "Authored source and scripted provider; source-reviewed labels are controls, not live-model quality.",
+    "tool_version": "0.1.0-alpha.1",
+    "generation_identity": {
+      "provider": {
+        "id": "openai",
+        "model": "scripted-control"
+      },
+      "generator": "context-pipeline-v4",
+      "parser": "babel-7.29.9-structure-v1",
+      "resolver": "relative-files-v1",
+      "prompt": "folder-evidence-v2",
+      "template": "context-sections-v1",
+      "renderer": "markdown-v1",
+      "detector": "credentials-v2",
+      "default_policy": "scanner-policy-v1"
+    },
+    "dataset_sha256": "sha256:3a12558cb8c278048881eaf65892d41d1bd6b5a2d2c490eaa45c6385c6dc6527",
+    "source": null,
+    "coverage": "partial",
+    "eligible_folders": 7,
+    "inventory": {
+      "analyzed": 12,
+      "ignored": 2,
+      "inventory-only": 1
+    },
+    "generation": {
+      "elapsed_ms": 141.74948300000003,
+      "requests": 6,
+      "input_utf8_bytes": 19362,
+      "response_utf8_bytes": 2922,
+      "reserved_input_tokens": 53342,
+      "reserved_output_tokens": 24576,
+      "illustrative_reserved_cost_usd": 0.10249399999999999,
+      "illustrative_rates_usd_per_million": {
+        "input": 1,
+        "output": 2
+      },
+      "actual_model_tokens": null,
+      "actual_provider_cost_usd": 0,
+      "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+    },
+    "flat_generation": {
+      "elapsed_ms": 12.806818000000021,
+      "requests": 4,
+      "input_utf8_bytes": 1106,
+      "response_utf8_bytes": 2221,
+      "reserved_input_tokens": 10114,
+      "reserved_output_tokens": 16384,
+      "illustrative_reserved_cost_usd": 0.042882,
+      "illustrative_rates_usd_per_million": {
+        "input": 1,
+        "output": 2
+      },
+      "actual_model_tokens": null,
+      "actual_provider_cost_usd": 0,
+      "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+    },
+    "claims": {
+      "supported": 5,
+      "unsupported": 0,
+      "unreviewed": 0,
+      "candidates": 5,
+      "reviewed": [
+        {
+          "path": "src/auth/session.ts",
+          "text": "Checks the signed prefix and requires the supplied session expiry to be later than the supplied current time.",
+          "verdict": "supported",
+          "source_sha256": "sha256:3c07e74673f976b182481666ca0d90430c1cb94fab6858fbe24f0fcfc7cd4499",
+          "start_line": 1,
+          "end_line": 2
+        },
+        {
+          "path": "src/auth/signature.ts",
+          "text": "Checks whether the token starts with the signed prefix.",
+          "verdict": "supported",
+          "source_sha256": "sha256:97daa7e5f37fd07c9083e99638289a9acf1f6cd88aa8d250c31003ba2c97ece4",
+          "start_line": 1,
+          "end_line": 1
+        },
+        {
+          "path": "src/billing/invoice.ts",
+          "text": "Computes an invoice total by summing values from zero.",
+          "verdict": "supported",
+          "source_sha256": "sha256:83caccee5c597d9acaeda49b8f76770836b188581b5f1907d14f1442facd6ac0",
+          "start_line": 1,
+          "end_line": 1
+        },
+        {
+          "path": "src/routes/login.ts",
+          "text": "Delegates login validation to verifySession with the supplied token and times.",
+          "verdict": "supported",
+          "source_sha256": "sha256:24a5f937bfb4efe5ee16e2216e4a121617e45d723e772d268e76f7d735e80abc",
+          "start_line": 1,
+          "end_line": 2
+        },
+        {
+          "path": "unrelated/info.ts",
+          "text": "Exports the numeric info constant.",
+          "verdict": "supported",
+          "source_sha256": "sha256:2fe1b0af721209272df83c97270b084db49629ed67ba545589e647f1f502926f",
+          "start_line": 1,
+          "end_line": 1
+        }
+      ]
+    },
+    "questions": [
+      {
+        "id": "auth",
+        "question": "Where is authentication handled?",
+        "expected": ["src/auth/session.ts", "src/routes/login.ts"],
+        "cross_folder": true,
+        "shcontext": {
+          "paths": [
+            "src/auth/session.ts",
+            "src/routes/login.ts",
+            "src/auth/signature.ts"
+          ],
+          "score": {
+            "hits": 2,
+            "expected": 2,
+            "returned": 3,
+            "recall": 1,
+            "precision": 0.6666666666666666,
+            "exact_set": false,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 70.23746799999998,
+          "status": "answered",
+          "relationship_labels_correct": true,
+          "references": [
+            {
+              "path": "src/auth/session.ts",
+              "sha256": "sha256:3c07e74673f976b182481666ca0d90430c1cb94fab6858fbe24f0fcfc7cd4499",
+              "start_line": 1,
+              "end_line": 3,
+              "symbol": "verifySession",
+              "basis": "source"
+            },
+            {
+              "path": "src/routes/login.ts",
+              "sha256": "sha256:24a5f937bfb4efe5ee16e2216e4a121617e45d723e772d268e76f7d735e80abc",
+              "start_line": 1,
+              "end_line": 4,
+              "symbol": "login",
+              "basis": "source"
+            },
+            {
+              "path": "src/auth/signature.ts",
+              "sha256": "sha256:97daa7e5f37fd07c9083e99638289a9acf1f6cd88aa8d250c31003ba2c97ece4",
+              "start_line": 1,
+              "end_line": 2,
+              "symbol": null,
+              "basis": "source"
+            }
+          ],
+          "relationships": [
+            {
+              "from": "src/auth/session.ts",
+              "to": "src/auth/signature.ts",
+              "reference": {
+                "specifier": "./signature"
+              },
+              "resolution": "resolved"
+            },
+            {
+              "from": "src/routes/login.ts",
+              "to": "src/auth/session.ts",
+              "reference": {
+                "specifier": "../auth/session"
+              },
+              "resolution": "resolved"
+            },
+            {
+              "from": "src/routes/login.ts",
+              "to": null,
+              "reference": {
+                "specifier": "./missing"
+              },
+              "resolution": "unresolved"
+            }
+          ]
+        },
+        "literal_exploration": {
+          "paths": [
+            "src/routes/login.ts",
+            "src/auth/session.ts",
+            "src/auth/signature.ts"
+          ],
+          "score": {
+            "hits": 2,
+            "expected": 2,
+            "returned": 3,
+            "recall": 1,
+            "precision": 0.6666666666666666,
+            "exact_set": false,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 4.335381999999981
+        },
+        "flat_folder": {
+          "paths": [
+            "src/auth/session.ts",
+            "src/routes/login.ts",
+            "src/auth/signature.ts"
+          ],
+          "score": {
+            "hits": 2,
+            "expected": 2,
+            "returned": 3,
+            "recall": 1,
+            "precision": 0.6666666666666666,
+            "exact_set": false,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 0.09617500000001655
+        }
+      },
+      {
+        "id": "consumer",
+        "question": "verifySession",
+        "expected": ["src/auth/session.ts", "src/routes/login.ts"],
+        "cross_folder": true,
+        "relationships": [
+          {
+            "from": "src/routes/login.ts",
+            "specifier": "./missing",
+            "resolution": "unresolved",
+            "to": null
+          }
+        ],
+        "shcontext": {
+          "paths": [
+            "src/auth/session.ts",
+            "src/routes/login.ts",
+            "src/auth/signature.ts"
+          ],
+          "score": {
+            "hits": 2,
+            "expected": 2,
+            "returned": 3,
+            "recall": 1,
+            "precision": 0.6666666666666666,
+            "exact_set": false,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 67.26853000000006,
+          "status": "answered",
+          "relationship_labels_correct": true,
+          "references": [
+            {
+              "path": "src/auth/session.ts",
+              "sha256": "sha256:3c07e74673f976b182481666ca0d90430c1cb94fab6858fbe24f0fcfc7cd4499",
+              "start_line": 1,
+              "end_line": 3,
+              "symbol": "verifySession",
+              "basis": "source"
+            },
+            {
+              "path": "src/routes/login.ts",
+              "sha256": "sha256:24a5f937bfb4efe5ee16e2216e4a121617e45d723e772d268e76f7d735e80abc",
+              "start_line": 1,
+              "end_line": 4,
+              "symbol": null,
+              "basis": "source"
+            },
+            {
+              "path": "src/auth/signature.ts",
+              "sha256": "sha256:97daa7e5f37fd07c9083e99638289a9acf1f6cd88aa8d250c31003ba2c97ece4",
+              "start_line": 1,
+              "end_line": 2,
+              "symbol": null,
+              "basis": "source"
+            }
+          ],
+          "relationships": [
+            {
+              "from": "src/auth/session.ts",
+              "to": "src/auth/signature.ts",
+              "reference": {
+                "specifier": "./signature"
+              },
+              "resolution": "resolved"
+            },
+            {
+              "from": "src/routes/login.ts",
+              "to": "src/auth/session.ts",
+              "reference": {
+                "specifier": "../auth/session"
+              },
+              "resolution": "resolved"
+            },
+            {
+              "from": "src/routes/login.ts",
+              "to": null,
+              "reference": {
+                "specifier": "./missing"
+              },
+              "resolution": "unresolved"
+            }
+          ]
+        },
+        "literal_exploration": {
+          "paths": ["src/auth/session.ts", "src/routes/login.ts"],
+          "score": {
+            "hits": 2,
+            "expected": 2,
+            "returned": 2,
+            "recall": 1,
+            "precision": 1,
+            "exact_set": true,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 3.490171000000032
+        },
+        "flat_folder": {
+          "paths": ["src/routes/login.ts", "src/auth/session.ts"],
+          "score": {
+            "hits": 2,
+            "expected": 2,
+            "returned": 2,
+            "recall": 1,
+            "precision": 1,
+            "exact_set": true,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 0.04282500000010714
+        }
+      },
+      {
+        "id": "prefix",
+        "question": "Where is the signed prefix checked?",
+        "expected": ["src/auth/signature.ts"],
+        "cross_folder": false,
+        "shcontext": {
+          "paths": [
+            "src/auth/signature.ts",
+            "src/auth/session.ts",
+            "src/routes/login.ts"
+          ],
+          "score": {
+            "hits": 1,
+            "expected": 1,
+            "returned": 3,
+            "recall": 1,
+            "precision": 0.3333333333333333,
+            "exact_set": false,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 62.782722000000035,
+          "status": "answered",
+          "relationship_labels_correct": true,
+          "references": [
+            {
+              "path": "src/auth/signature.ts",
+              "sha256": "sha256:97daa7e5f37fd07c9083e99638289a9acf1f6cd88aa8d250c31003ba2c97ece4",
+              "start_line": 1,
+              "end_line": 2,
+              "symbol": "signed",
+              "basis": "source"
+            },
+            {
+              "path": "src/auth/session.ts",
+              "sha256": "sha256:3c07e74673f976b182481666ca0d90430c1cb94fab6858fbe24f0fcfc7cd4499",
+              "start_line": 1,
+              "end_line": 3,
+              "symbol": null,
+              "basis": "source"
+            },
+            {
+              "path": "src/routes/login.ts",
+              "sha256": "sha256:24a5f937bfb4efe5ee16e2216e4a121617e45d723e772d268e76f7d735e80abc",
+              "start_line": 1,
+              "end_line": 4,
+              "symbol": null,
+              "basis": "source"
+            }
+          ],
+          "relationships": [
+            {
+              "from": "src/auth/session.ts",
+              "to": "src/auth/signature.ts",
+              "reference": {
+                "specifier": "./signature"
+              },
+              "resolution": "resolved"
+            },
+            {
+              "from": "src/routes/login.ts",
+              "to": "src/auth/session.ts",
+              "reference": {
+                "specifier": "../auth/session"
+              },
+              "resolution": "resolved"
+            },
+            {
+              "from": "src/routes/login.ts",
+              "to": null,
+              "reference": {
+                "specifier": "./missing"
+              },
+              "resolution": "unresolved"
+            }
+          ]
+        },
+        "literal_exploration": {
+          "paths": ["src/auth/session.ts", "src/auth/signature.ts"],
+          "score": {
+            "hits": 1,
+            "expected": 1,
+            "returned": 2,
+            "recall": 1,
+            "precision": 0.5,
+            "exact_set": false,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 3.221046000000001
+        },
+        "flat_folder": {
+          "paths": ["src/auth/session.ts", "src/auth/signature.ts"],
+          "score": {
+            "hits": 1,
+            "expected": 1,
+            "returned": 2,
+            "recall": 1,
+            "precision": 0.5,
+            "exact_set": false,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 0.032889000000068336
+        }
+      },
+      {
+        "id": "total",
+        "question": "invoiceTotal",
+        "expected": ["src/billing/invoice.ts"],
+        "cross_folder": false,
+        "shcontext": {
+          "paths": ["src/billing/invoice.ts"],
+          "score": {
+            "hits": 1,
+            "expected": 1,
+            "returned": 1,
+            "recall": 1,
+            "precision": 1,
+            "exact_set": true,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 54.99653599999999,
+          "status": "answered",
+          "relationship_labels_correct": true,
+          "references": [
+            {
+              "path": "src/billing/invoice.ts",
+              "sha256": "sha256:83caccee5c597d9acaeda49b8f76770836b188581b5f1907d14f1442facd6ac0",
+              "start_line": 1,
+              "end_line": 2,
+              "symbol": "invoiceTotal",
+              "basis": "source"
+            }
+          ],
+          "relationships": []
+        },
+        "literal_exploration": {
+          "paths": ["src/billing/invoice.ts"],
+          "score": {
+            "hits": 1,
+            "expected": 1,
+            "returned": 1,
+            "recall": 1,
+            "precision": 1,
+            "exact_set": true,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 2.1036660000000893
+        },
+        "flat_folder": {
+          "paths": ["src/billing/invoice.ts"],
+          "score": {
+            "hits": 1,
+            "expected": 1,
+            "returned": 1,
+            "recall": 1,
+            "precision": 1,
+            "exact_set": true,
+            "all_expected": true,
+            "correct_abstention": null
+          },
+          "elapsed_ms": 0.03341000000000349
+        }
+      },
+      {
+        "id": "missing",
+        "question": "quantum teleportation",
+        "expected": [],
+        "cross_folder": false,
+        "shcontext": {
+          "paths": [],
+          "score": {
+            "hits": 0,
+            "expected": 0,
+            "returned": 0,
+            "recall": null,
+            "precision": null,
+            "exact_set": true,
+            "all_expected": true,
+            "correct_abstention": true
+          },
+          "elapsed_ms": 46.509367,
+          "status": "no_match",
+          "relationship_labels_correct": true,
+          "references": [],
+          "relationships": []
+        },
+        "literal_exploration": {
+          "paths": [],
+          "score": {
+            "hits": 0,
+            "expected": 0,
+            "returned": 0,
+            "recall": null,
+            "precision": null,
+            "exact_set": true,
+            "all_expected": true,
+            "correct_abstention": true
+          },
+          "elapsed_ms": 2.4501070000000027
+        },
+        "flat_folder": {
+          "paths": [],
+          "score": {
+            "hits": 0,
+            "expected": 0,
+            "returned": 0,
+            "recall": null,
+            "precision": null,
+            "exact_set": true,
+            "all_expected": true,
+            "correct_abstention": true
+          },
+          "elapsed_ms": 0.022683999999912885
+        }
+      }
+    ]
+  },
+  "updates": [
+    {
+      "name": "unchanged",
+      "expected_regenerated": [],
+      "regenerated": [],
+      "reused": [
+        ".",
+        "legacy",
+        "src",
+        "src/auth",
+        "src/billing",
+        "src/routes",
+        "unrelated"
+      ],
+      "changes": {
+        "added": [],
+        "modified": [],
+        "deleted": [],
+        "moves": []
+      },
+      "correct": true,
+      "metrics": {
+        "elapsed_ms": 33.41433400000005,
+        "requests": 0,
+        "input_utf8_bytes": 0,
+        "response_utf8_bytes": 0,
+        "reserved_input_tokens": 0,
+        "reserved_output_tokens": 0,
+        "illustrative_reserved_cost_usd": 0,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_regeneration": {
+        "elapsed_ms": 8.828504000000066,
+        "requests": 4,
+        "input_utf8_bytes": 1106,
+        "response_utf8_bytes": 2221,
+        "reserved_input_tokens": 10114,
+        "reserved_output_tokens": 16384,
+        "illustrative_reserved_cost_usd": 0.042882,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      }
+    },
+    {
+      "name": "isolated-edit",
+      "expected_regenerated": [".", "unrelated"],
+      "regenerated": [".", "unrelated"],
+      "reused": ["legacy", "src", "src/auth", "src/billing", "src/routes"],
+      "changes": {
+        "added": [],
+        "modified": ["unrelated/info.ts"],
+        "deleted": [],
+        "moves": []
+      },
+      "correct": true,
+      "metrics": {
+        "elapsed_ms": 67.10074699999996,
+        "requests": 2,
+        "input_utf8_bytes": 7564,
+        "response_utf8_bytes": 828,
+        "reserved_input_tokens": 19005,
+        "reserved_output_tokens": 8192,
+        "illustrative_reserved_cost_usd": 0.035389,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_regeneration": {
+        "elapsed_ms": 14.448570000000018,
+        "requests": 4,
+        "input_utf8_bytes": 1106,
+        "response_utf8_bytes": 2221,
+        "reserved_input_tokens": 10114,
+        "reserved_output_tokens": 16384,
+        "illustrative_reserved_cost_usd": 0.042882,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      }
+    },
+    {
+      "name": "addition",
+      "expected_regenerated": [".", "extra"],
+      "regenerated": [".", "extra"],
+      "reused": [
+        "legacy",
+        "src",
+        "src/auth",
+        "src/billing",
+        "src/routes",
+        "unrelated"
+      ],
+      "changes": {
+        "added": ["extra/new.ts"],
+        "modified": [],
+        "deleted": [],
+        "moves": []
+      },
+      "correct": true,
+      "metrics": {
+        "elapsed_ms": 68.54492099999993,
+        "requests": 2,
+        "input_utf8_bytes": 9274,
+        "response_utf8_bytes": 854,
+        "reserved_input_tokens": 20891,
+        "reserved_output_tokens": 8192,
+        "illustrative_reserved_cost_usd": 0.037275,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_regeneration": {
+        "elapsed_ms": 8.947091999999998,
+        "requests": 5,
+        "input_utf8_bytes": 1234,
+        "response_utf8_bytes": 2717,
+        "reserved_input_tokens": 12490,
+        "reserved_output_tokens": 20480,
+        "illustrative_reserved_cost_usd": 0.05345,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      }
+    },
+    {
+      "name": "move",
+      "expected_regenerated": [".", "archive"],
+      "regenerated": [".", "archive"],
+      "reused": [
+        "extra",
+        "legacy",
+        "src",
+        "src/auth",
+        "src/billing",
+        "src/routes"
+      ],
+      "changes": {
+        "added": ["archive/info.ts"],
+        "modified": [],
+        "deleted": ["unrelated/info.ts"],
+        "moves": [
+          {
+            "from": "unrelated/info.ts",
+            "to": "archive/info.ts",
+            "basis": "identical-content"
+          }
+        ]
+      },
+      "correct": true,
+      "metrics": {
+        "elapsed_ms": 93.0315569999999,
+        "requests": 2,
+        "input_utf8_bytes": 9304,
+        "response_utf8_bytes": 857,
+        "reserved_input_tokens": 20921,
+        "reserved_output_tokens": 8192,
+        "illustrative_reserved_cost_usd": 0.037305,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_regeneration": {
+        "elapsed_ms": 9.239000000000033,
+        "requests": 5,
+        "input_utf8_bytes": 1230,
+        "response_utf8_bytes": 2741,
+        "reserved_input_tokens": 12486,
+        "reserved_output_tokens": 20480,
+        "illustrative_reserved_cost_usd": 0.053446,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      }
+    },
+    {
+      "name": "deletion",
+      "expected_regenerated": ["."],
+      "regenerated": ["."],
+      "reused": [
+        "archive",
+        "legacy",
+        "src",
+        "src/auth",
+        "src/billing",
+        "src/routes"
+      ],
+      "changes": {
+        "added": [],
+        "modified": [],
+        "deleted": ["extra/new.ts"],
+        "moves": []
+      },
+      "correct": true,
+      "metrics": {
+        "elapsed_ms": 70.747701,
+        "requests": 1,
+        "input_utf8_bytes": 6959,
+        "response_utf8_bytes": 353,
+        "reserved_input_tokens": 12981,
+        "reserved_output_tokens": 4096,
+        "illustrative_reserved_cost_usd": 0.021173,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_regeneration": {
+        "elapsed_ms": 8.649785000000065,
+        "requests": 4,
+        "input_utf8_bytes": 1102,
+        "response_utf8_bytes": 2245,
+        "reserved_input_tokens": 10110,
+        "reserved_output_tokens": 16384,
+        "illustrative_reserved_cost_usd": 0.042878,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      }
+    },
+    {
+      "name": "dependency-evidence-edit",
+      "expected_regenerated": [".", "src", "src/auth", "src/routes"],
+      "regenerated": [".", "src", "src/auth", "src/routes"],
+      "reused": ["archive", "legacy", "src/billing"],
+      "changes": {
+        "added": [],
+        "modified": ["src/auth/session.ts"],
+        "deleted": [],
+        "moves": []
+      },
+      "correct": true,
+      "metrics": {
+        "elapsed_ms": 84.70935099999997,
+        "requests": 4,
+        "input_utf8_bytes": 18063,
+        "response_utf8_bytes": 1947,
+        "reserved_input_tokens": 41206,
+        "reserved_output_tokens": 16384,
+        "illustrative_reserved_cost_usd": 0.073974,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_regeneration": {
+        "elapsed_ms": 8.031844999999976,
+        "requests": 4,
+        "input_utf8_bytes": 1141,
+        "response_utf8_bytes": 2245,
+        "reserved_input_tokens": 10150,
+        "reserved_output_tokens": 16384,
+        "illustrative_reserved_cost_usd": 0.042918000000000005,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      }
+    },
+    {
+      "name": "configuration-invalidation",
+      "expected_regenerated": [
+        ".",
+        "archive",
+        "legacy",
+        "src",
+        "src/auth",
+        "src/billing",
+        "src/routes"
+      ],
+      "regenerated": [
+        ".",
+        "archive",
+        "legacy",
+        "src",
+        "src/auth",
+        "src/billing",
+        "src/routes"
+      ],
+      "reused": [],
+      "changes": {
+        "added": [],
+        "modified": [],
+        "deleted": [],
+        "moves": []
+      },
+      "correct": true,
+      "metrics": {
+        "elapsed_ms": 73.02804100000003,
+        "requests": 6,
+        "input_utf8_bytes": 19407,
+        "response_utf8_bytes": 2946,
+        "reserved_input_tokens": 53388,
+        "reserved_output_tokens": 24576,
+        "illustrative_reserved_cost_usd": 0.10253999999999999,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_regeneration": {
+        "elapsed_ms": 7.614096000000018,
+        "requests": 4,
+        "input_utf8_bytes": 1141,
+        "response_utf8_bytes": 2245,
+        "reserved_input_tokens": 10150,
+        "reserved_output_tokens": 16384,
+        "illustrative_reserved_cost_usd": 0.042918000000000005,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      }
+    },
+    {
+      "name": "generator-invalidation",
+      "expected_regenerated": [
+        ".",
+        "archive",
+        "legacy",
+        "src",
+        "src/auth",
+        "src/billing",
+        "src/routes"
+      ],
+      "regenerated": [
+        ".",
+        "archive",
+        "legacy",
+        "src",
+        "src/auth",
+        "src/billing",
+        "src/routes"
+      ],
+      "reused": [],
+      "changes": {
+        "added": [],
+        "modified": [],
+        "deleted": [],
+        "moves": []
+      },
+      "correct": true,
+      "metrics": {
+        "elapsed_ms": 72.20809200000008,
+        "requests": 6,
+        "input_utf8_bytes": 19407,
+        "response_utf8_bytes": 2946,
+        "reserved_input_tokens": 53388,
+        "reserved_output_tokens": 24576,
+        "illustrative_reserved_cost_usd": 0.10253999999999999,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      },
+      "flat_regeneration": {
+        "elapsed_ms": 6.6632549999999355,
+        "requests": 4,
+        "input_utf8_bytes": 1141,
+        "response_utf8_bytes": 2245,
+        "reserved_input_tokens": 10150,
+        "reserved_output_tokens": 16384,
+        "illustrative_reserved_cost_usd": 0.042918000000000005,
+        "illustrative_rates_usd_per_million": {
+          "input": 1,
+          "output": 2
+        },
+        "actual_model_tokens": null,
+        "actual_provider_cost_usd": 0,
+        "basis": "Scripted provider: no remote model, actual tokens not applicable; reservations use illustrative caller prices, not market prices or invoices."
+      }
+    }
+  ],
+  "negative_control": {
+    "mechanical_freshness": "fresh",
+    "claims": {
+      "supported": 4,
+      "unsupported": 1,
+      "unreviewed": 0,
+      "candidates": 5,
+      "reviewed": [
+        {
+          "path": "src/auth/session.ts",
+          "text": "Cryptographically verifies signatures and rejects every replayed token.",
+          "verdict": "unsupported",
+          "reason": "The cited code only checks a prefix and supplied times; neither cryptography nor replay storage is implemented."
+        },
+        {
+          "path": "src/auth/signature.ts",
+          "text": "Checks whether the token starts with the signed prefix.",
+          "verdict": "supported",
+          "source_sha256": "sha256:97daa7e5f37fd07c9083e99638289a9acf1f6cd88aa8d250c31003ba2c97ece4",
+          "start_line": 1,
+          "end_line": 1
+        },
+        {
+          "path": "src/billing/invoice.ts",
+          "text": "Computes an invoice total by summing values from zero.",
+          "verdict": "supported",
+          "source_sha256": "sha256:83caccee5c597d9acaeda49b8f76770836b188581b5f1907d14f1442facd6ac0",
+          "start_line": 1,
+          "end_line": 1
+        },
+        {
+          "path": "src/routes/login.ts",
+          "text": "Delegates login validation to verifySession with the supplied token and times.",
+          "verdict": "supported",
+          "source_sha256": "sha256:24a5f937bfb4efe5ee16e2216e4a121617e45d723e772d268e76f7d735e80abc",
+          "start_line": 1,
+          "end_line": 2
+        },
+        {
+          "path": "unrelated/info.ts",
+          "text": "Exports the numeric info constant.",
+          "verdict": "supported",
+          "source_sha256": "sha256:2fe1b0af721209272df83c97270b084db49629ed67ba545589e647f1f502926f",
+          "start_line": 1,
+          "end_line": 1
+        }
+      ]
+    },
+    "expected_rejection": true
+  },
+  "live_measurement": {
+    "status": "blocked",
+    "reason": "Requires an authorized OpenAI key, available model and independent source review; controlled reservations are not actual model tokens or invoices."
+  }
+}

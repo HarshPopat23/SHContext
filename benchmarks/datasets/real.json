@@ -1,0 +1,86 @@
+[
+  {
+    "id": "is-number",
+    "scope": "Full pinned public repository; source-reviewed index.js claim, other scripted file prose is unreviewed.",
+    "source": {
+      "url": "https://github.com/jonschlinkert/is-number.git",
+      "commit": "98e8ff1da1a89f93d1397a24d7413ed15421c139",
+      "license": "MIT"
+    },
+    "facts": [
+      {
+        "path": "index.js",
+        "start_line": 10,
+        "end_line": 18,
+        "text": "Accepts finite numeric inputs and finite nonempty numeric strings, rejecting whitespace-only strings.",
+        "basis": "typeof num === 'string' && num.trim() !== ''",
+        "sha256": "sha256:04255e482e181687823a95b207802ddd32e746c65dce4c95a5176fc192735960"
+      }
+    ],
+    "questions": [
+      {
+        "id": "numeric-implementation",
+        "question": "Where does num.trim reject empty numeric strings?",
+        "expected": ["index.js"],
+        "cross_folder": false
+      },
+      {
+        "id": "numeric-tests",
+        "question": "isNumber fixtures",
+        "expected": ["index.js", "test.js"],
+        "cross_folder": false
+      },
+      {
+        "id": "missing",
+        "question": "quantum teleportation",
+        "expected": [],
+        "cross_folder": false
+      }
+    ]
+  },
+  {
+    "id": "mitt",
+    "scope": "Full pinned public repository; source-reviewed src/index.ts claim, other scripted file prose is unreviewed. Root-package test imports may remain unresolved.",
+    "source": {
+      "url": "https://github.com/developit/mitt.git",
+      "commit": "6b41670516ed8e8b738612f60491995470aa63b3",
+      "license": "MIT"
+    },
+    "facts": [
+      {
+        "path": "src/index.ts",
+        "start_line": 103,
+        "end_line": 121,
+        "text": "Invokes type-matched event handlers before wildcard handlers, passing type and event to wildcard handlers.",
+        "basis": "handler(type, evt!)",
+        "sha256": "sha256:1536a2dd71d64785d811076beee6d970583ca555dd34ce839face641a200054b"
+      }
+    ],
+    "questions": [
+      {
+        "id": "event-implementation",
+        "question": "Where are wildcard event handlers invoked?",
+        "expected": ["src/index.ts"],
+        "cross_folder": false
+      },
+      {
+        "id": "cross-folder",
+        "question": "mitt emitter tests",
+        "expected": ["src/index.ts", "test/index_test.ts"],
+        "cross_folder": true
+      },
+      {
+        "id": "type-tests",
+        "question": "test-types-compilation",
+        "expected": ["test/test-types-compilation.ts"],
+        "cross_folder": false
+      },
+      {
+        "id": "missing",
+        "question": "quantum teleportation",
+        "expected": [],
+        "cross_folder": false
+      }
+    ]
+  }
+]

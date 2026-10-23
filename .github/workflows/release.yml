@@ -1,0 +1,66 @@
+name: Alpha release candidate
+on:
+  workflow_dispatch:
+    inputs:
+      create_draft:
+        description: Create an unpublished GitHub prerelease draft after checks
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      tag: ${{ steps.identity.outputs.tag }}
+    steps:
+      - name: Require merged main source
+        run: test "$GITHUB_REF" = refs/heads/main
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run benchmark:quality -- --check
+      - run: npm run benchmark:real -- --check
+      - run: npm run benchmark:agents -- --check
+      - run: npm exec --yes --package @anthropic-ai/claude-code@2.1.308 -- node scripts/check-plugin.mjs
+      - run: npm run release:pack -- "$RUNNER_TEMP/alpha-release" --require-clean
+      - id: identity
+        run: node -e "const fs=require('node:fs'); const m=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/alpha-release/release-manifest.json')); fs.appendFileSync(process.env.GITHUB_OUTPUT,'tag='+m.tag+'\n');"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: shcontext-alpha-release
+          path: ${{ runner.temp }}/alpha-release/
+          if-no-files-found: error
+  draft:
+    if: inputs.create_draft
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: shcontext-alpha-release
+          path: alpha-release
+      - name: Check artifact integrity
+        working-directory: alpha-release
+        run: sha256sum --check SHA256SUMS
+      - name: Check source identity
+        env:
+          RELEASE_TAG: ${{ needs.package.outputs.tag }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: node -e "const m=require('./alpha-release/release-manifest.json'); if(m.source_dirty||m.source_revision!==process.env.RELEASE_SHA||m.tag!==process.env.RELEASE_TAG)process.exit(1);"
+      - name: Create unpublished draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.package.outputs.tag }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: gh release create "$RELEASE_TAG" alpha-release/*.tgz alpha-release/SHA256SUMS alpha-release/release-manifest.json alpha-release/release-notes.md --target "$RELEASE_SHA" --draft --prerelease --title "SHContext $RELEASE_TAG" --notes-file alpha-release/release-notes.md
