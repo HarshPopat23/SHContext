@@ -6,3 +6,4 @@ coverage/
 .shcontext/
 *.log
 .DS_Store
+__pycache__/

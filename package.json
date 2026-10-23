@@ -78,6 +78,7 @@
     "LICENSE",
     "README.md",
     "skills/",
+    "skills-web/",
     ".claude-plugin/",
     "benchmarks/agent-results.md",
     "benchmarks/agent-results.json",
@@ -107,7 +108,9 @@
     "test:evaluation": "npm run build && node --test --test-concurrency=1 tests/evaluation.test.mjs",
     "release:pack": "node scripts/package-release.mjs",
     "test:release": "node --test --test-concurrency=1 tests/release.test.mjs",
-    "benchmark:live": "npm run build && node benchmarks/live.mjs"
+    "benchmark:live": "npm run build && node benchmarks/live.mjs",
+    "package:web": "node scripts/package-web-skills.mjs",
+    "test:web": "npm run build && node --test tests/web-distribution.test.mjs"
   },
   "devDependencies": {
     "@types/babel__traverse": "7.28.0",

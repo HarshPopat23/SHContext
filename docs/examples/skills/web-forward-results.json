@@ -1,0 +1,461 @@
+{
+  "version": 1,
+  "date": "2026-10-23",
+  "evaluator": "Independent fresh Codex agent; local instruction usability, not Claude web",
+  "actual_claude_web": false,
+  "input": {
+    "repository": "kubernetes-sigs/headlamp",
+    "revision": "375ca60c2bd38fbe7ae0249826a1774333c7b921",
+    "source_files": [
+      "frontend/src/lib/router/Route.tsx",
+      "frontend/src/lib/router/createRouteURL.test.ts",
+      "frontend/src/lib/router/createRouteURL.tsx",
+      "frontend/src/lib/router/getDefaultRoutes.tsx",
+      "frontend/src/lib/router/getRoute.tsx",
+      "frontend/src/lib/router/getRoutePath.tsx",
+      "frontend/src/lib/router/getRouteUseClusterURL.tsx",
+      "frontend/src/lib/router/index.tsx",
+      "frontend/src/lib/router/notFoundRoute.tsx"
+    ],
+    "change": "notFoundRoute.tsx: noAuthRequired true -> false"
+  },
+  "input_archives": {
+    "headlamp-original.zip": {
+      "sha256": "e222842ac4e45aace99c920d6b29637311f033f0d891b8c9c0af147441c8ef65",
+      "size_bytes": 17422,
+      "access": "read-only; no operation targeted source archive for writing"
+    },
+    "headlamp-changed.zip": {
+      "sha256": "8709df92729ef00c6c738306d0cbce7d732887986980ba8154b4155cdba8918b",
+      "size_bytes": 17406,
+      "access": "read-only; no operation targeted source archive for writing"
+    }
+  },
+  "source_review": "Parent independently compared every uploaded file to the pinned Git revision, with only the declared controlled change.",
+  "package_artifacts": [
+    {
+      "file": "context-web-build.zip",
+      "bytes": 3412514,
+      "sha256": "1a8311d1f6275b7575c5b248d8c3dae4ef023e56de692d5967bbde2fc242dea8"
+    },
+    {
+      "file": "context-web-update.zip",
+      "bytes": 3415724,
+      "sha256": "3790ade5246dbc0d2507d3c7d6800e1a54ebc131d4730dc55f286ee9fc49f57c"
+    },
+    {
+      "file": "context-web-verify.zip",
+      "bytes": 3415731,
+      "sha256": "f5820b4c1f1b4ca38a10c55ed0582a0daa05dd7a786cfadc91e2fec74a69105a"
+    },
+    {
+      "file": "context-web-query.zip",
+      "bytes": 3412513,
+      "sha256": "a3f20a2787b915319b7d2ff47ad770510f05f7fee03a7e74981180e9384e5450"
+    }
+  ],
+  "initial_tested_source_hashes": {
+    "scripts/web-workspace.py": "84c317df10eba623f155abbb58617729eeed352fa5941c9dc6d72b371cf144ad",
+    "src/web/runtime.ts": "2aa31c41aa6049860fbc7f68e33c79a5bc97be15140ddc5fff9cddf1d633e656",
+    "scripts/package-web-skills.mjs": "18999a3a80d48ec6a073d10f73c820652580fc0b926bb0ae84b4de0229aedc02",
+    "skills-web/shared/workflow.md": "3f0eba100dca6f1351814249757e70d40227d644b93828c6a18dca54d6991ed8",
+    "skills-web/context-web-build/SKILL.md": "e8ab536296a6b74fb5099e70fb8c356fddd2b12182c0aae2c67ced5bb6e6afef",
+    "skills-web/context-web-update/SKILL.md": "060d8813ff8cec180ca67a4a1a701ac4dd0bdae51ff31878b2866a20004176fb",
+    "skills-web/context-web-verify/SKILL.md": "6de746fd179258554bb0447310cdba7ed6991931a43f33058261a3a105adbf2d",
+    "skills-web/context-web-query/SKILL.md": "ee2ddc94c29b0da2eeb7790636d20fa0f248cce8d789254677f226a6e79a14aa"
+  },
+  "instruction_hashes": {
+    "skills-web/shared/workflow.md": "3f0eba100dca6f1351814249757e70d40227d644b93828c6a18dca54d6991ed8",
+    "skills-web/context-web-build/SKILL.md": "e8ab536296a6b74fb5099e70fb8c356fddd2b12182c0aae2c67ced5bb6e6afef",
+    "skills-web/context-web-update/SKILL.md": "060d8813ff8cec180ca67a4a1a701ac4dd0bdae51ff31878b2866a20004176fb",
+    "skills-web/context-web-verify/SKILL.md": "6de746fd179258554bb0447310cdba7ed6991931a43f33058261a3a105adbf2d",
+    "skills-web/context-web-query/SKILL.md": "ee2ddc94c29b0da2eeb7790636d20fa0f248cce8d789254677f226a6e79a14aa"
+  },
+  "activation_fixture_sha256": "0f895344d9c10de7823b3cab77df840768da829cde817541c24b288114869eb4",
+  "activation_predictions": [
+    {
+      "id": "b1",
+      "prediction": "context-web-build"
+    },
+    {
+      "id": "b2",
+      "prediction": "context-web-build"
+    },
+    {
+      "id": "b3",
+      "prediction": "context-web-build"
+    },
+    {
+      "id": "u1",
+      "prediction": "context-web-update"
+    },
+    {
+      "id": "u2",
+      "prediction": "context-web-update"
+    },
+    {
+      "id": "u3",
+      "prediction": "context-web-update"
+    },
+    {
+      "id": "v1",
+      "prediction": "context-web-verify"
+    },
+    {
+      "id": "v2",
+      "prediction": "context-web-verify"
+    },
+    {
+      "id": "v3",
+      "prediction": "context-web-verify"
+    },
+    {
+      "id": "q1",
+      "prediction": "context-web-query"
+    },
+    {
+      "id": "q2",
+      "prediction": "context-web-query"
+    },
+    {
+      "id": "q3",
+      "prediction": "context-web-query"
+    },
+    {
+      "id": "n1",
+      "prediction": null
+    },
+    {
+      "id": "n2",
+      "prediction": null
+    },
+    {
+      "id": "n3",
+      "prediction": null
+    },
+    {
+      "id": "n4",
+      "prediction": null
+    },
+    {
+      "id": "n5",
+      "prediction": null
+    },
+    {
+      "id": "n6",
+      "prediction": null
+    },
+    {
+      "id": "n7",
+      "prediction": null
+    },
+    {
+      "id": "n8",
+      "prediction": null
+    }
+  ],
+  "prediction_method": "Extracted trusted skills, read only SKILL.md frontmatter name/description, classified all 20 supplied prompts and saved predictions.json before reading bodies or workflows. No expected classifications were consulted.",
+  "isolation": {
+    "source_checkout_tests_helpers_expected_classifications_or_prior_conversation_read": false,
+    "bundled_resource_source_inspected": false,
+    "bundled_resources_executed": "Only documented resources/web.py commands.",
+    "network_used": false,
+    "dependencies_installed": false,
+    "model_api_keys_used": false
+  },
+  "runtime": {
+    "preflight_status": "compatible",
+    "node": "v24.19.0",
+    "python": "3.12.14"
+  },
+  "steps": [
+    {
+      "phase": "build",
+      "operation": "preflight",
+      "exit_code": 0
+    },
+    {
+      "phase": "build",
+      "operation": "list",
+      "exit_code": 0
+    },
+    {
+      "phase": "build",
+      "operation": "open",
+      "exit_code": 0
+    },
+    {
+      "phase": "build",
+      "operation": "prepare",
+      "exit_code": 0
+    },
+    {
+      "phase": "build",
+      "operation": "submit",
+      "exit_code": 0
+    },
+    {
+      "phase": "build",
+      "operation": "finalize",
+      "exit_code": 0
+    },
+    {
+      "phase": "build",
+      "operation": "verify",
+      "exit_code": 0
+    },
+    {
+      "phase": "build",
+      "operation": "export",
+      "exit_code": 0
+    },
+    {
+      "phase": "update",
+      "operation": "preflight",
+      "exit_code": 0
+    },
+    {
+      "phase": "update",
+      "operation": "list",
+      "exit_code": 0
+    },
+    {
+      "phase": "update",
+      "operation": "open",
+      "exit_code": 0
+    },
+    {
+      "phase": "update",
+      "operation": "verify-before-regeneration",
+      "exit_code": 1,
+      "state": "stale",
+      "finding": "source_changed"
+    },
+    {
+      "phase": "update",
+      "operation": "prepare",
+      "exit_code": 0
+    },
+    {
+      "phase": "update",
+      "operation": "submit",
+      "exit_code": 0
+    },
+    {
+      "phase": "update",
+      "operation": "finalize",
+      "exit_code": 0
+    },
+    {
+      "phase": "update",
+      "operation": "verify",
+      "exit_code": 0
+    },
+    {
+      "phase": "update",
+      "operation": "export",
+      "exit_code": 0
+    },
+    {
+      "phase": "verify",
+      "operation": "preflight",
+      "exit_code": 0
+    },
+    {
+      "phase": "verify",
+      "operation": "list",
+      "exit_code": 0
+    },
+    {
+      "phase": "verify",
+      "operation": "open",
+      "exit_code": 0
+    },
+    {
+      "phase": "verify",
+      "operation": "verify",
+      "exit_code": 0
+    },
+    {
+      "phase": "query",
+      "operation": "preflight",
+      "exit_code": 0
+    },
+    {
+      "phase": "query",
+      "operation": "list",
+      "exit_code": 0
+    },
+    {
+      "phase": "query",
+      "operation": "open",
+      "exit_code": 0
+    },
+    {
+      "phase": "query",
+      "operation": "query",
+      "exit_code": 0
+    }
+  ],
+  "build": {
+    "host_drafts": 1,
+    "submission_retries": 0,
+    "regenerated": ["."],
+    "reused": [],
+    "coverage": "complete",
+    "verification": "fresh",
+    "export_sha256": "df59d2762f14f90e67cba079cf4adda788278c05061b61f5d788b57d28883d7b"
+  },
+  "update": {
+    "fresh_workspace": true,
+    "previous_export_imported": true,
+    "host_drafts": 1,
+    "submission_retries": 0,
+    "regenerated": ["."],
+    "reused": [],
+    "changed_files": ["notFoundRoute.tsx"],
+    "coverage": "complete",
+    "verification": "fresh",
+    "export_sha256": "a12de307cc1abb9b7f2990a794014e6a2eb95c108d558ebde8a5f8364405fde3",
+    "auth_metadata_change": "noAuthRequired true -> false",
+    "draft_method": "Reviewed supplied changed source, confirmed other source bodies unchanged against prior extracted source, retained my own evidence-based claims and revised not-found purpose/file claims and uncertainty. No automated summarizer or generic summary template."
+  },
+  "observed_summary": {
+    "original": "Wildcard not-found route has noAuthRequired true. Other authored context explains mutable route registry, lookup, URL generation/cluster helpers, route metadata and inspected URL tests.",
+    "updated": "Wildcard not-found route has noAuthRequired false, with an explicit outside-scope enforcement caveat.",
+    "citations": "Generated CONTEXT.md purpose and notFoundRoute file prose use E9 links; source reference resolves to notFoundRoute.tsx lines 1–30 and current source hash."
+  },
+  "query": {
+    "status": "answered",
+    "context": {
+      "schema_version": 1,
+      "state": "fresh",
+      "coverage": "complete",
+      "findings": []
+    },
+    "not_found_candidate_rank": 2,
+    "decisive_returned_reference": {
+      "path": "notFoundRoute.tsx",
+      "sha256": "sha256:7e02f03bdb4a9b4c322decf70d0ce28cf676e20107b72d0593cd0701706809f2",
+      "start_line": 21,
+      "end_line": 30,
+      "symbol": "NotFoundRoute",
+      "basis": "source"
+    },
+    "manually_inspected_current_source": [
+      "notFoundRoute.tsx (full file)",
+      "Route.tsx (full file)",
+      "getRoutePath.tsx (full file)"
+    ],
+    "answer": "The changed not-found route sets noAuthRequired:false (frontend/src/lib/router/notFoundRoute.tsx:22–29, specifically line 28). Route.tsx:36–37 documents this property as the authentication exemption. Thus the route no longer declares that exemption; actual login checks or redirects cannot be established from this selected folder because its authentication consumer is outside scope. Its comments say it must be considered last and is intentionally separate from the default route map (notFoundRoute.tsx:19–21).",
+    "traversal": {
+      "depth": 1,
+      "truncated": true
+    }
+  },
+  "problems_encountered": [
+    {
+      "kind": "output volume",
+      "detail": "Initial whole request display was truncated by the execution display; read remaining source evidence in bounded chunks. No evidence source was silently dropped."
+    },
+    {
+      "kind": "tester scratch failure",
+      "exit_code": 1,
+      "detail": "An optional comparison script tried to access draft_schema on the already published build request and raised KeyError. Corrected by comparing current update source bodies with prior extracted source and reading current draft_schema. No workflow command or submission failed."
+    },
+    {
+      "kind": "tester procedural deviations",
+      "detail": "Initial preflight and source listing were independent concurrent read-only calls despite the workflow asking for sequential work. Also reread published build request during optional schema comparison; the guide only requests request_file reads while awaiting a draft. No session/source state was edited."
+    },
+    {
+      "kind": "query relevance",
+      "detail": "For the natural-language auth question createRouteURL.tsx ranked above notFoundRoute.tsx; several returned source excerpts were unrelated license text or omitted the auth property comment. Full current-source inspection, explicitly instructed by the workflow, supplied Route.tsx:36–37."
+    },
+    {
+      "kind": "read-only skill guide clarity",
+      "detail": "Verify/query SKILL.md says run only verify/query, while the shared workflow includes prepare/submit/finalize examples. The operation-specific restriction was clear enough to follow, but tailored workflow pages would reduce distraction. Preflight/list/open were interpreted as required setup."
+    }
+  ],
+  "limitations": [
+    "No claim of Claude web runtime, skill selection UI, ZIP upload, installation policy, account limit, file download rendering or browser acceptance testing.",
+    "Scope consists of one folder with nine uploaded TypeScript files plus deterministic generated shcontext.config.json. No multi-folder ancestor invalidation or reuse was exercised.",
+    "No unchanged zero-draft update scenario was run.",
+    "Mechanical complete coverage/freshness does not prove narrative correctness or runtime behavior. Project tests were inspected, not executed.",
+    "Components, cluster helpers, auth consumers, parent config/ignore rules and package installation are outside scope.",
+    "Query dependency traversal was truncated at depth 1 although the result had fresh/complete context and exit 0.",
+    "Source archives were never written by this test; final hashes recorded, but no independent pre-run hash baseline was captured."
+  ],
+  "post_forward_changes": "Initial tested package hashes identify the first model test precisely. The final-export follow-up used the staged atomic ZIP writer and additional Windows name checks. A later metadata-only safety bound caps implicit directory nodes as well as explicit ZIP entries, covered by archive tests.",
+  "final_export_followup": {
+    "evaluator": "Independent local Codex follow-up on final packaged export helper; not Claude web acceptance or a real browser test.",
+    "package_sha256": "f100b8f58303f1ab4d778d73012e88c216827dc31f2edcb1390194a29788bb1a",
+    "input_hashes_unchanged": true,
+    "actual_host_drafts": 0,
+    "changed": false,
+    "regenerated": [],
+    "reused": ["."],
+    "verification": {
+      "schema_version": 1,
+      "state": "fresh",
+      "coverage": "complete",
+      "findings": []
+    },
+    "operation_exit_codes": [
+      {
+        "operation": "preflight",
+        "exit_code": 0
+      },
+      {
+        "operation": "list",
+        "exit_code": 0
+      },
+      {
+        "operation": "open",
+        "exit_code": 0
+      },
+      {
+        "operation": "prepare",
+        "exit_code": 0
+      },
+      {
+        "operation": "finalize",
+        "exit_code": 0
+      },
+      {
+        "operation": "verify",
+        "exit_code": 0
+      },
+      {
+        "operation": "export",
+        "exit_code": 0
+      },
+      {
+        "operation": "export",
+        "exit_code": 1
+      }
+    ],
+    "output_sha256": "45b688b5535dc4e78fe54469c1c0307df76d2e15fe20db20b536b831d0470cc4",
+    "crc_valid": true,
+    "no_overwrite_check": {
+      "command_index": 7,
+      "exit_code": 1,
+      "error": {
+        "code": "web_workspace",
+        "message": "Export already exists; choose a new filename."
+      },
+      "successful_output_hash_unchanged": true
+    },
+    "problems": [
+      {
+        "kind": "tester report script",
+        "exit_code": 1,
+        "detail": "First report writer assumed the intentional existing-output error JSON was on stdout; it was on stderr. Corrected the report reader; no workflow or output was changed."
+      }
+    ],
+    "limitations": [
+      "This exercised valid Headlamp archives and the existing-output rejection path. It did not independently construct or test malicious Windows archive filenames.",
+      "The no-overwrite behavior was observed, but internal staging/atomicity mechanisms were not inspected or proved by this local test.",
+      "The package still labels provenance claude-web-session as documented; this follow-up ran under Codex locally and makes no authenticated Claude authorship claim."
+    ]
+  }
+}
