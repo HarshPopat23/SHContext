@@ -221,3 +221,16 @@ The version-1 owned output path set also permits optional
 the generator, updater and ownership reader in `src/update/cache.ts`, reusing
 `FolderSummarySchema` rather than defining a second summary format. See
 [incremental updates](incremental-updates.md) for the persisted cache and migration.
+
+## Host session protocol v1
+
+`HostSubmissionSchema` binds a JSON draft object to a session UUID and SHA-256
+request ID; the ordinary draft checker subsequently enforces fields, evidence,
+direct-file coverage and word limits. `HostSessionSchema` records the canonical
+selected root, build/update operation, input/generation IDs, baseline owned-context
+identity, ordered accepted envelopes and optional publication intent/completion.
+These private sessions are outside the source tree and are not portable context
+artifacts or authenticated model attestations. [Host generation](host-generation.md)
+documents request fields, bounds and failure semantics. Portable manifests use
+provider `host` and a declared session/model label; prompt identity includes
+`host-v1` so protocol changes invalidate host caches without changing API identity.

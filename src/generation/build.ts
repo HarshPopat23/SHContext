@@ -5,29 +5,17 @@ import type { ExecutionOptions, ExecutionReport } from '../agents/types.js';
 import { realpathSync, lstatSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { scanRepository, ScanError } from '../scanner/index.js';
-import { digest, byteOrder } from '../scanner/filesystem.js';
-import {
-  ContractBundleSchema,
-  GenerationManifestSchema,
-  needsManifestFile,
-  isPartial,
-  type AnalysisFailure,
-  type ContractBundle,
-} from '../core/contracts/index.js';
+import { byteOrder } from '../scanner/filesystem.js';
+import type { ContractBundle } from '../core/contracts/index.js';
 import {
   OpenAIProvider,
   type ModelProvider,
   type CancellationSignal,
 } from '../providers/index.js';
-import { summarize, contextPath, throwIfCancelled } from './summarize.js';
-import { renderFolder } from './render.js';
+import { summarize, throwIfCancelled } from './summarize.js';
+import { assembleGeneration } from './assembly.js';
 import { BuildError } from './errors.js';
-import { CACHE_PATH } from '../update/cache.js';
-import {
-  sourceChanges,
-  gitHead,
-  type SourceChanges,
-} from '../update/changes.js';
+import type { SourceChanges } from '../update/changes.js';
 import {
   readOwnedTree,
   withPublicationLock,
@@ -79,6 +67,11 @@ export async function runGeneration(
       'provider_configuration',
       'Configure provider id and model in shcontext.config.json. OpenAI also requires OPENAI_API_KEY in the host environment.',
     );
+  if (identity.id === 'host' && !options.provider)
+    throw new BuildError(
+      'host_workflow_required',
+      'Host generation uses prepare, submit and finalize; no API fallback was selected.',
+    );
   let adapter: ModelProvider | undefined;
   const getProvider = (): ModelProvider => {
     if (adapter) return adapter;
@@ -117,98 +110,25 @@ export async function runGeneration(
     });
     try {
       const previous = incremental ? readOwnedTree(root) : null;
-      const {
-        report,
-        folders,
-        generation,
-        generation_id,
-        cache,
-        regenerated,
-        reused,
-        sources,
-      } = await summarize(
+      const collected = await summarize(
         root,
         scan,
         coordinator.signal,
         previous?.cache,
         coordinator,
       );
+      const { folders, regenerated, reused, sources } = collected;
       await reviewSummaries(
         coordinator,
         folders,
         sources,
         options.review ?? false,
       );
-      const changes = sourceChanges(
+      const { bundle, outputs, unchanged, changes } = assembleGeneration(
         root,
-        previous?.inventory ?? null,
-        scan.inventory,
-        previous?.manifest.provenance.git_head ?? null,
-      );
-      const unchanged =
-        !!previous &&
-        previous.manifest.input_id === scan.inventory.input_id &&
-        previous.manifest.generator.generation_id === generation_id &&
-        regenerated.length === 0;
-      const outputs = new Map<string, string>();
-      for (const folder of folders)
-        outputs.set(contextPath(folder.source_path), renderFolder(folder));
-      outputs.set(
-        'context/.shcontext/report.json',
-        `${JSON.stringify(scan.inventory, null, 2)}\n`,
-      );
-      outputs.set(CACHE_PATH, `${JSON.stringify(cache, null, 2)}\n`);
-      const newManifest = GenerationManifestSchema.parse({
-        schema_version: 1,
-        generator: { version: generation.generator, generation_id },
-        generation,
-        selection: {
-          configuration: scan.configuration,
-          control_files: scan.control_files,
-        },
-        input_id: scan.inventory.input_id,
-        coverage: scan.inventory.coverage,
-        provenance: unchanged
-          ? previous.manifest.provenance
-          : { git_head: gitHead(root) },
-        files: scan.inventory.entries
-          .filter(needsManifestFile)
-          .map(({ path, sha256, disposition, reason, mode }) => ({
-            path,
-            sha256,
-            disposition,
-            reason,
-            mode,
-          })),
-        directories: folders.map((folder) => ({
-          path: folder.source_path,
-          coverage: folder.coverage,
-        })),
-        outputs: [...outputs]
-          .map(([path, content]) => ({ path, sha256: digest(content) }))
-          .sort((a, b) => byteOrder(a.path, b.path)),
-        analysis_failures: scan.inventory.entries
-          .filter(isPartial)
-          .map((entry) => ({
-            path: entry.path,
-            code: entry.reason as AnalysisFailure['code'],
-            message:
-              'Source analysis is incomplete for the recorded reason; no unsupported behavior is claimed.',
-          })),
-        diagnostics: [],
-      });
-      const manifest = unchanged ? previous.manifest : newManifest;
-      const bundle = ContractBundleSchema.parse({
-        schema_version: 1,
-        inventory: scan.inventory,
-        analyses: report.analyses,
-        edges: report.edges,
-        folders,
-        manifest,
-      });
-      outputs.set(
-        'context/.shcontext/manifest.json',
-        `${JSON.stringify(manifest, null, 2)}\n`,
+        scan,
+        collected,
+        previous,
       );
       if (!unchanged)
         publish(root, outputs, initial, () => {

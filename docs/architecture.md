@@ -258,3 +258,13 @@ Oversized requests fail without truncation; large-folder chunking remains planne
 [Offline verification](verification.md) now checks output integrity and freshness
 with a separate source-review boundary. Live-provider quality evaluation is blocked
 until host credentials are supplied; controlled-provider tests do not prove it.
+
+## Active-host generation
+
+The sequential [host protocol](host-generation.md) exposes the existing folder
+evidence/draft boundary through prepare/submit/finalize. It replays locally
+accepted drafts through the same checker and cache, then shares structured bundle
+assembly and staged publication with API generation. Sessions stay outside the
+source root. Host identity is declared, not authenticated; token/cost telemetry is
+unavailable. The optional OpenAI adapter and its public injectable-provider API
+remain supported.

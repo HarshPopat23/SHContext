@@ -1,5 +1,7 @@
 # Install, generate, change, update and verify
 
+For **Claude Code with no separate API key**, start with [host generation](host-generation.md). The OpenAI examples below are an optional API workflow; installing the plugin does not require them.
+
 SHContext `0.1.0-alpha.1` is an alpha release candidate. This PR prepares the
 package and release workflow; it does not publish to npm or claim that a public
 GitHub release already exists. The source route works before publication. Live

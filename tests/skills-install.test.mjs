@@ -66,6 +66,13 @@ test(
       checkout,
     );
     const cli = join(checkout, 'dist/cli/index.js');
+    assert.match(
+      run([
+        join(checkout, 'examples/host-demo.mjs'),
+        join(box, 'host source demo'),
+      ]).stdout,
+      /HOST WALKTHROUGH PASSED/,
+    );
     assert.match(run([cli, '--help']).stdout, /build <directory>/);
     const repo = join(box, 'target repository');
     fs.mkdirSync(repo);

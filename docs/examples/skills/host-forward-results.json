@@ -1,0 +1,58 @@
+{
+  "method": "Fresh independent native Codex agent followed the packaged build/update skills and linked protocol, without test helpers or expected summaries. This is not an authenticated Claude Code session.",
+  "configuration": {
+    "provider": {
+      "id": "host",
+      "model": "claude-code-session"
+    },
+    "provenance_note": "Declared label, not the actual authenticated model identity."
+  },
+  "source_files": [
+    {
+      "path": "math/prices.ts",
+      "content": "export function totalAfterDiscount(prices: number[], percent: number): number {\n  const subtotal = prices.reduce((sum, price) => sum + price, 0);\n  return subtotal * (1 - percent / 100);\n}\n",
+      "sha256": "sha256:3d59d06b8b345aba4a75a3ebd0d8170c098c0361d91ec73ff13d2387b7bce31d"
+    },
+    {
+      "path": "ui/cart.ts",
+      "content": "import { totalAfterDiscount } from \"../math/prices\";\nexport function cartLabel(prices: number[]) {\n  return \"Total: \" + totalAfterDiscount(prices, 20).toFixed(2);\n}\n",
+      "sha256": "sha256:4a80b96b395b26714e6b7584f0048681aa4f82da1aa1c03d60ff1afefa1eb949"
+    }
+  ],
+  "change": "ui/cart.ts discount argument 10 to 20",
+  "build": {
+    "accepted_host_drafts": 3,
+    "status": "published",
+    "coverage": "complete"
+  },
+  "update": {
+    "accepted_host_drafts": 3,
+    "regenerated": [".", "math", "ui"],
+    "reused": [],
+    "reason": "The math folder includes incoming consumer evidence from the changed cart source, so both folders and root are affected."
+  },
+  "final_verification": {
+    "state": "fresh",
+    "coverage": "complete",
+    "findings": []
+  },
+  "source_review": {
+    "answer": "cartLabel sums prices, applies a 20 percent discount via totalAfterDiscount, formats two decimal places, and prefixes Total: .",
+    "references": [
+      {
+        "path": "ui/cart.ts",
+        "start_line": 1,
+        "end_line": 3
+      },
+      {
+        "path": "math/prices.ts",
+        "start_line": 1,
+        "end_line": 3
+      }
+    ],
+    "repository_code_or_tests_executed": false
+  },
+  "operational_correction": "An alternate response filename inside the session was rejected as unknown state; the agent moved only its own draft to the prescribed response.json and continued without editing tool-owned state.",
+  "actual_host_tokens": null,
+  "actual_host_cost_usd": null
+}

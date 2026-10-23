@@ -39,6 +39,8 @@ import { BuildError } from './errors.js';
 export const GENERATOR_VERSION = 'context-pipeline-v4';
 export const RENDERER_VERSION = 'markdown-v1';
 export const TEMPLATE_VERSION = 'context-sections-v1';
+export const promptVersion = (providerId: string) =>
+  providerId === 'host' ? `${PROMPT_VERSION}/host-v1` : PROMPT_VERSION;
 export function generationIdentity(
   scan: ScanResult,
   report: RepositoryAnalysis,
@@ -53,7 +55,7 @@ export function generationIdentity(
     generator: GENERATOR_VERSION,
     parser: report.components.parser,
     resolver: report.components.resolver,
-    prompt: PROMPT_VERSION,
+    prompt: promptVersion(scan.configuration.provider.id),
     template: TEMPLATE_VERSION,
     renderer: RENDERER_VERSION,
     detector: scan.versions.detector,
@@ -94,6 +96,7 @@ export async function summarize(
   signal: CancellationSignal | undefined,
   previous: IncrementalCache | null | undefined,
   coordinator: Coordinator,
+  draftAttempts = 2,
 ) {
   throwIfCancelled(signal);
   const report = analyzeRepository(root, {
@@ -312,7 +315,7 @@ export async function summarize(
     ) {
       const input = JSON.stringify(inputData);
       let draft: ReturnType<typeof checkedDraft> | undefined;
-      for (let attempt = 0; attempt < 2; attempt++) {
+      for (let attempt = 0; attempt < draftAttempts; attempt++) {
         throwIfCancelled(signal);
         const raw = await coordinator.generate(role, path, {
           instructions: INSTRUCTIONS,
@@ -326,7 +329,8 @@ export async function summarize(
           draft = checkedDraft(raw, base, available, wordLimit);
           break;
         } catch (error) {
-          if (attempt || !(error instanceof BuildError)) throw error;
+          if (attempt === draftAttempts - 1 || !(error instanceof BuildError))
+            throw error;
         }
       }
       if (!draft)

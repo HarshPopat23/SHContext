@@ -6,7 +6,14 @@ import { parseArgs } from 'node:util';
 import { scanRepository, ScanError } from '../scanner/index.js';
 import { getProjectInfo } from '../core/index.js';
 import { verifyRepository } from '../validation/index.js';
-import { buildRepository, BuildError } from '../generation/index.js';
+import {
+  buildRepository,
+  BuildError,
+  prepareRepository,
+  submitRepository,
+  finalizeRepository,
+  readHostSubmission,
+} from '../generation/index.js';
 
 interface CliOutput {
   stdout: (text: string) => void;
@@ -24,12 +31,16 @@ Options:
 
 Commands:
   scan <directory>   Print a local JSON inventory without model calls or writes
-  build <directory>  Generate context/ using the configured OpenAI model
+  prepare <directory> Prepare/resume a host session without API calls
+  submit <directory>  Validate a host draft and prepare the next folder
+  finalize <directory> Publish a complete validated host session
+  build <directory>  Generate context/ using the optional configured OpenAI model
   update <directory> Refresh affected summaries using the structured cache
   query <question>   Search context and inspected source (defaults to current directory)
   verify <directory> Check context integrity and freshness offline (read-only)
 
 Exit codes: 0 complete, 2 partial, 1 operational/configuration failure
+Host options: --session <outside-directory>; prepare accepts --update; submit requires --draft <envelope.json>
 Query options: --root <directory>, --limit <1–20>, --depth <0–3>, --json
 Build/update options: --workers <1–8> (default 1), --retries <0–2>, --review
   --max-requests <n>, --max-input-tokens <n>, --max-output-tokens <n>
@@ -51,6 +62,9 @@ export async function runCli(
         help: { type: 'boolean', short: 'h' },
         version: { type: 'boolean', short: 'v' },
         root: { type: 'string' },
+        session: { type: 'string' },
+        draft: { type: 'string' },
+        update: { type: 'boolean' },
         limit: { type: 'string' },
         depth: { type: 'string' },
         json: { type: 'boolean' },
@@ -69,6 +83,8 @@ export async function runCli(
     });
 
     const command = positionals[0];
+    const hostCommands = ['prepare', 'submit', 'finalize'];
+    const hostFlags = ['session', 'draft', 'update'] as const;
     const queryFlags = ['root', 'limit', 'depth', 'json'] as const;
     const agentFlags = [
       'workers',
@@ -83,8 +99,10 @@ export async function runCli(
     ] as const;
     if (
       !values.help &&
-      ((command !== 'query' &&
-        queryFlags.some((key) => values[key] !== undefined)) ||
+      ((!hostCommands.includes(command ?? '') &&
+        hostFlags.some((key) => values[key] !== undefined)) ||
+        (command !== 'query' &&
+          queryFlags.some((key) => values[key] !== undefined)) ||
         (!['build', 'update'].includes(command ?? '') &&
           agentFlags.some((key) => values[key] !== undefined)))
     ) {
@@ -99,6 +117,49 @@ export async function runCli(
         : /^\d+(?:\.\d+)?$/.test(value)
           ? Number(value)
           : NaN;
+    if (hostCommands.includes(command ?? '')) {
+      if (values.help) {
+        output.stdout(help());
+        return 0;
+      }
+      if (
+        positionals.length !== 2 ||
+        values.version ||
+        !values.session ||
+        (command !== 'submit' && values.draft !== undefined) ||
+        (command === 'submit' && !values.draft) ||
+        (command !== 'prepare' && values.update !== undefined)
+      ) {
+        output.stderr(
+          'Usage: shcontext prepare|submit|finalize <directory> --session <outside-directory>; submit requires --draft <envelope.json>; prepare optionally accepts --update.\n',
+        );
+        return 1;
+      }
+      try {
+        const result =
+          command === 'prepare'
+            ? await prepareRepository(positionals[1]!, values.session, {
+                update: values.update ?? false,
+              })
+            : command === 'submit'
+              ? await submitRepository(
+                  positionals[1]!,
+                  values.session,
+                  readHostSubmission(values.draft!),
+                )
+              : await finalizeRepository(positionals[1]!, values.session);
+        output.stdout(`${JSON.stringify(result, null, 2)}\n`);
+        output.stderr(
+          `Host session ${result.status}; no external API was called. Host usage/cost is not measured.\n`,
+        );
+        return 'coverage' in result && result.coverage === 'partial' ? 2 : 0;
+      } catch (error) {
+        output.stderr(
+          `${JSON.stringify(error instanceof BuildError || error instanceof ScanError ? { code: error.code, message: error.message } : { code: 'host_failed', message: 'Host operation failed; preserve the session and publication state for inspection.' })}\n`,
+        );
+        return 1;
+      }
+    }
     if (command === 'query') {
       if (values.help) {
         output.stdout(help());

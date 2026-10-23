@@ -1,9 +1,9 @@
 {
   "method": "Independent native agent, fresh context, skill names/descriptions and requests only; expected labels withheld. Not a Claude Code model session.",
-  "metadata_sha256": "0d9d440d52bac69106c34d0a62f49dcb39fe08fc9bb594354a053e06379a978c",
-  "cases_sha256": "890e6118ac2217ead8485fc8222c3e19f6888426ca7315047c46d6ce3d5d5a35",
-  "total": 38,
-  "matched": 38,
+  "metadata_sha256": "d5a803adb2b21629e31126358bf304e23f08b41ee7041f51194e158b26e1d00c",
+  "cases_sha256": "dccec30a84a2875cc1674cf97e5e814cc90c9b32d065af516efd5e930358f703",
+  "total": 41,
+  "matched": 41,
   "predictions": [
     {
       "id": "b1",
@@ -156,6 +156,18 @@
     {
       "id": "x8",
       "selected": ["context-verify"]
+    },
+    {
+      "id": "host-build-no-api",
+      "selected": ["context-build"]
+    },
+    {
+      "id": "host-update-no-api",
+      "selected": ["context-update"]
+    },
+    {
+      "id": "host-advice-only",
+      "selected": []
     }
   ]
 }

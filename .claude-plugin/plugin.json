@@ -1,8 +1,10 @@
 {
   "name": "shcontext",
-  "version": "0.1.0",
-  "description": "Five source-based SHContext workflows: build, update, verify, query and controlled benchmark.",
-  "author": { "name": "Harsh Popat" },
+  "version": "0.2.0",
+  "description": "Five repository context workflows with Claude-native generation and optional OpenAI automation.",
+  "author": {
+    "name": "Harsh Popat"
+  },
   "homepage": "https://github.com/HarshPopat23/SHContext/blob/main/docs/skills.md",
   "repository": "https://github.com/HarshPopat23/SHContext",
   "license": "MIT",

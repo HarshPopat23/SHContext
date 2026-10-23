@@ -29,3 +29,9 @@ export type {
   AgentRole,
   AgentReview,
 } from './agents/index.js';
+export {
+  prepareRepository,
+  submitRepository,
+  finalizeRepository,
+  readHostSubmission,
+} from './generation/index.js';
