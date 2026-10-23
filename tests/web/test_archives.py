@@ -27,6 +27,13 @@ class Archives(unittest.TestCase):
             warnings.simplefilter("ignore", UserWarning)
             with zipfile.ZipFile(path, "w", compression) as out:
                 for name, data in entries:
+                    if isinstance(name, str):
+                        # ZipInfo normalizes the host separator on Windows. Preserve
+                        # hostile header bytes instead of accidentally testing a safe name.
+                        item = zipfile.ZipInfo(name)
+                        item.filename = item.orig_filename = name
+                        item.compress_type = compression
+                        name = item
                     out.writestr(name, data)
         return path
 
@@ -57,6 +64,17 @@ class Archives(unittest.TestCase):
         path.write_bytes(path.read_bytes().replace(b"repo/xxx.ts", b"repo/x\x00x.ts"))
         with self.assertRaises(ValueError):
             web.safe_extract(path, self.root / "out")
+        self.assertFalse((self.root / "out").exists())
+
+    def test_backslash_header_survives_windows_zipinfo_normalization(self):
+        with patch.object(zipfile.os, "sep", "\\"):
+            path = self.archive([("repo\\escape", "bad")])
+            with zipfile.ZipFile(path) as source:
+                entry = source.infolist()[0]
+                self.assertEqual(entry.orig_filename, "repo\\escape")
+                self.assertEqual(entry.filename, "repo/escape")
+            with self.assertRaises(ValueError):
+                web.safe_extract(path, self.root / "out")
         self.assertFalse((self.root / "out").exists())
 
     def test_duplicates_aliases_and_file_prefixes(self):

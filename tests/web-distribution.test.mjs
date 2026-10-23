@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import test, { before, after } from 'node:test';
@@ -571,7 +571,7 @@ test('subfolder scope is explicit and partial unsupported coverage is returned r
 });
 
 test('network denial is a tested positive control and bundled host pipeline runs under that denial', () => {
-  const deny = join(repo, 'tests/helpers/deny-network.mjs');
+  const deny = pathToFileURL(join(repo, 'tests/helpers/deny-network.mjs')).href;
   assert.match(
     run(
       process.execPath,
