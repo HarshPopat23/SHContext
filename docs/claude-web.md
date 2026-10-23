@@ -6,9 +6,12 @@ No separate OpenAI or Anthropic API key is needed: Claude authors summaries in
 the active chat, consuming the account's normal usage allowance. Unattended
 CLI/CI generation may still use the optional OpenAI adapter.
 
-**Acceptance status:** packaging and the local archive workflow are tested;
-actual Claude web installation/execution is not yet certified. The available
-browser reaches Claude's sign-in screen. See [web acceptance](claude-web-acceptance.md).
+**Acceptance status:** the four skills were installed and exercised in Claude web
+on a Free account (Sonnet 5.5 Medium, Node 22.22.0, Python 3.13.17). A pinned
+Headlamp build, downloaded-context update in a new chat, zero-draft reuse,
+multi-folder invalidation and rejection controls passed. See the detailed
+[web acceptance record](claude-web-acceptance.md); runtime availability and
+account policies still vary.
 
 ## Get and install the ZIPs
 
@@ -35,7 +38,7 @@ is implied.
 | `context-web-query.zip`  | Read-only repository questions and source retrieval         |
 
 Enable **Code execution and file creation** in Claude's capabilities settings.
-Go to **Customize → Skills → + → Create skill → Upload a skill**, upload each
+Go to **Customize → Skills → Add skill → Upload skill**, upload each
 desired ZIP and enable it. Team/Enterprise policies may require administrator
 enablement. Follow [Claude's current installation guide][use-skills] if labels
 change. Each ZIP has one matching skill-name directory containing `SKILL.md`,
@@ -164,3 +167,7 @@ exercise build/update/reimport/query and failure states. These do not replace
 [use-skills]: https://support.claude.com/en/articles/12512180-use-skills-in-claude
 [create-skills]: https://support.claude.com/en/articles/12512198-how-to-create-custom-skills
 [skills-overview]: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+
+The upload contains at most 200 files and no nested archives. Compiled JavaScript
+bundles include locked production dependencies; their licenses and version
+inventory remain separate resources. No extraction or installation is required.

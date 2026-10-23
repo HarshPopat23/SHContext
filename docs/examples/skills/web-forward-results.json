@@ -65,11 +65,11 @@
     "skills-web/context-web-query/SKILL.md": "ee2ddc94c29b0da2eeb7790636d20fa0f248cce8d789254677f226a6e79a14aa"
   },
   "instruction_hashes": {
-    "skills-web/shared/workflow.md": "3f0eba100dca6f1351814249757e70d40227d644b93828c6a18dca54d6991ed8",
     "skills-web/context-web-build/SKILL.md": "e8ab536296a6b74fb5099e70fb8c356fddd2b12182c0aae2c67ced5bb6e6afef",
     "skills-web/context-web-update/SKILL.md": "060d8813ff8cec180ca67a4a1a701ac4dd0bdae51ff31878b2866a20004176fb",
     "skills-web/context-web-verify/SKILL.md": "6de746fd179258554bb0447310cdba7ed6991931a43f33058261a3a105adbf2d",
-    "skills-web/context-web-query/SKILL.md": "ee2ddc94c29b0da2eeb7790636d20fa0f248cce8d789254677f226a6e79a14aa"
+    "skills-web/context-web-query/SKILL.md": "ee2ddc94c29b0da2eeb7790636d20fa0f248cce8d789254677f226a6e79a14aa",
+    "skills-web/shared/workflow.md": "94c887a479e092906ae779f91698ba6a1a36b09afbf5edc291aa6d2a58be8d94"
   },
   "activation_fixture_sha256": "0f895344d9c10de7823b3cab77df840768da829cde817541c24b288114869eb4",
   "activation_predictions": [
@@ -323,7 +323,7 @@
   "observed_summary": {
     "original": "Wildcard not-found route has noAuthRequired true. Other authored context explains mutable route registry, lookup, URL generation/cluster helpers, route metadata and inspected URL tests.",
     "updated": "Wildcard not-found route has noAuthRequired false, with an explicit outside-scope enforcement caveat.",
-    "citations": "Generated CONTEXT.md purpose and notFoundRoute file prose use E9 links; source reference resolves to notFoundRoute.tsx lines 1–30 and current source hash."
+    "citations": "Generated CONTEXT.md purpose and notFoundRoute file prose use E9 links; source reference resolves to notFoundRoute.tsx lines 1\u201330 and current source hash."
   },
   "query": {
     "status": "answered",
@@ -347,7 +347,7 @@
       "Route.tsx (full file)",
       "getRoutePath.tsx (full file)"
     ],
-    "answer": "The changed not-found route sets noAuthRequired:false (frontend/src/lib/router/notFoundRoute.tsx:22–29, specifically line 28). Route.tsx:36–37 documents this property as the authentication exemption. Thus the route no longer declares that exemption; actual login checks or redirects cannot be established from this selected folder because its authentication consumer is outside scope. Its comments say it must be considered last and is intentionally separate from the default route map (notFoundRoute.tsx:19–21).",
+    "answer": "The changed not-found route sets noAuthRequired:false (frontend/src/lib/router/notFoundRoute.tsx:22\u201329, specifically line 28). Route.tsx:36\u201337 documents this property as the authentication exemption. Thus the route no longer declares that exemption; actual login checks or redirects cannot be established from this selected folder because its authentication consumer is outside scope. Its comments say it must be considered last and is intentionally separate from the default route map (notFoundRoute.tsx:19\u201321).",
     "traversal": {
       "depth": 1,
       "truncated": true
@@ -369,7 +369,7 @@
     },
     {
       "kind": "query relevance",
-      "detail": "For the natural-language auth question createRouteURL.tsx ranked above notFoundRoute.tsx; several returned source excerpts were unrelated license text or omitted the auth property comment. Full current-source inspection, explicitly instructed by the workflow, supplied Route.tsx:36–37."
+      "detail": "For the natural-language auth question createRouteURL.tsx ranked above notFoundRoute.tsx; several returned source excerpts were unrelated license text or omitted the auth property comment. Full current-source inspection, explicitly instructed by the workflow, supplied Route.tsx:36\u201337."
     },
     {
       "kind": "read-only skill guide clarity",
@@ -385,7 +385,7 @@
     "Query dependency traversal was truncated at depth 1 although the result had fresh/complete context and exit 0.",
     "Source archives were never written by this test; final hashes recorded, but no independent pre-run hash baseline was captured."
   ],
-  "post_forward_changes": "Initial tested package hashes identify the first model test precisely. The final-export follow-up used the staged atomic ZIP writer and additional Windows name checks. A later metadata-only safety bound caps implicit directory nodes as well as explicit ZIP entries, covered by archive tests.",
+  "post_forward_changes": "After initial and final-export follow-ups, browser upload constraints prompted plain JavaScript bundling with separate license resources and no nested archives. Current packaged instructions and v3 build/reuse evidence were independently rerun locally; legacy test evidence retains its original package hashes. Live Claude testing is recorded separately by the parent evaluator.",
   "final_export_followup": {
     "evaluator": "Independent local Codex follow-up on final packaged export helper; not Claude web acceptance or a real browser test.",
     "package_sha256": "f100b8f58303f1ab4d778d73012e88c216827dc31f2edcb1390194a29788bb1a",
@@ -457,5 +457,512 @@
       "The no-overwrite behavior was observed, but internal staging/atomicity mechanisms were not inspected or proved by this local test.",
       "The package still labels provenance claude-web-session as documented; this follow-up ran under Codex locally and makes no authenticated Claude authorship claim."
     ]
+  },
+  "initial_instruction_hashes": {
+    "skills-web/shared/workflow.md": "3f0eba100dca6f1351814249757e70d40227d644b93828c6a18dca54d6991ed8",
+    "skills-web/context-web-build/SKILL.md": "e8ab536296a6b74fb5099e70fb8c356fddd2b12182c0aae2c67ced5bb6e6afef",
+    "skills-web/context-web-update/SKILL.md": "060d8813ff8cec180ca67a4a1a701ac4dd0bdae51ff31878b2866a20004176fb",
+    "skills-web/context-web-verify/SKILL.md": "6de746fd179258554bb0447310cdba7ed6991931a43f33058261a3a105adbf2d",
+    "skills-web/context-web-query/SKILL.md": "ee2ddc94c29b0da2eeb7790636d20fa0f248cce8d789254677f226a6e79a14aa"
+  },
+  "instruction_hashes_scope": "Current bundled-js v3 packaged instructions, reviewed in bundled_js_v3_followup. Initial instruction hashes are preserved separately.",
+  "latest_tested_package_artifacts": [
+    {
+      "file": "context-web-build.zip",
+      "bytes": 912181,
+      "sha256": "0a7098cc40834a55a766e231d8778fc2f81296f758cd6c5b6aae89d6538fed1f",
+      "files": 29,
+      "outer_entries": 29,
+      "nested_archives": 0
+    },
+    {
+      "file": "context-web-query.zip",
+      "bytes": 912180,
+      "sha256": "536bb599b8bf9d512a9f975dd71bee96fc7e91bad171e7ac13554d73610a7d7c",
+      "files": 29,
+      "outer_entries": 29,
+      "nested_archives": 0
+    },
+    {
+      "file": "context-web-update.zip",
+      "bytes": 912237,
+      "sha256": "1d9d4eaadbf29b1557de0d34f94963e6e05ad857ac260f3b938f444cdcca451b",
+      "files": 29,
+      "outer_entries": 29,
+      "nested_archives": 0
+    },
+    {
+      "file": "context-web-verify.zip",
+      "bytes": 912244,
+      "sha256": "f7a0aba925ab9c70b6213110fc5857a060cfc45f0491ad9fce52c4190493644a",
+      "files": 29,
+      "outer_entries": 29,
+      "nested_archives": 0
+    }
+  ],
+  "historical_evidence_scope": "Legacy top-level package_artifacts/build/update/query/final_export_followup describe their explicitly hashed earlier packages. Current v3 independent usage evidence is bundled_js_v3_followup; no skipped v3 case is inferred from earlier passes.",
+  "bundled_js_v3_followup": {
+    "evaluator": "Independent local Codex instruction-usability follow-up on bundled-js v3; same evaluator retained prior conversation. Fresh installed packages and workspaces, not a newly blinded evaluator and not Claude web acceptance.",
+    "actual_claude_web": false,
+    "package_directory": "../SHContext-web-workflow/browser-bundled-js-v3",
+    "package_artifacts": [
+      {
+        "file": "context-web-build.zip",
+        "bytes": 912181,
+        "sha256": "0a7098cc40834a55a766e231d8778fc2f81296f758cd6c5b6aae89d6538fed1f",
+        "files": 29,
+        "outer_entries": 29,
+        "nested_archives": 0
+      },
+      {
+        "file": "context-web-query.zip",
+        "bytes": 912180,
+        "sha256": "536bb599b8bf9d512a9f975dd71bee96fc7e91bad171e7ac13554d73610a7d7c",
+        "files": 29,
+        "outer_entries": 29,
+        "nested_archives": 0
+      },
+      {
+        "file": "context-web-update.zip",
+        "bytes": 912237,
+        "sha256": "1d9d4eaadbf29b1557de0d34f94963e6e05ad857ac260f3b938f444cdcca451b",
+        "files": 29,
+        "outer_entries": 29,
+        "nested_archives": 0
+      },
+      {
+        "file": "context-web-verify.zip",
+        "bytes": 912244,
+        "sha256": "f7a0aba925ab9c70b6213110fc5857a060cfc45f0491ad9fce52c4190493644a",
+        "files": 29,
+        "outer_entries": 29,
+        "nested_archives": 0
+      }
+    ],
+    "instruction_hashes": {
+      "skills-web/context-web-build/SKILL.md": "e8ab536296a6b74fb5099e70fb8c356fddd2b12182c0aae2c67ced5bb6e6afef",
+      "skills-web/context-web-update/SKILL.md": "060d8813ff8cec180ca67a4a1a701ac4dd0bdae51ff31878b2866a20004176fb",
+      "skills-web/context-web-verify/SKILL.md": "6de746fd179258554bb0447310cdba7ed6991931a43f33058261a3a105adbf2d",
+      "skills-web/context-web-query/SKILL.md": "ee2ddc94c29b0da2eeb7790636d20fa0f248cce8d789254677f226a6e79a14aa",
+      "skills-web/shared/workflow.md": "94c887a479e092906ae779f91698ba6a1a36b09afbf5edc291aa6d2a58be8d94"
+    },
+    "instruction_hash_source": "Exact extracted packaged SKILL.md and references/workflow.md bytes. All four packaged workflows have identical hashes. No source implementation checkout was inspected.",
+    "instructions_reviewed": "Read build/update SKILL.md bodies and the full shared packaged workflow. The changed paragraph says uploads contain at most 200 files, no nested archives and plain JavaScript dependency bundles with separate licenses/version inventory. Verify/query metadata were reviewed for routing; their operation bodies were not re-exercised.",
+    "routing": {
+      "corpus_sha256": "0f895344d9c10de7823b3cab77df840768da829cde817541c24b288114869eb4",
+      "predictions": [
+        {
+          "id": "b1",
+          "prediction": "context-web-build"
+        },
+        {
+          "id": "b2",
+          "prediction": "context-web-build"
+        },
+        {
+          "id": "b3",
+          "prediction": "context-web-build"
+        },
+        {
+          "id": "u1",
+          "prediction": "context-web-update"
+        },
+        {
+          "id": "u2",
+          "prediction": "context-web-update"
+        },
+        {
+          "id": "u3",
+          "prediction": "context-web-update"
+        },
+        {
+          "id": "v1",
+          "prediction": "context-web-verify"
+        },
+        {
+          "id": "v2",
+          "prediction": "context-web-verify"
+        },
+        {
+          "id": "v3",
+          "prediction": "context-web-verify"
+        },
+        {
+          "id": "q1",
+          "prediction": "context-web-query"
+        },
+        {
+          "id": "q2",
+          "prediction": "context-web-query"
+        },
+        {
+          "id": "q3",
+          "prediction": "context-web-query"
+        },
+        {
+          "id": "n1",
+          "prediction": null
+        },
+        {
+          "id": "n2",
+          "prediction": null
+        },
+        {
+          "id": "n3",
+          "prediction": null
+        },
+        {
+          "id": "n4",
+          "prediction": null
+        },
+        {
+          "id": "n5",
+          "prediction": null
+        },
+        {
+          "id": "n6",
+          "prediction": null
+        },
+        {
+          "id": "n7",
+          "prediction": null
+        },
+        {
+          "id": "n8",
+          "prediction": null
+        }
+      ],
+      "prediction_method": "Read only current packaged frontmatter name/description and corpus id/prompt fields, saved predictions.json before reading current workflow bodies. Compared expected labels only after predictions had been saved; prior prompt corpus was already familiar to this evaluator.",
+      "correct": 20,
+      "total": 20,
+      "mismatched_ids": []
+    },
+    "runtime": {
+      "status": "compatible",
+      "node": "v24.19.0",
+      "python": "3.12.14",
+      "network_required": false
+    },
+    "source": {
+      "path": "/workspace/scratch/0f6a5ed92616/SHContext-web-workflow/browser-final-355177f/headlamp-original.zip",
+      "sha256_before": "e222842ac4e45aace99c920d6b29637311f033f0d891b8c9c0af147441c8ef65",
+      "sha256_after": "e222842ac4e45aace99c920d6b29637311f033f0d891b8c9c0af147441c8ef65",
+      "unchanged": true,
+      "scope": "frontend/src/lib/router",
+      "wrapper": "headlamp-original"
+    },
+    "steps": [
+      {
+        "phase": "build",
+        "operation": "preflight",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-build/context-web-build/resources/web.py",
+          "preflight"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"status\": \"compatible\",\n  \"node\": \"v24.19.0\",\n  \"python\": \"3.12.14\",\n  \"network_required\": false\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "build",
+        "operation": "list",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-build/context-web-build/resources/web.py",
+          "list",
+          "--source",
+          "/workspace/scratch/0f6a5ed92616/SHContext-web-workflow/browser-final-355177f/headlamp-original.zip"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"entries\": 10,\n  \"directories\": [\n    \"headlamp-original\",\n    \"headlamp-original/frontend\",\n    \"headlamp-original/frontend/src\",\n    \"headlamp-original/frontend/src/lib\",\n    \"headlamp-original/frontend/src/lib/router\"\n  ],\n  \"directories_truncated\": false\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "build",
+        "operation": "open",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-build/context-web-build/resources/web.py",
+          "open",
+          "--source",
+          "/workspace/scratch/0f6a5ed92616/SHContext-web-workflow/browser-final-355177f/headlamp-original.zip",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/build",
+          "--repo-prefix",
+          "headlamp-original",
+          "--subfolder",
+          "frontend/src/lib/router"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"workspace\": \"/tmp/shcontext-bundled-js-v3-forward-independent/build\",\n  \"root\": \"/tmp/shcontext-bundled-js-v3-forward-independent/build/source/headlamp-original/frontend/src/lib/router\",\n  \"previous\": false,\n  \"provider\": {\n    \"id\": \"host\",\n    \"model\": \"claude-web-session\"\n  }\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "build",
+        "operation": "prepare",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-build/context-web-build/resources/web.py",
+          "prepare",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/build"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"status\": \"awaiting_draft\",\n  \"session_id\": \"48a9c0d7-9835-4838-a650-de23af2f8fbf\",\n  \"session_directory\": \"/tmp/shcontext-bundled-js-v3-forward-independent/build/session\",\n  \"request_file\": \"/tmp/shcontext-bundled-js-v3-forward-independent/build/session/request.json\",\n  \"host_drafts\": 0,\n  \"input_id\": \"sha256:55d288b4c0d5b56248b2a07b752b6e1be6eebc7acec4a72ec0be4beb7fc5feae\",\n  \"generation_id\": \"sha256:52b2969fe026fcc3aa0fa9d1375d364197b5c5898f0c85207391af3a50b22c8d\",\n  \"actual_host_tokens\": null,\n  \"actual_host_cost_usd\": null\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "build",
+        "operation": "submit",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-build/context-web-build/resources/web.py",
+          "submit",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/build",
+          "--draft",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/build-draft.json"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"status\": \"ready\",\n  \"session_id\": \"48a9c0d7-9835-4838-a650-de23af2f8fbf\",\n  \"session_directory\": \"/tmp/shcontext-bundled-js-v3-forward-independent/build/session\",\n  \"request_file\": \"/tmp/shcontext-bundled-js-v3-forward-independent/build/session/request.json\",\n  \"host_drafts\": 1,\n  \"input_id\": \"sha256:55d288b4c0d5b56248b2a07b752b6e1be6eebc7acec4a72ec0be4beb7fc5feae\",\n  \"generation_id\": \"sha256:52b2969fe026fcc3aa0fa9d1375d364197b5c5898f0c85207391af3a50b22c8d\",\n  \"actual_host_tokens\": null,\n  \"actual_host_cost_usd\": null\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "build",
+        "operation": "finalize",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-build/context-web-build/resources/web.py",
+          "finalize",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/build"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"status\": \"published\",\n  \"session_id\": \"48a9c0d7-9835-4838-a650-de23af2f8fbf\",\n  \"session_directory\": \"/tmp/shcontext-bundled-js-v3-forward-independent/build/session\",\n  \"request_file\": \"/tmp/shcontext-bundled-js-v3-forward-independent/build/session/request.json\",\n  \"host_drafts\": 1,\n  \"input_id\": \"sha256:55d288b4c0d5b56248b2a07b752b6e1be6eebc7acec4a72ec0be4beb7fc5feae\",\n  \"generation_id\": \"sha256:52b2969fe026fcc3aa0fa9d1375d364197b5c5898f0c85207391af3a50b22c8d\",\n  \"actual_host_tokens\": null,\n  \"actual_host_cost_usd\": null,\n  \"changed\": true,\n  \"coverage\": \"complete\",\n  \"regenerated\": [\n    \".\"\n  ],\n  \"reused\": [],\n  \"changes\": {\n    \"added\": [\n      \"Route.tsx\",\n      \"createRouteURL.test.ts\",\n      \"createRouteURL.tsx\",\n      \"getDefaultRoutes.tsx\",\n      \"getRoute.tsx\",\n      \"getRoutePath.tsx\",\n      \"getRouteUseClusterURL.tsx\",\n      \"index.tsx\",\n      \"notFoundRoute.tsx\",\n      \"shcontext.config.json\"\n    ],\n    \"modified\": [],\n    \"deleted\": [],\n    \"moves\": []\n  },\n  \"output_paths\": [\n    \"context/CONTEXT.md\",\n    \"context/.shcontext/report.json\",\n    \"context/.shcontext/cache.json\",\n    \"context/.shcontext/manifest.json\"\n  ]\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "build",
+        "operation": "verify",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-build/context-web-build/resources/web.py",
+          "verify",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/build"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"schema_version\": 1,\n  \"state\": \"fresh\",\n  \"coverage\": \"complete\",\n  \"findings\": []\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "build",
+        "operation": "export",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-build/context-web-build/resources/web.py",
+          "export",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/build",
+          "--output",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/headlamp-original-context.zip"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"archive\": \"/tmp/shcontext-bundled-js-v3-forward-independent/headlamp-original-context.zip\",\n  \"sha256\": \"99b78bd14702437a34613d7a1f41c614843542c6cec897bb72389395e90d90f8\",\n  \"files\": 4,\n  \"coverage\": \"complete\"\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "reuse",
+        "operation": "preflight",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-update/context-web-update/resources/web.py",
+          "preflight"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"status\": \"compatible\",\n  \"node\": \"v24.19.0\",\n  \"python\": \"3.12.14\",\n  \"network_required\": false\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "reuse",
+        "operation": "list",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-update/context-web-update/resources/web.py",
+          "list",
+          "--source",
+          "/workspace/scratch/0f6a5ed92616/SHContext-web-workflow/browser-final-355177f/headlamp-original.zip"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"entries\": 10,\n  \"directories\": [\n    \"headlamp-original\",\n    \"headlamp-original/frontend\",\n    \"headlamp-original/frontend/src\",\n    \"headlamp-original/frontend/src/lib\",\n    \"headlamp-original/frontend/src/lib/router\"\n  ],\n  \"directories_truncated\": false\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "reuse",
+        "operation": "open",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-update/context-web-update/resources/web.py",
+          "open",
+          "--source",
+          "/workspace/scratch/0f6a5ed92616/SHContext-web-workflow/browser-final-355177f/headlamp-original.zip",
+          "--previous",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/headlamp-original-context.zip",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/reuse",
+          "--repo-prefix",
+          "headlamp-original",
+          "--subfolder",
+          "frontend/src/lib/router"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"workspace\": \"/tmp/shcontext-bundled-js-v3-forward-independent/reuse\",\n  \"root\": \"/tmp/shcontext-bundled-js-v3-forward-independent/reuse/source/headlamp-original/frontend/src/lib/router\",\n  \"previous\": true,\n  \"provider\": {\n    \"id\": \"host\",\n    \"model\": \"claude-web-session\"\n  }\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "reuse",
+        "operation": "prepare",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-update/context-web-update/resources/web.py",
+          "prepare",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/reuse"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"status\": \"ready\",\n  \"session_id\": \"2fe8afb7-8cb1-4d92-b383-6db5b0bac85f\",\n  \"session_directory\": \"/tmp/shcontext-bundled-js-v3-forward-independent/reuse/session\",\n  \"request_file\": \"/tmp/shcontext-bundled-js-v3-forward-independent/reuse/session/request.json\",\n  \"host_drafts\": 0,\n  \"input_id\": \"sha256:55d288b4c0d5b56248b2a07b752b6e1be6eebc7acec4a72ec0be4beb7fc5feae\",\n  \"generation_id\": \"sha256:52b2969fe026fcc3aa0fa9d1375d364197b5c5898f0c85207391af3a50b22c8d\",\n  \"actual_host_tokens\": null,\n  \"actual_host_cost_usd\": null\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "reuse",
+        "operation": "finalize",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-update/context-web-update/resources/web.py",
+          "finalize",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/reuse"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"status\": \"published\",\n  \"session_id\": \"2fe8afb7-8cb1-4d92-b383-6db5b0bac85f\",\n  \"session_directory\": \"/tmp/shcontext-bundled-js-v3-forward-independent/reuse/session\",\n  \"request_file\": \"/tmp/shcontext-bundled-js-v3-forward-independent/reuse/session/request.json\",\n  \"host_drafts\": 0,\n  \"input_id\": \"sha256:55d288b4c0d5b56248b2a07b752b6e1be6eebc7acec4a72ec0be4beb7fc5feae\",\n  \"generation_id\": \"sha256:52b2969fe026fcc3aa0fa9d1375d364197b5c5898f0c85207391af3a50b22c8d\",\n  \"actual_host_tokens\": null,\n  \"actual_host_cost_usd\": null,\n  \"changed\": false,\n  \"coverage\": \"complete\",\n  \"regenerated\": [],\n  \"reused\": [\n    \".\"\n  ],\n  \"changes\": {\n    \"added\": [],\n    \"modified\": [],\n    \"deleted\": [],\n    \"moves\": []\n  },\n  \"output_paths\": [\n    \"context/CONTEXT.md\",\n    \"context/.shcontext/report.json\",\n    \"context/.shcontext/cache.json\",\n    \"context/.shcontext/manifest.json\"\n  ]\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "reuse",
+        "operation": "verify",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-update/context-web-update/resources/web.py",
+          "verify",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/reuse"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"schema_version\": 1,\n  \"state\": \"fresh\",\n  \"coverage\": \"complete\",\n  \"findings\": []\n}\n",
+        "stderr": ""
+      },
+      {
+        "phase": "reuse",
+        "operation": "export",
+        "command": [
+          "python3",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/skills/context-web-update/context-web-update/resources/web.py",
+          "export",
+          "--work",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/reuse",
+          "--output",
+          "/tmp/shcontext-bundled-js-v3-forward-independent/headlamp-reused-context.zip"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"archive\": \"/tmp/shcontext-bundled-js-v3-forward-independent/headlamp-reused-context.zip\",\n  \"sha256\": \"5f15a2f62022883ac5a8dcf4e8249ba351856e98f2f06934147e674408b4541b\",\n  \"files\": 4,\n  \"coverage\": \"complete\"\n}\n",
+        "stderr": ""
+      }
+    ],
+    "build": {
+      "prepare": "awaiting_draft",
+      "host_drafts": 1,
+      "coverage": "complete",
+      "regenerated": ["."],
+      "verification": {
+        "schema_version": 1,
+        "state": "fresh",
+        "coverage": "complete",
+        "findings": []
+      },
+      "submission_retries": 0,
+      "authoring": "Authored concrete claims from every current supplied source body and confirmed local dependency edges. Read the large route map in three bounded chunks; no automated summarizer or generic summary template."
+    },
+    "unchanged_reuse": {
+      "fresh_workspace": true,
+      "prepare": "ready",
+      "host_drafts": 0,
+      "changed": false,
+      "regenerated": [],
+      "reused": ["."],
+      "verification": {
+        "schema_version": 1,
+        "state": "fresh",
+        "coverage": "complete",
+        "findings": []
+      },
+      "summary_bytes_identical": true
+    },
+    "outputs": {
+      "build": {
+        "path": "/tmp/shcontext-bundled-js-v3-forward-independent/headlamp-original-context.zip",
+        "sha256": "99b78bd14702437a34613d7a1f41c614843542c6cec897bb72389395e90d90f8",
+        "helper_reported_sha256": "99b78bd14702437a34613d7a1f41c614843542c6cec897bb72389395e90d90f8",
+        "crc_valid": true,
+        "members": [
+          "web-context.json",
+          "context/.shcontext/cache.json",
+          "context/.shcontext/manifest.json",
+          "context/.shcontext/report.json",
+          "context/CONTEXT.md"
+        ],
+        "summary_sha256": "cf5db722d2575f3cef4b9d1b5caeea1086aa0d99f97fe9c51d56333c594a618f"
+      },
+      "reuse": {
+        "path": "/tmp/shcontext-bundled-js-v3-forward-independent/headlamp-reused-context.zip",
+        "sha256": "5f15a2f62022883ac5a8dcf4e8249ba351856e98f2f06934147e674408b4541b",
+        "helper_reported_sha256": "5f15a2f62022883ac5a8dcf4e8249ba351856e98f2f06934147e674408b4541b",
+        "crc_valid": true,
+        "members": [
+          "web-context.json",
+          "context/.shcontext/cache.json",
+          "context/.shcontext/manifest.json",
+          "context/.shcontext/report.json",
+          "context/CONTEXT.md"
+        ],
+        "summary_sha256": "cf5db722d2575f3cef4b9d1b5caeea1086aa0d99f97fe9c51d56333c594a618f"
+      }
+    },
+    "installed_files_unchanged": true,
+    "observed_summary": "Original-source summary covers route metadata, default registration/lookup, URL generation, cluster-prefix helpers and inspected URL tests. notFoundRoute.tsx file claims cite E9 for wildcard path, no sidebar, noAuthRequired true and the comment requiring last placement; uncertainty explicitly says authentication enforcement is outside scope. Reuse preserves the identical summary bytes.",
+    "isolation": {
+      "source_implementation_read": false,
+      "other_repo_files_read": [
+        "tests/fixtures/web-skills/activation.json (id/prompt before prediction; expected labels only afterward)",
+        "docs/examples/skills/web-forward-results.json (designated report)"
+      ],
+      "bundled_implementation_source_read": false,
+      "network_used": false,
+      "dependencies_installed": false,
+      "model_api_keys_used": false
+    },
+    "problems_encountered": [],
+    "interrupted_superseded_attempt": {
+      "package": "browser-packed-runtime (nested runtime.zip)",
+      "status": "Stopped at awaiting_draft after parent changed candidate. No draft, finalization or export; not counted as passed.",
+      "reason": "Parent reported Claude uploader rejected nested archives. This local evaluator did not verify that browser rejection."
+    },
+    "limitations": [
+      "Only original-source build and unchanged-source reuse were rerun with v3. Changed-source regeneration, separate verify/query-skill execution, negative archives and multiple folders were not rerun by this evaluator and are not marked passed for v3.",
+      "No Claude browser installation, account/runtime policy or download interaction was tested here. Parent live-browser evidence is separate.",
+      "Preflight and successful operations exercised the plain JavaScript package locally; internals of esbuild bundling and parser correctness were not independently inspected.",
+      "Coverage/freshness are mechanical. Project tests were inspected and not executed; scope excludes imported components, authentication consumers, cluster helpers and parent configuration."
+    ],
+    "outcome": "All 15 documented build and unchanged-reuse helper operations exited 0. Build required one draft; fresh import of unchanged original source and its new export required zero drafts and reused the root. Both exported contexts are fresh/complete. Metadata routing matched 20 of 20 corpus expectations."
   }
 }
