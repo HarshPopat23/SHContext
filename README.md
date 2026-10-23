@@ -1,11 +1,12 @@
 # SHContext
 
-SHContext is a repository context generator under development. It will create a `context/`
+SHContext is a repository context generator under development. It creates a `context/`
 directory that mirrors source folders and explains their responsibilities with
 source references and explicit coverage limits.
 
-The CLI implements local `scan <directory>` and `build <directory>` with one
-OpenAI provider, incremental `update <directory>`, plus offline `verify <directory>`. Builds collect inspected evidence, summarize folders from leaves
+The CLI implements local `scan <directory>`, active-host generation through
+`prepare`/`submit`/`finalize`, optional OpenAI API `build`/`update`, and offline
+`verify <directory>` and `query`. Builds collect inspected evidence, summarize folders from leaves
 to root, add conservative relationships and publish a mirrored `context/` tree.
 The reusable library exposes shared schemas, JS/TS analysis, generation and local
 context querying. Four execution roles run sequentially by default; bounded folder
@@ -18,6 +19,15 @@ The current `0.1.0-alpha.1` candidate remains experimental. Start with the
 offline walkthrough. See [evaluation methods and results](docs/benchmarks.md),
 [organization freshness CI](docs/ci.md) and [release preparation](docs/release.md).
 
+## Choose your environment
+
+Start with [the step-by-step usage guides](docs/usage.md):
+
+- [Claude Code terminal](docs/claude-code.md): local installation, first build, questions, changes, updates and recovery.
+- [Claude web chat](docs/claude-web.md): four skill uploads, small source ZIPs, downloads and cross-chat updates.
+- [Antigravity IDE](docs/antigravity.md): separate tool/source folders and an explicit local host-authoring workflow.
+- [Claude Code on the web](docs/claude-code-cloud.md): cloud checkout/setup, distinct from ordinary Claude chat.
+
 ## Use uploaded repositories in Claude web
 
 Build the web distribution with `npm run package:web -- /absolute/new/output`
@@ -27,13 +37,13 @@ enable code execution, and attach a source-only repository ZIP. Ask:
 “Use context-web-build to generate context for frontend/src/lib/router from this
 Headlamp archive and return a downloadable context ZIP.”
 See [installation, runtime requirements and updates](docs/claude-web.md).
-Actual Claude web account acceptance is [still pending](docs/claude-web-acceptance.md);
+The bounded Claude web workflow has [actual account acceptance evidence](docs/claude-web-acceptance.md);
 the CLI/plugin installation below is separate.
 
 ## Install the workflow plugin
 
 Prepare the source checkout below, set its absolute path as `SHCONTEXT_HOME`, then
-run these inside Claude Code after this change is merged:
+run these inside Claude Code:
 
 ```text
 /plugin marketplace add HarshPopat23/SHContext
