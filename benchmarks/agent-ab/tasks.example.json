@@ -1,0 +1,26 @@
+{
+  "repo": "/absolute/path/to/checkout-at-pinned-commit",
+  "context": "/absolute/path/to/prebuilt/context",
+  "handwritten": "/absolute/path/to/AGENTS.md-written-by-a-human",
+  "arms": ["none", "handwritten", "shcontext-pointer", "shcontext-mcp"],
+  "agent": ["claude", "-p", "--output-format", "json", "--max-turns", "30"],
+  "timeout_ms": 600000,
+  "tasks": [
+    {
+      "id": "locate-router",
+      "type": "locate",
+      "prompt": "Which files implement route matching? Answer with file paths only.",
+      "check": { "kind": "contains_all", "values": ["router.ts"] }
+    },
+    {
+      "id": "fix-issue-123",
+      "type": "change",
+      "prompt": "Fix the bug described in the task text. Do not run git commands.",
+      "check": {
+        "kind": "command",
+        "command": "npm",
+        "args": ["test", "--", "--grep", "issue 123"]
+      }
+    }
+  ]
+}

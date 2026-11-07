@@ -6,6 +6,9 @@ import { parseArgs } from 'node:util';
 import { scanRepository, ScanError } from '../scanner/index.js';
 import { getProjectInfo } from '../core/index.js';
 import { verifyRepository } from '../validation/index.js';
+import { folderStatus } from '../status/index.js';
+import { initRepository, InitError } from '../init/index.js';
+import { serveStdio } from '../mcp/index.js';
 import {
   buildRepository,
   BuildError,
@@ -38,6 +41,9 @@ Commands:
   update <directory> Refresh affected summaries using the structured cache
   query <question>   Search context and inspected source (defaults to current directory)
   verify <directory> Check context integrity and freshness offline (read-only)
+  status [directory] Per-folder freshness: which summaries are still trustworthy (read-only)
+  init [directory]   Point agents at context/ (AGENTS.md block); --claude, --mcp, --no-ignore
+  mcp                Serve context tools to MCP clients over stdio (offline, read-only); --root
 
 Exit codes: 0 complete, 2 partial, 1 operational/configuration failure
 Host options: --session <outside-directory>; prepare accepts --update; submit requires --draft <envelope.json>
@@ -77,6 +83,9 @@ export async function runCli(
         'max-cost-usd': { type: 'string' },
         'input-usd-per-million': { type: 'string' },
         'output-usd-per-million': { type: 'string' },
+        claude: { type: 'boolean' },
+        mcp: { type: 'boolean' },
+        'no-ignore': { type: 'boolean' },
       },
       strict: true,
       allowPositionals: true,
@@ -101,8 +110,16 @@ export async function runCli(
       !values.help &&
       ((!hostCommands.includes(command ?? '') &&
         hostFlags.some((key) => values[key] !== undefined)) ||
-        (command !== 'query' &&
+        (!['query', 'mcp'].includes(command ?? '') &&
           queryFlags.some((key) => values[key] !== undefined)) ||
+        (command === 'mcp' &&
+          (['limit', 'depth', 'json'] as const).some(
+            (key) => values[key] !== undefined,
+          )) ||
+        (command !== 'init' &&
+          (['claude', 'mcp', 'no-ignore'] as const).some(
+            (key) => values[key] !== undefined,
+          )) ||
         (!['build', 'update'].includes(command ?? '') &&
           agentFlags.some((key) => values[key] !== undefined)))
     ) {
@@ -159,6 +176,66 @@ export async function runCli(
         );
         return 1;
       }
+    }
+    if (command === 'init' || command === 'status') {
+      if (values.help) {
+        output.stdout(help());
+        return 0;
+      }
+      if (positionals.length > 2 || values.version) {
+        output.stderr(
+          `Usage: shcontext ${command} [directory]${command === 'init' ? ' [--claude] [--mcp] [--no-ignore]' : ''}\n`,
+        );
+        return 1;
+      }
+      const target = positionals[1] ?? process.cwd();
+      try {
+        if (command === 'init') {
+          const changes = initRepository(target, {
+            targets: values.claude ? ['agents', 'claude'] : ['agents'],
+            mcp: values.mcp ?? false,
+            ignore: !values['no-ignore'],
+          });
+          output.stdout(
+            `${JSON.stringify({ schema_version: 1, changes }, null, 2)}\n`,
+          );
+          output.stderr(
+            'Agent instructions installed. Review the changes, then run shcontext build (or update) and commit context/.\n',
+          );
+          return 0;
+        }
+        const result = folderStatus(target);
+        output.stdout(`${JSON.stringify(result, null, 2)}\n`);
+        output.stderr(
+          `Status ${result.state}: ${result.counts.fresh} fresh, ${result.counts.stale} stale folders${result.new_folders.length ? `, ${result.new_folders.length} new` : ''}. ${result.note}\n`,
+        );
+        return result.state === 'current'
+          ? result.coverage === 'partial'
+            ? 2
+            : 0
+          : 1;
+      } catch (error) {
+        output.stderr(
+          `${JSON.stringify(error instanceof InitError || error instanceof ScanError ? { code: error.code, message: error.message } : { code: `${command}_failed`, message: `${command} failed without changing context or source.` })}\n`,
+        );
+        return 1;
+      }
+    }
+    if (command === 'mcp') {
+      if (values.help) {
+        output.stdout(help());
+        return 0;
+      }
+      if (positionals.length !== 1 || values.version) {
+        output.stderr('Usage: shcontext mcp [--root directory]\n');
+        return 1;
+      }
+      // stdout carries protocol messages only; diagnostics go to stderr.
+      output.stderr(
+        'SHContext MCP server (offline, read-only) listening on stdio.\n',
+      );
+      await serveStdio(values.root ?? process.cwd());
+      return 0;
     }
     if (command === 'query') {
       if (values.help) {

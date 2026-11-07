@@ -44,7 +44,6 @@ The renderer supplies metadata; the model does not invent hashes or paths.
 schema_version: 1
 source_path: 'src/auth'
 coverage: 'complete'
-input_id: 'sha256:<64 lowercase hexadecimal characters>'
 generation_id: 'sha256:<64 lowercase hexadecimal characters>'
 ---
 ```
@@ -52,9 +51,13 @@ generation_id: 'sha256:<64 lowercase hexadecimal characters>'
 The angle-bracket values above describe the grammar, not literal valid digests.
 `coverage` is `complete` or `partial`. `source_path` has no trailing slash.
 No `fresh: true` field is stored: freshness must be checked against current input.
-`input_id` identifies the full selected repository snapshot; `generation_id`
-identifies the transformation. Updates can reuse narrative while rebinding this
-metadata to the new snapshot.
+`generation_id` identifies the transformation. The repository-wide `input_id` is
+deliberately **not** written into summaries (renderer `markdown-v2`): it changes
+on every source edit, which would rewrite every `CONTEXT.md` and make committed
+context noisy and conflict-prone. It lives in `manifest.json`, `report.json` and
+the cache, so a reused folder's `CONTEXT.md` stays byte-identical until its own
+inputs change. Contexts rendered by `markdown-v1` fail verification as modified;
+rebuild them (alpha format change).
 
 | Required heading                 | Required content                                                                                         |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
