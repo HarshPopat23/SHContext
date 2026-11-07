@@ -40,7 +40,6 @@ export function renderFolder(folder: FolderSummary): string {
     'schema_version: 1',
     `source_path: ${quote(folder.source_path)}`,
     `coverage: ${quote(folder.coverage)}`,
-    `input_id: ${quote(folder.input_id)}`,
     `generation_id: ${quote(folder.generation_id)}`,
     '---',
     '',

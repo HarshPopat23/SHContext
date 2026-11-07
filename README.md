@@ -174,6 +174,7 @@ do not establish live-model quality or billing.
 - [Development decisions](docs/development.md): tooling choices and sources.
 - [Code structure and dependencies](docs/code-structure.md): extraction API and conservative graph.
 - [Context querying](docs/querying.md): local retrieval, source references and freshness states.
+- [Agent integration](docs/agent-integration.md): `init`, per-folder `status` and the offline MCP server.
 - [Execution roles](docs/agents.md): sequential/parallel work, source review and spending limits.
 - [Offline verification](docs/verification.md): integrity, freshness, source review and recovery.
 - [Context generation](docs/generation.md): build command, provider, evidence and recoverable publication.

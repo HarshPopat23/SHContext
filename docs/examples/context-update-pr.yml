@@ -1,0 +1,68 @@
+# Opt-in: refreshes committed context/ after merges and opens a PR for human review.
+# Sends eligible source to the configured model provider and spends money. Read
+# docs/ci.md first. Copy into .github/workflows/ only after the alpha is installable.
+name: SHContext update PR
+on:
+  push:
+    branches: [main] # trusted code only; never use pull_request_target for this job
+    paths-ignore: ['context/**']
+  workflow_dispatch:
+concurrency:
+  group: shcontext-update
+  cancel-in-progress: false
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  update:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+      - name: Install reviewed SHContext alpha
+        env:
+          EXPECTED_SHA256: ${{ vars.SHCONTEXT_ALPHA_SHA256 }}
+        run: |
+          [[ "$EXPECTED_SHA256" =~ ^[a-f0-9]{64}$ ]]
+          curl --fail --location https://github.com/HarshPopat23/SHContext/releases/download/v0.1.0-alpha.1/shcontext-0.1.0-alpha.1.tgz --output "$RUNNER_TEMP/shcontext.tgz"
+          printf '%s  %s\n' "$EXPECTED_SHA256" "$RUNNER_TEMP/shcontext.tgz" | sha256sum --check
+          npm install --prefix "$RUNNER_TEMP/shcontext-tool" --ignore-scripts --no-audit --no-fund "$RUNNER_TEMP/shcontext.tgz"
+      - name: Update context (capped spend)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Caller-supplied rates and cap; this job aborts rather than exceed the cap.
+          INPUT_USD_PER_MILLION: ${{ vars.SHCONTEXT_INPUT_USD_PER_MILLION }}
+          OUTPUT_USD_PER_MILLION: ${{ vars.SHCONTEXT_OUTPUT_USD_PER_MILLION }}
+          MAX_COST_USD: ${{ vars.SHCONTEXT_MAX_COST_USD }}
+        run: |
+          # Exit 2 means partial coverage, which is acceptable; 1 is a failure.
+          set +e
+          "$RUNNER_TEMP/shcontext-tool/node_modules/.bin/shcontext" update "$GITHUB_WORKSPACE" \
+            --max-cost-usd "$MAX_COST_USD" \
+            --input-usd-per-million "$INPUT_USD_PER_MILLION" \
+            --output-usd-per-million "$OUTPUT_USD_PER_MILLION"
+          code=$?
+          [ "$code" -eq 0 ] || [ "$code" -eq 2 ]
+      - name: Open a pull request when context changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- context; then
+            echo "Context unchanged; nothing to propose."
+            exit 0
+          fi
+          branch="shcontext/update-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -- context
+          git commit -m "chore: refresh SHContext context"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "Refresh SHContext context" \
+            --body "Automated update. Review citations against source before merging; mechanical freshness does not prove the prose is accurate."

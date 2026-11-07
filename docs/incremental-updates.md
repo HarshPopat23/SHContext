@@ -141,8 +141,9 @@ command. Missing context can be initialized like a build. Provider configuration
 is required; credentials are acquired only if model generation is actually needed.
 
 On change, render and stage a complete consistent tree. Every summary carries the
-full repository `input_id`, so reused folders' metadata and citation labels may
-change without a provider call. The existing journaled writer checks old ownership
+full repository `input_id` only in the manifest, report and cache; rendered
+`CONTEXT.md` files omit it, so reused folders stay byte-identical and commits touch
+only the folders whose inputs changed. The existing journaled writer checks old ownership
 and current source identity before swapping. Obsolete summaries disappear only
 as part of replacing a fully owned tree; unexpected user files, edited summaries,
 symlinks or hardlinks block the entire operation. Provider failure, invalid drafts,

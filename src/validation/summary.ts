@@ -71,7 +71,6 @@ export function inspectSummary(
     'schema_version: 1',
     `source_path: ${quote(folder.path)}`,
     `coverage: ${quote(folder.coverage)}`,
-    `input_id: ${quote(manifest.input_id)}`,
     `generation_id: ${quote(manifest.generator.generation_id)}`,
     '---',
     '',

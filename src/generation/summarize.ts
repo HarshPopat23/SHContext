@@ -37,7 +37,7 @@ import { standardLimitations, NO_EVIDENCE_LIMITATION } from './limitations.js';
 import { BuildError } from './errors.js';
 
 export const GENERATOR_VERSION = 'context-pipeline-v4';
-export const RENDERER_VERSION = 'markdown-v1';
+export const RENDERER_VERSION = 'markdown-v2';
 export const TEMPLATE_VERSION = 'context-sections-v1';
 export const promptVersion = (providerId: string) =>
   providerId === 'host' ? `${PROMPT_VERSION}/host-v1` : PROMPT_VERSION;

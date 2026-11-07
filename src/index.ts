@@ -35,3 +35,11 @@ export {
   finalizeRepository,
   readHostSubmission,
 } from './generation/index.js';
+export { folderStatus } from './status/index.js';
+export type {
+  StatusResult,
+  FolderStatus,
+  FolderStaleReason,
+} from './status/index.js';
+export { initRepository, InitError } from './init/index.js';
+export type { InitOptions, InitChange } from './init/index.js';

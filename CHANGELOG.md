@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Examples: Claude Code `SessionStart` hook for per-folder freshness and an opt-in, spend-capped GitHub Action that opens a context-update PR. `benchmarks/agent-ab/` adds an agent A/B runner and paired-bootstrap analyzer; it is tested with a fake agent only and has produced no results yet.
+- **Format change (renderer `markdown-v2`):** summaries no longer embed the repository-wide `input_id`, so an edit rewrites only the edited folder and its ancestors instead of every `CONTEXT.md`. Contexts built with `markdown-v1` must be rebuilt.
+- `shcontext init` installs an `AGENTS.md`/`CLAUDE.md` pointer block, `.mcp.json` entry and ignore rules; `shcontext status` reports per-folder freshness; `shcontext mcp` serves five offline read-only tools (`ctx_status`, `ctx_query`, `ctx_folder`, `ctx_cite`, `ctx_verify`) over stdio. See [agent integration](docs/agent-integration.md).
 - Claude-native sequential prepare/submit/finalize generation and incremental updates, with no separate model API key. Existing OpenAI generation remains optional.
 - Plugin 0.2.0 uses active-host build/update instructions, source-bound structured drafts and shared staged publication. Host model/tokens/cost remain explicitly unverified.
 
