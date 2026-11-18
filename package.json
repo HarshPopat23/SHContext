@@ -116,7 +116,7 @@
     "@types/babel__traverse": "7.28.0",
     "@types/node": "26.6.5",
     "esbuild": "0.28.2",
-    "prettier": "3.9.10",
+    "prettier": "3.10.1",
     "typescript": "7.0.2"
   },
   "dependencies": {
